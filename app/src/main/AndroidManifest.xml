@@ -13,14 +13,38 @@
         android:theme="@style/Theme.POSApp"
         tools:targetApi="31">
         <activity
-            android:name=".tabletry"
+            android:name=".inventory"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".manageUsers"
+            android:name=".AaUriButton"
+            android:exported="false"
+            android:screenOrientation="landscape">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Users.editUsers"
+            android:exported="false"
+            android:screenOrientation="landscape">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Users.addUser"
+            android:exported="false"
+            android:screenOrientation="landscape">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".userList"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data

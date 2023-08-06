@@ -11,11 +11,13 @@
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:weightSum="10">
         <TextView
             android:id="@+id/txtTitles"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="10"
             android:text="ID\t\t\t\t\t\t\tProduct Name\t\t\t\t\t\t\tPrice"
             android:textSize="75px">
         </TextView>
@@ -28,12 +30,13 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_below="@+id/linearLayout1"
+        android:weightSum="10"
         >
 
         <ListView
             android:id="@+id/lstInventory"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="9"
             android:layout_height="fill_parent"
             tools:layout_editor_absoluteX="1dp"
             tools:layout_editor_absoluteY="1dp"
@@ -49,7 +52,9 @@
                 app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
                 app:layout_constraintTop_toTopOf="@+id/linearLayout2"
-                android:layout_margin="2dp">
+                android:layout_margin="2dp"
+                android:layout_weight="1"
+                android:weightSum="3">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -77,7 +82,4 @@
                     android:maxLines="1"></Button>
             </LinearLayout>
     </LinearLayout>
-
-
-
 </RelativeLayout>

@@ -87,6 +87,7 @@ public class productList extends AppCompatActivity {
                 i.putExtra("id",pr.id);
                 i.putExtra("product",pr.product);
                 i.putExtra("prodPrice",pr.prodPrice);
+                i.putExtra("category",pr.category);
                 startActivity(i);
 
             }

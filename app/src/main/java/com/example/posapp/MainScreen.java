@@ -19,6 +19,7 @@ public class MainScreen extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
         btnMoreInfo = findViewById(R.id.btnMoreInfo);
+        btnUsers = findViewById(R.id.btnUsers);
         btnProducts = findViewById(R.id.btnProducts);
         btnOrderingSystem = findViewById(R.id.btnOrderingSystem);
         btnAdmin = findViewById(R.id.btnAdmin); //Remove This
@@ -26,14 +27,18 @@ public class MainScreen extends AppCompatActivity {
         btnAdmin.setOnClickListener(new View.OnClickListener() { //Remove This
             @Override
             public void onClick(View view) {
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-
-                String sql = "drop table products";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.execute();
+                Intent i = new Intent(MainScreen.this, AaUriButton.class);
+                startActivity(i);
             }
         });
 
+        btnUsers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainScreen.this, userList.class);
+                startActivity(i);
+            }
+        });
         btnOrderingSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
