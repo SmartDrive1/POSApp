@@ -13,9 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.example.posapp.Users.addUser;
-import com.example.posapp.Users.editUsers;
-
 import java.util.ArrayList;
 
 public class userList extends AppCompatActivity {

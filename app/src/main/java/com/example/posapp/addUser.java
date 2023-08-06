@@ -1,4 +1,4 @@
-package com.example.posapp.Users;
+package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,9 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.example.posapp.R;
-import com.example.posapp.userList;
 
 public class addUser extends AppCompatActivity {
 
