@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class productList extends AppCompatActivity {
 
-    ListView lstInventory;
+    ListView lstProducts;
     Button btnBack, btnAddProduct;
     ArrayList<String> titles = new ArrayList <String>();
     ArrayAdapter arrayAdapter;
@@ -30,7 +30,7 @@ public class productList extends AppCompatActivity {
 
         btnBack = findViewById(R.id.btnBack);
         btnAddProduct = findViewById(R.id.btnAddProduct);
-        lstInventory = findViewById(R.id.lstInventory);
+        lstProducts = findViewById(R.id.lstProducts);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,7 +58,7 @@ public class productList extends AppCompatActivity {
 
         titles.clear();
         arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item,titles);
-        lstInventory.setAdapter(arrayAdapter);
+        lstProducts.setAdapter(arrayAdapter);
 
         final ArrayList<cProd> prods = new ArrayList<cProd>();
         if(c.moveToFirst())
@@ -75,10 +75,10 @@ public class productList extends AppCompatActivity {
 
             }while(c.moveToNext());
             arrayAdapter.notifyDataSetChanged();
-            lstInventory.invalidateViews();
+            lstProducts.invalidateViews();
         }
 
-        lstInventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lstProducts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String a = titles.get(position).toString();

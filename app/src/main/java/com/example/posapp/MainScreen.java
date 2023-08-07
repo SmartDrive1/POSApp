@@ -22,6 +22,7 @@ public class MainScreen extends AppCompatActivity {
         btnUsers = findViewById(R.id.btnUsers);
         btnProducts = findViewById(R.id.btnProducts);
         btnOrderingSystem = findViewById(R.id.btnOrderingSystem);
+        btnInventory = findViewById(R.id.btnInventory);
         btnAdmin = findViewById(R.id.btnAdmin); //Remove This
 
         btnAdmin.setOnClickListener(new View.OnClickListener() { //Remove This
@@ -66,6 +67,13 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainScreen.this, moreinfo.class);
+                startActivity(i);
+            }
+        });
+        btnInventory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainScreen.this, inventory.class);
                 startActivity(i);
             }
         });

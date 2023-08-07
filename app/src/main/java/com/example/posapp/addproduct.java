@@ -64,7 +64,7 @@ public class addproduct extends AppCompatActivity {
             Toast.makeText(this,"Product Name or Price is Blank", Toast.LENGTH_LONG).show();
         }else if (Integer.parseInt(price) <= 0)
             {
-                Toast.makeText(this,"Please a Price Greater Than 0", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Please Enter a Price Greater Than 0", Toast.LENGTH_LONG).show();
             }else{
             try{
                 String product = txtProduct.getText().toString();
