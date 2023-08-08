@@ -11,6 +11,7 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.ScrollCaptureSession;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 
 public class OrderingSystem extends AppCompatActivity {
     Button btnAdd, btnBack;
-    EditText txtCategory, Quantity, Price;
+    EditText Quantity, Price;
     Spinner sp1;
     ArrayList<String> getP = new ArrayList<>();
     ArrayAdapter arrayAdapter;
@@ -54,39 +55,63 @@ public class OrderingSystem extends AppCompatActivity {
             }
         });
 
+        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                updatePrice();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         getProducts();
 
     }
 
-    public void getProducts(){
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+    public void getProducts() {
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )");//incase there are no tables yet
         final Cursor c = db.rawQuery("select * from products", null);
         int product = c.getColumnIndex("product");
 
         getP.clear();
-        arrayAdapter = new ArrayAdapter(this, R.layout.spinnerlayout,getP);
+        arrayAdapter = new ArrayAdapter(this, R.layout.spinnerlayout, getP);
         sp1.setAdapter(arrayAdapter);
 
         final ArrayList<cProd> prods = new ArrayList<cProd>();
-        if(c.moveToFirst())
-        {
-            do{
+        if (c.moveToFirst()) {
+            do {
                 cProd pr = new cProd();
                 pr.product = c.getString(product);
                 prods.add(pr);
                 getP.add(c.getString(product));
 
-            }while(c.moveToNext());
+            } while (c.moveToNext());
             arrayAdapter.notifyDataSetChanged();
         }
     }
 
-    public void add(){
-        String[] orderItems = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
-
-        TemporaryContainer container = new TemporaryContainer(orderItems);
+    public void add() {
+        transacProducts[] orderProducts = {new transacProducts(sp1.getSelectedItem().toString(), 10.99, 2)};
+        TmpContainer container = new TmpContainer(orderProducts);
         cCurrentTransac.setCurrentTransaction(container);
+    }
 
+    public void updatePrice() {
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )");//incase there are no tables yet
+        final Cursor c = db.rawQuery("SELECT * FROM products WHERE product ='" + sp1.getSelectedItem().toString() + "'", null);
+
+        if (c.moveToFirst()) {
+            int prodPriceIndex = c.getColumnIndex("prodPrice");
+            int productPrice = c.getInt(prodPriceIndex);
+            Price.setText(String.valueOf(productPrice));
+        } else {
+            Price.setText("N/A");
+        }
+
+        c.close();
     }
 }

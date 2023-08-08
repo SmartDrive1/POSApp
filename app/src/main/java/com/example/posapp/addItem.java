@@ -59,8 +59,6 @@ public class addItem extends AppCompatActivity {
             Toast.makeText(this,"Please enter a Stock Amount Greater Than or Equals to 0", Toast.LENGTH_LONG).show();
         }else{
             try{
-                String product = txtItemName.getText().toString();
-                String prodPrice = txtStock.getText().toString();
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS inventory(id INTEGER PRIMARY KEY AUTOINCREMENT,itemName VARCHAR, stock INTEGER )");
 

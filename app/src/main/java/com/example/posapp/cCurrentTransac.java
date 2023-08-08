@@ -4,13 +4,13 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class cCurrentTransac {
-    private Array[] value;
+    private static TmpContainer currentTransaction;
 
-    public cCurrentTransac(Array[] value) {
-        this.value = value;
+    public static void setCurrentTransaction(TmpContainer container) {
+        currentTransaction = container;
     }
 
-    public Array[] getValue() {
-        return value;
+    public static TmpContainer getCurrentTransaction() {
+        return currentTransaction;
     }
 }

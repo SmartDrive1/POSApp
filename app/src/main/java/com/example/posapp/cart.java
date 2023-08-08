@@ -2,8 +2,11 @@ package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,22 +16,44 @@ import java.util.ArrayList;
 
 public class cart extends AppCompatActivity {
 
-    //ListView lstCart1;
-    TextView txt1;
+    ListView lstCart1;
     String tmpName, tmpQty, tmpPrice;
     Integer arrayLength, ctr = 0;
     ArrayList<String> titles = new ArrayList <String>();
     ArrayAdapter arrayAdapter;
-
+    Button btnBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        txt1 = findViewById(R.id.txtView);
+        lstCart1 = findViewById(R.id.lstCart1);
+        btnBack = findViewById(R.id.btnBack);
 
-        cCurrentTransac a = new cCurrentTransac();
-        tmpName = a.Product.get(1);
-        txt1.setText(tmpName);
+        TmpContainer container = cCurrentTransac.getCurrentTransaction();
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(cart.this, OrderingSystem.class);
+                startActivity(i);
+            }
+        });
+
+        titles.clear();
+        arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item,titles);
+        lstCart1.setAdapter(arrayAdapter);
+
+        if (container != null) {
+            transacProducts[] orderProducts = container.getProducts();
+
+            ArrayAdapter<transacProducts> adapter = new ArrayAdapter<>(
+                    this,
+                    android.R.layout.simple_list_item_1,
+                    orderProducts
+            );
+
+            lstCart1.setAdapter(adapter);
+        }
     }
 }
