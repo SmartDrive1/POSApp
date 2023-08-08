@@ -146,6 +146,8 @@
             android:text="Add User"
             android:layout_margin="5dp"
             android:layout_weight="1"
+            android:autoSizeTextType="uniform"
+            android:maxLines="1"
             android:id="@+id/btnAddUser"/>
 
         <Button

@@ -33,7 +33,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Product Name:"
+            android:text="Product:"
             android:textSize="50px"
             android:textColor="@color/black"/>
 
@@ -111,6 +111,21 @@
             android:text="Back"
             android:layout_margin="5dp"
             android:id="@+id/btnCancel"/>
+    </LinearLayout>
+    <!--  Buttons  -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Continue"
+            android:layout_margin="5dp"
+            android:id="@+id/btnContinue"/>
     </LinearLayout>
 
 </LinearLayout>

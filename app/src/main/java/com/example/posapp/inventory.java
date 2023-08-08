@@ -83,7 +83,7 @@ public class inventory extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), editItem.class);
                 i.putExtra("id",pr.id);
                 i.putExtra("itemName",pr.itemName);
-                i.putExtra("stock",pr.stock);
+                i.putExtra("itemStock",pr.stock);
                 startActivity(i);
 
             }

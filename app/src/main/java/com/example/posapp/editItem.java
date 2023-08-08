@@ -72,17 +72,21 @@ public class editItem extends AppCompatActivity {
             String editItemName1 = txtEditItemName.getText().toString();
             String editItemStock1 = txtEditItemStock.getText().toString();
 
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+            if (editItemStock1.equals("") || editItemName1.equals("")){
+                Toast.makeText(this,"Item Name or Item Stock is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
+            }else{
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
 
-            String sql = "update inventory set itemName = ?, stock = ? where id = ?";
-            SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1,editItemName1);
-            statement.bindString(2,editItemStock1);
-            statement.execute();
-            Toast.makeText(this,"Product Updated", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(editItem.this, inventory.class);
-            startActivity(i);
-        }catch (Exception e)
+                String sql = "update inventory set itemName = ?, stock = ? where id = ?";
+                SQLiteStatement statement = db.compileStatement(sql);
+                statement.bindString(1,editItemName1);
+                statement.bindString(2,editItemStock1);
+                statement.execute();
+                Toast.makeText(this,"Product Updated", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(editItem.this, inventory.class);
+                startActivity(i);
+            }
+            }catch (Exception e)
         {
             Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
         }

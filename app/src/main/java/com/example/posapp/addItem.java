@@ -53,7 +53,7 @@ public class addItem extends AppCompatActivity {
         String Stock = txtStock.getText().toString();
         if(itemName.equals("") || Stock.equals(""))
         {
-            Toast.makeText(this,"Product Name or Price is Blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Item Name or Stock is Blank", Toast.LENGTH_LONG).show();
         }else if (Integer.parseInt(Stock) < 0)
         {
             Toast.makeText(this,"Please enter a Stock Amount Greater Than or Equals to 0", Toast.LENGTH_LONG).show();
