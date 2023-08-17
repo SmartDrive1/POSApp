@@ -5,7 +5,7 @@ public class transacProducts {
     private double price;
     private int quantity;
 
-    public transacProducts(String productName, double price, int quantity) {
+    public transacProducts(String productName, Double price, int quantity) {
         this.productName = productName;
         this.price = price;
         this.quantity = quantity;

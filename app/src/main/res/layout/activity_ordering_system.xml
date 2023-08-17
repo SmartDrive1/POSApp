@@ -91,6 +91,53 @@
             android:textAlignment="center" />
     </LinearLayout>
 
+<!--    Total Price-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total:"
+            android:textSize="50px"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/txtTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:enabled="false"
+            android:ems="10"
+            android:inputType="number"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <!--  Buttons  -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="1">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total"
+            android:layout_margin="5dp"
+            android:id="@+id/btnTotal"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Orders"
+            android:layout_margin="5dp"
+            android:id="@+id/btnOrders"/>
+    </LinearLayout>
+
     <!--  Buttons  -->
     <LinearLayout
         android:layout_width="wrap_content"
@@ -111,21 +158,6 @@
             android:text="Back"
             android:layout_margin="5dp"
             android:id="@+id/btnCancel"/>
-    </LinearLayout>
-    <!--  Buttons  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_weight="1">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Continue"
-            android:layout_margin="5dp"
-            android:id="@+id/btnContinue"/>
     </LinearLayout>
 
 </LinearLayout>
