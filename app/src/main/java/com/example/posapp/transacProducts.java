@@ -25,6 +25,6 @@ public class transacProducts {
     }
 
     public String toString() {
-        return "Product: " + productName + "\nPrice: $" + price + "\nQuantity: " + quantity;
+        return "Product: " + productName + "\nPrice: Php " + price + "\nQuantity: " + quantity;
     }
 }

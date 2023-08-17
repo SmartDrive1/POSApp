@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -55,5 +56,20 @@ public class cart extends AppCompatActivity {
 
             lstCart1.setAdapter(adapter);
         }
+
+        lstCart1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                final ArrayList<carttmp> ccart = new ArrayList<carttmp>();
+                String a = titles.get(position).toString();
+                carttmp pr = ccart.get((position));
+                Intent i = new Intent(getApplicationContext(), editOrder.class);
+                i.putExtra("prodName",pr.prodName);
+                i.putExtra("quantity",pr.quantity);
+                i.putExtra("price",pr.price);
+                startActivity(i);
+
+            }
+        });
     }
 }

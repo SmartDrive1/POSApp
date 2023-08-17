@@ -68,7 +68,6 @@ public class editItem extends AppCompatActivity {
 
     public void edit(){
         try{
-            String editID1 = editID.getText().toString();
             String editItemName1 = txtEditItemName.getText().toString();
             String editItemStock1 = txtEditItemStock.getText().toString();
 

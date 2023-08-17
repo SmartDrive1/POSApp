@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -58,6 +59,10 @@ public class OrderingSystem extends AppCompatActivity {
                 add();
 
                 Toast.makeText(OrderingSystem.this,"Order Added", Toast.LENGTH_LONG).show();
+
+                Quantity.setText("");
+                totalPriceUp.setText("");
+                sp1.setSelection(0);
             }
         });
 
@@ -126,19 +131,43 @@ public class OrderingSystem extends AppCompatActivity {
     }
 
     public void add() {
-        double qty1 = Double.parseDouble(Quantity.getText().toString());
-        double price1 = Double.parseDouble(Price.getText().toString());
-        double totalPrice = qty1 * price1;
+        String prodName = sp1.getSelectedItem().toString();
+        String qty1 = Quantity.getText().toString();
+        String tPrice = totalPriceUp.getText().toString();
+        Spinner spinner = (Spinner)findViewById(R.id.accID);
+        if(Quantity.getText().toString().equals(""))
+        {
+            Toast.makeText(this,"Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
+        }else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0){
+            Toast.makeText(this,"Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
+        }else{
+            try{
+                String tPrice1 = totalPriceUp.getText().toString();
+                String qty2 = Quantity.getText().toString();
+                String prodName1 = spinner.getSelectedItem().toString();
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+                db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
 
-        totalPriceUp.setText(String.valueOf(Double.valueOf(totalPrice)));
-        transacProducts[] orderProducts = {new transacProducts(sp1.getSelectedItem().toString(), Double.valueOf(String.valueOf(totalPriceUp.getText())), Integer.valueOf(String.valueOf(Quantity.getText())))};
-        TmpContainer container = new TmpContainer(orderProducts);
-        cCurrentTransac.setCurrentTransaction(container);
+
+                String sql = "insert into cartlist (prodName, quantity, price)values(?,?,?)";
+                SQLiteStatement statement = db.compileStatement(sql);
+                statement.bindString(1,prodName1);
+                statement.bindString(2,qty2);
+                statement.bindString(3,tPrice1);
+                statement.execute();
+                Toast.makeText(this,"Item Added to Cart", Toast.LENGTH_LONG).show();
+                Quantity.setText("");
+                totalPriceUp.setText("");
+            }catch (Exception e)
+            {
+                Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     public void updatePrice() {
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )");//incase there are no tables yet
+        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER)");//in case there are no tables yet
         final Cursor c = db.rawQuery("SELECT * FROM products WHERE product ='" + sp1.getSelectedItem().toString() + "'", null);
 
         if (c.moveToFirst()) {
@@ -148,7 +177,6 @@ public class OrderingSystem extends AppCompatActivity {
         } else {
             Price.setText("N/A");
         }
-
         c.close();
     }
 }
