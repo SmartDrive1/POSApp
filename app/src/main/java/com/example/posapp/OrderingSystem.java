@@ -91,18 +91,7 @@ public class OrderingSystem extends AppCompatActivity {
         Total.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (String.valueOf(Quantity.getText()).equals("")){
-                    Toast.makeText(OrderingSystem.this,"Please Input a Quantity", Toast.LENGTH_LONG).show();
-                }else if(Integer.parseInt(String.valueOf(Quantity.getText())) <= 0){
-                    Toast.makeText(OrderingSystem.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
-                }else{
-                    double qty1 = Double.parseDouble(Quantity.getText().toString());
-                    double price1 = Double.parseDouble(Price.getText().toString());
-                    double totalPrice = qty1 * price1;
-
-                    totalPriceUp.setText(String.valueOf(Double.valueOf(totalPrice)));
-                }
-
+                total();
             }
         });
     }
@@ -131,9 +120,6 @@ public class OrderingSystem extends AppCompatActivity {
     }
 
     public void add() {
-        String prodName = sp1.getSelectedItem().toString();
-        String qty1 = Quantity.getText().toString();
-        String tPrice = totalPriceUp.getText().toString();
         Spinner spinner = (Spinner)findViewById(R.id.accID);
         if(Quantity.getText().toString().equals(""))
         {
@@ -142,12 +128,12 @@ public class OrderingSystem extends AppCompatActivity {
             Toast.makeText(this,"Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
         }else{
             try{
+                total();
                 String tPrice1 = totalPriceUp.getText().toString();
                 String qty2 = Quantity.getText().toString();
                 String prodName1 = spinner.getSelectedItem().toString();
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
-
 
                 String sql = "insert into cartlist (prodName, quantity, price)values(?,?,?)";
                 SQLiteStatement statement = db.compileStatement(sql);
@@ -178,5 +164,19 @@ public class OrderingSystem extends AppCompatActivity {
             Price.setText("N/A");
         }
         c.close();
+    }
+
+    public void total(){
+        if (String.valueOf(Quantity.getText()).equals("")){
+            Toast.makeText(OrderingSystem.this,"Please Input a Quantity", Toast.LENGTH_LONG).show();
+        }else if(Integer.parseInt(String.valueOf(Quantity.getText())) <= 0){
+            Toast.makeText(OrderingSystem.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
+        }else{
+            double qty1 = Double.parseDouble(Quantity.getText().toString());
+            double price1 = Double.parseDouble(Price.getText().toString());
+            double totalPrice = qty1 * price1;
+
+            totalPriceUp.setText(String.valueOf(Double.valueOf(totalPrice)));
+        }
     }
 }

@@ -2,7 +2,10 @@ package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,8 +21,6 @@ import java.util.ArrayList;
 public class cart extends AppCompatActivity {
 
     ListView lstCart1;
-    String tmpName, tmpQty, tmpPrice;
-    Integer arrayLength, ctr = 0;
     ArrayList<String> titles = new ArrayList <String>();
     ArrayAdapter arrayAdapter;
     Button btnBack;
@@ -30,8 +31,7 @@ public class cart extends AppCompatActivity {
 
         lstCart1 = findViewById(R.id.lstCart1);
         btnBack = findViewById(R.id.btnBack);
-
-        TmpContainer container = cCurrentTransac.getCurrentTransaction();
+        lstCart1 = findViewById(R.id.lstCart1);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,20 +41,32 @@ public class cart extends AppCompatActivity {
             }
         });
 
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
+        final Cursor c = db.rawQuery("select * from cartlist", null);
+        int prodName = c.getColumnIndex("prodName");
+        int quantity = c.getColumnIndex("quantity");
+        int price = c.getColumnIndex("price");
+
         titles.clear();
         arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item,titles);
         lstCart1.setAdapter(arrayAdapter);
 
-        if (container != null) {
-            transacProducts[] orderProducts = container.getProducts();
+        final ArrayList<carttmp> cart = new ArrayList<carttmp>();
+        if(c.moveToFirst())
+        {
+            do{
+                carttmp pr = new carttmp();
+                pr.prodName = c.getString(prodName);
+                pr.quantity = c.getString(quantity);
+                pr.price = c.getString(price);
+                cart.add(pr);
 
-            ArrayAdapter<transacProducts> adapter = new ArrayAdapter<>(
-                    this,
-                    android.R.layout.simple_list_item_1,
-                    orderProducts
-            );
+                titles.add(c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
 
-            lstCart1.setAdapter(adapter);
+            }while(c.moveToNext());
+            arrayAdapter.notifyDataSetChanged();
+            lstCart1.invalidateViews();
         }
 
         lstCart1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
