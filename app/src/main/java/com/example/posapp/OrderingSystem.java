@@ -58,8 +58,6 @@ public class OrderingSystem extends AppCompatActivity {
             public void onClick(View view) {
                 add();
 
-                Toast.makeText(OrderingSystem.this,"Order Added", Toast.LENGTH_LONG).show();
-
                 Quantity.setText("");
                 totalPriceUp.setText("");
                 sp1.setSelection(0);
@@ -120,36 +118,47 @@ public class OrderingSystem extends AppCompatActivity {
     }
 
     public void add() {
-        Spinner spinner = (Spinner)findViewById(R.id.accID);
-        if(Quantity.getText().toString().equals(""))
-        {
-            Toast.makeText(this,"Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
-        }else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0){
-            Toast.makeText(this,"Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
-        }else{
-            try{
-                total();
-                String tPrice1 = totalPriceUp.getText().toString();
-                String qty2 = Quantity.getText().toString();
-                String prodName1 = spinner.getSelectedItem().toString();
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
+        Spinner spinner = (Spinner) findViewById(R.id.prodName);
+        if (Quantity.getText().toString().equals("")) {
+            Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
+        } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {
+            Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
+        }else try {
+            total();
+            String tPrice1 = totalPriceUp.getText().toString();
+            String qty2 = Quantity.getText().toString();
+            String prodName1 = spinner.getSelectedItem().toString();
 
-                String sql = "insert into cartlist (prodName, quantity, price)values(?,?,?)";
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+            db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY, quantity INTEGER, price DOUBLE)");
+
+            // Check if an item with the same prodName already exists
+            Cursor cursor = db.rawQuery("SELECT * FROM cartlist WHERE prodName=?", new String[]{prodName1});
+            if (cursor.getCount() > 0) {
+                // Update the existing item's quantity and price
+                db.execSQL("UPDATE cartlist SET quantity=?, price=? WHERE prodName=?", new String[]{qty2, tPrice1, prodName1});
+                Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
+            } else {
+                // Insert a new item
+                String sql = "INSERT INTO cartlist (prodName, quantity, price) VALUES (?, ?, ?)";
                 SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1,prodName1);
-                statement.bindString(2,qty2);
-                statement.bindString(3,tPrice1);
+                statement.bindString(1, prodName1);
+                statement.bindString(2, String.valueOf(Integer.parseInt(qty2)));
+                statement.bindString(3, String.valueOf(Double.parseDouble(tPrice1)));
                 statement.execute();
-                Toast.makeText(this,"Item Added to Cart", Toast.LENGTH_LONG).show();
-                Quantity.setText("");
-                totalPriceUp.setText("");
-            }catch (Exception e)
-            {
-                Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Item Added to Cart", Toast.LENGTH_LONG).show();
             }
+
+            Quantity.setText("");
+            totalPriceUp.setText("");
+            cursor.close();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
         }
-    }
+
+}
+
+
 
     public void updatePrice() {
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);

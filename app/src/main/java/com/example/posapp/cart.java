@@ -29,7 +29,6 @@ public class cart extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
-        lstCart1 = findViewById(R.id.lstCart1);
         btnBack = findViewById(R.id.btnBack);
         lstCart1 = findViewById(R.id.lstCart1);
 
@@ -40,7 +39,6 @@ public class cart extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from cartlist", null);

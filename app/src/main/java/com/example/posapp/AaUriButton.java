@@ -12,7 +12,7 @@ import android.widget.Button;
 
 public class AaUriButton extends AppCompatActivity {
 
-    Button btnClearUsers, btnClearProducts, btnClearTransactions, btnClearInventory, btnBack;
+    Button btnClearUsers, btnClearProducts, btnClearTransactions, btnClearInventory, btnBack, btnClearOrders;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +23,7 @@ public class AaUriButton extends AppCompatActivity {
         btnClearProducts = findViewById(R.id.btnClearProducts);
         btnClearTransactions = findViewById(R.id.btnCLearTransactions);
         btnBack = findViewById(R.id.btnBack);
+        btnClearOrders = findViewById(R.id.ClearOrders);
 
         btnClearProducts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,6 +31,17 @@ public class AaUriButton extends AppCompatActivity {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
 
                 String sql = "drop table products";
+                SQLiteStatement statement = db.compileStatement(sql);
+                statement.execute();
+            }
+        });
+
+        btnClearOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+
+                String sql = "drop table cartlist";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.execute();
             }
