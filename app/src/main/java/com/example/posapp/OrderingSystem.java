@@ -158,8 +158,6 @@ public class OrderingSystem extends AppCompatActivity {
 
 }
 
-
-
     public void updatePrice() {
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER)");//in case there are no tables yet

@@ -68,6 +68,7 @@ public class editItem extends AppCompatActivity {
 
     public void edit(){
         try{
+            String upID = editID.getText().toString();
             String editItemName1 = txtEditItemName.getText().toString();
             String editItemStock1 = txtEditItemStock.getText().toString();
 
@@ -80,6 +81,7 @@ public class editItem extends AppCompatActivity {
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.bindString(1,editItemName1);
                 statement.bindString(2,editItemStock1);
+                statement.bindString(3,upID);
                 statement.execute();
                 Toast.makeText(this,"Product Updated", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(editItem.this, inventory.class);

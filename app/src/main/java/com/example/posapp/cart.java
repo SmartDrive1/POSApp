@@ -14,16 +14,17 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class cart extends AppCompatActivity {
 
     ListView lstCart1;
     ArrayList<String> titles = new ArrayList <String>();
+    TextView total;
     ArrayAdapter arrayAdapter;
-    Button btnBack;
+    Button btnBack, payment;
+    Double tPrice = 0.0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,8 @@ public class cart extends AppCompatActivity {
 
         btnBack = findViewById(R.id.btnBack);
         lstCart1 = findViewById(R.id.lstCart1);
+        payment = findViewById(R.id.btnPayment);
+        total = findViewById(R.id.totalPrice);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,6 +61,8 @@ public class cart extends AppCompatActivity {
                 pr.prodName = c.getString(prodName);
                 pr.quantity = c.getString(quantity);
                 pr.price = c.getString(price);
+
+                tPrice = tPrice + Double.parseDouble(c.getString(price));//edit
                 cart.add(pr);
 
                 titles.add(c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
@@ -70,9 +75,8 @@ public class cart extends AppCompatActivity {
         lstCart1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                final ArrayList<carttmp> ccart = new ArrayList<carttmp>();
                 String a = titles.get(position).toString();
-                carttmp pr = ccart.get((position));
+                carttmp pr = cart.get((position));
                 Intent i = new Intent(getApplicationContext(), editOrder.class);
                 i.putExtra("prodName",pr.prodName);
                 i.putExtra("quantity",pr.quantity);
@@ -81,5 +85,7 @@ public class cart extends AppCompatActivity {
 
             }
         });
+
+        total.setText("Total: " + tPrice.toString());
     }
 }

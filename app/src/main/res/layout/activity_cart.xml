@@ -65,6 +65,24 @@
                 android:text="Cart"
                 android:autoSizeTextType="uniform"
                 android:maxLines="2"></TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/totalPrice"
+                android:textSize="70px"
+                android:gravity="center"
+                android:background="@drawable/back"
+                android:text="Total: 0"
+                android:autoSizeTextType="uniform"
+                android:maxLines="2"></TextView>
+
+            <Button
+                android:id="@+id/btnPayment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Payment"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"></Button>
 
             <Button
                 android:id="@+id/btnBack"
