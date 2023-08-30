@@ -90,7 +90,7 @@ public class userList extends AppCompatActivity {
                 i.putExtra("fullName",ul.fullName);
                 i.putExtra("userName",ul.userName);
                 i.putExtra("password",ul.password);
-                    i.putExtra("access",ul.access);
+                i.putExtra("access",ul.access);
                 startActivity(i);
 
             }
