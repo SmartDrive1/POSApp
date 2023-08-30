@@ -1,53 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:weightSum="50"
+    android:layout_centerInParent="true"
     tools:context=".payment">
 
-
-    <!--  Price  -->
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
+        android:weightSum="9">
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price:"
-            android:textSize="50px"
-            android:textColor="@color/black"/>
-
-        <EditText
-            android:id="@+id/txtPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:ems="10"
-            android:inputType="number"
-            android:textAlignment="center" />
+            android:id="@+id/txtTitles"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="10"
+            android:text="Product Name\t\t\t\t\t\t\t Quantity\t\t\t\t\t\t\t Price"
+            android:textSize="75px">
+        </TextView>
     </LinearLayout>
 
-    <!--  Buttons  -->
+
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_weight="1">
+        android:layout_below="@+id/linearLayout1"
+        android:weightSum="10"
+        >
 
-        <Button
+        <ListView
+            android:id="@+id/lstCart1"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="fill_parent"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="1dp"
+            android:background="@drawable/back">
+        </ListView>
+
+        <LinearLayout
+            android:id="@+id/btns"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_margin="5dp"
-            android:id="@+id/btnCancel"/>
+            android:layout_gravity="center"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="2"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout2">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Cart"
+                android:textSize="70px"></TextView>
+
+            <TextView
+                android:id="@+id/totalPrice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Total: 0"
+                android:textSize="70px"></TextView>
+
+            <TextView
+                android:id="@+id/txtPay"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Pay: 0"
+                android:textSize="70px"></TextView>
+
+            <TextView
+                android:id="@+id/txtChange"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Change: 0"
+                android:textSize="70px"></TextView>
+
+            <Button
+                android:id="@+id/btnConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"
+                android:text="Confirm"></Button>
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"
+                android:text="Back"></Button>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

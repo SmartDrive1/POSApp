@@ -11,8 +11,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,9 +23,11 @@ public class cart extends AppCompatActivity {
     ListView lstCart1;
     ArrayList<String> titles = new ArrayList <String>();
     TextView total;
+    EditText tPayment;
     ArrayAdapter arrayAdapter;
     Button btnBack, payment;
-    Double tPrice = 0.0;
+    Double tPrice = 0.00;
+    Double xPayment = 0.00;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,7 @@ public class cart extends AppCompatActivity {
         lstCart1 = findViewById(R.id.lstCart1);
         payment = findViewById(R.id.btnPayment);
         total = findViewById(R.id.totalPrice);
+        tPayment = findViewById(R.id.txtPayment);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,9 +51,21 @@ public class cart extends AppCompatActivity {
         payment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), payment.class);
-                i.putExtra("tPrice", String.valueOf(total));
-                startActivity(i);
+
+
+                if (tPayment.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Payment Value is Blank", Toast.LENGTH_SHORT).show();
+                } else {
+                    xPayment = Double.parseDouble(tPayment.getText().toString());
+                    if (xPayment < tPrice) {
+                        Toast.makeText(getApplicationContext(), "Input Payment Value More Than the Price", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Intent i = new Intent(getApplicationContext(), payment.class);
+                        i.putExtra("tPrice", tPrice.toString());
+                        i.putExtra("tPayment", xPayment.toString());
+                        startActivity(i);
+                    }
+                }
             }
         });
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
