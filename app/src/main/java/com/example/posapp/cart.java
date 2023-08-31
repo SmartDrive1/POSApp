@@ -68,6 +68,7 @@ public class cart extends AppCompatActivity {
                 }
             }
         });
+
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from cartlist", null);

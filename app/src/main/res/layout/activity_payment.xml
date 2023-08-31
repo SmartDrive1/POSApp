@@ -67,8 +67,8 @@
                 android:background="@drawable/back"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="Cart"
-                android:textSize="70px"></TextView>
+                android:text="Confirm\nOrder"
+                android:textSize="60px"></TextView>
 
             <TextView
                 android:id="@+id/totalPrice"
@@ -80,7 +80,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Total: 0"
-                android:textSize="70px"></TextView>
+                android:textSize="60px"></TextView>
 
             <TextView
                 android:id="@+id/txtPay"
@@ -92,7 +92,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Pay: 0"
-                android:textSize="70px"></TextView>
+                android:textSize="60px"></TextView>
 
             <TextView
                 android:id="@+id/txtChange"
@@ -104,7 +104,7 @@
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Change: 0"
-                android:textSize="70px"></TextView>
+                android:textSize="60px"></TextView>
 
             <Button
                 android:id="@+id/btnConfirm"
