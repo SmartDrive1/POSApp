@@ -6,4 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".confirmTransaction">
 
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/lstCart1"/>
 </LinearLayout>
