@@ -71,8 +71,6 @@ public class payment extends AppCompatActivity {
     }
 
     public void refreshList() {
-        Intent i = getIntent();
-        String tPrice = i.getStringExtra("tPrice");
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from cartlist", null);
@@ -98,13 +96,15 @@ public class payment extends AppCompatActivity {
             arrayAdapter.notifyDataSetChanged();
             lstCart1.invalidateViews();
         }
+        c.close();
+        db.close();
     }
 
     public void confirmTrans() {
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, prodname TEXT, quantity INTEGER, price DOUBLE, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
             Cursor cursor = db.rawQuery("SELECT prodName, quantity, price FROM cartlist", null);
 
             while (cursor.moveToNext()) {
@@ -119,11 +119,12 @@ public class payment extends AppCompatActivity {
 
                 db.insert("transactions", null, values);
             }
-
             String sql = "drop table cartlist";
             SQLiteStatement statement = db.compileStatement(sql);
             statement.execute();
+
             cursor.close();
+            db.close();
 
             Toast.makeText(this, "Data transferred from cartlist to transactions", Toast.LENGTH_LONG).show();
         } catch (Exception e) {

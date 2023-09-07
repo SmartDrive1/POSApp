@@ -52,20 +52,21 @@ public class cart extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-                if (tPayment.getText().toString().equals("")) {
+                if(tPrice <= 0){
+                    Toast.makeText(getApplicationContext(), "No Items in Cart", Toast.LENGTH_SHORT).show();
+                }else if (tPayment.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "Payment Value is Blank", Toast.LENGTH_SHORT).show();
-                } else {
-                    xPayment = Double.parseDouble(tPayment.getText().toString());
-                    if (xPayment < tPrice) {
-                        Toast.makeText(getApplicationContext(), "Input Payment Value More Than the Price", Toast.LENGTH_SHORT).show();
                     } else {
-                        Intent i = new Intent(getApplicationContext(), payment.class);
-                        i.putExtra("tPrice", tPrice.toString());
-                        i.putExtra("tPayment", xPayment.toString());
-                        startActivity(i);
+                        xPayment = Double.parseDouble(tPayment.getText().toString());
+                        if (xPayment < tPrice) {
+                            Toast.makeText(getApplicationContext(), "Input Payment Value More Than the Price", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Intent i = new Intent(getApplicationContext(), payment.class);
+                            i.putExtra("tPrice", tPrice.toString());
+                            i.putExtra("tPayment", xPayment.toString());
+                            startActivity(i);
+                        }
                     }
-                }
             }
         });
 
@@ -97,6 +98,8 @@ public class cart extends AppCompatActivity {
             }while(c.moveToNext());
             arrayAdapter.notifyDataSetChanged();
             lstCart1.invalidateViews();
+            c.close();
+            db.close();
         }
 
         lstCart1.setOnItemClickListener(new AdapterView.OnItemClickListener() {

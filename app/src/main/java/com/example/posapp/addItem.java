@@ -71,10 +71,11 @@ public class addItem extends AppCompatActivity {
                 txtItemName.setText("");
                 txtStock.setText("");
                 txtItemName.requestFocus();
+                db.close();
             }catch (Exception e)
             {
                 Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
             }
         }
     }
-    }
+}
