@@ -26,6 +26,7 @@ public class manageTransactions extends AppCompatActivity {
         setContentView(R.layout.activity_manage_transactions);
 
         back = findViewById(R.id.btnBack);
+        lstTrans = findViewById(R.id.lstTrans);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,12 +35,14 @@ public class manageTransactions extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        refreshList();
     }
 
     public void refreshList(){
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS transactions(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
-        final Cursor c = db.rawQuery("select * from cartlist", null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
+        final Cursor c = db.rawQuery("select * from transactions", null);
+        int id = c.getColumnIndex("id");
         int prodName = c.getColumnIndex("prodName");
         int quantity = c.getColumnIndex("quantity");
         int price = c.getColumnIndex("price");
@@ -48,19 +51,19 @@ public class manageTransactions extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item,titles);
         lstTrans.setAdapter(arrayAdapter);
 
-        final ArrayList<carttmp> cart = new ArrayList<carttmp>();
+        final ArrayList<cTrans> trans = new ArrayList<cTrans>();
         if(c.moveToFirst())
         {
             do{
-                carttmp pr = new carttmp();
+                cTrans pr = new cTrans();
+                pr.id = c.getString(id);
                 pr.prodName = c.getString(prodName);
                 pr.quantity = c.getString(quantity);
                 pr.price = c.getString(price);
 
-                tPrice = tPrice + Double.parseDouble(c.getString(price));//edit
-                cart.add(pr);
+                trans.add(pr);
 
-                titles.add(c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
+                titles.add(c.getString(id) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
 
             }while(c.moveToNext());
             arrayAdapter.notifyDataSetChanged();

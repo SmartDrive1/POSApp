@@ -2,16 +2,13 @@ package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class MainScreen extends AppCompatActivity {
-    Button btnUsers, btnAddProduct, btnTransactions, btnOrderingSystem, btnAnalysis, btnMoreInfo, btnProducts, btnInventory, btnLogout, btnAdmin;
+    Button btnUsers, btnTransactions, btnOrderingSystem, btnAnalysis, btnMoreInfo, btnProducts, btnInventory, btnLogout, btnAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +20,16 @@ public class MainScreen extends AppCompatActivity {
         btnProducts = findViewById(R.id.btnProducts);
         btnOrderingSystem = findViewById(R.id.btnOrderingSystem);
         btnInventory = findViewById(R.id.btnInventory);
+        btnTransactions = findViewById(R.id.btnTransactions);
         btnAdmin = findViewById(R.id.btnAdmin); //Remove This
+
+        btnTransactions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainScreen.this, manageTransactions.class);
+                startActivity(i);
+            }
+        });
 
         btnAdmin.setOnClickListener(new View.OnClickListener() { //Remove This
             @Override

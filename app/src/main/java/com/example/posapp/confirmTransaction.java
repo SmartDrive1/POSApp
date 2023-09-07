@@ -17,10 +17,7 @@ import java.util.ArrayList;
 
 public class confirmTransaction extends AppCompatActivity {
 
-    ListView lstCart1;
     Button back;
-    ArrayList<String> titles = new ArrayList <String>();
-    ArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

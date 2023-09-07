@@ -2,6 +2,7 @@ package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -100,25 +101,27 @@ public class payment extends AppCompatActivity {
         db.close();
     }
 
+    @SuppressLint("Range")
     public void confirmTrans() {
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-
             db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
-            Cursor cursor = db.rawQuery("SELECT prodName, quantity, price FROM cartlist", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM cartlist", null);
+            if(cursor.moveToFirst()){
+                do{
+                    String prodName = cursor.getString(cursor.getColumnIndex("prodName"));
+                    String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
+                    String price = cursor.getString(cursor.getColumnIndex("price"));
 
-            while (cursor.moveToNext()) {
-                String prodName = cursor.getString(0);
-                int quantity = cursor.getInt(1);
-                double price = cursor.getDouble(2);
-
-                ContentValues values = new ContentValues();
-                values.put("prodname", prodName);
-                values.put("quantity", quantity);
-                values.put("price", price);
-
-                db.insert("transactions", null, values);
+                    String sql = "insert into transactions (prodName, quantity, price)values(?,?,?)";
+                    SQLiteStatement statement = db.compileStatement(sql);
+                    statement.bindString(1, prodName);
+                    statement.bindString(2, quantity);
+                    statement.bindString(3, price);
+                    statement.execute();
+                }while (cursor.moveToNext());
             }
+
             String sql = "drop table cartlist";
             SQLiteStatement statement = db.compileStatement(sql);
             statement.execute();
@@ -126,9 +129,9 @@ public class payment extends AppCompatActivity {
             cursor.close();
             db.close();
 
-            Toast.makeText(this, "Data transferred from cartlist to transactions", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             Toast.makeText(this, "Failed to transfer data", Toast.LENGTH_LONG).show();
         }
+
     }
 }

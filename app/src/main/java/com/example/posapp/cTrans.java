@@ -1,6 +1,6 @@
 package com.example.posapp;
 
-public class tmpConfirm {
+public class cTrans {
     String id;
     String prodName;
     String quantity;

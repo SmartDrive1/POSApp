@@ -12,7 +12,7 @@ import android.widget.Button;
 
 public class AaUriButton extends AppCompatActivity {
 
-    Button btnClearUsers, btnClearProducts, btnClearTransactions, btnClearInventory, btnBack, btnClearOrders;
+    Button btnClearUsers, btnClearProducts, btnClearTransactions, btnClearInventory, btnBack, btnClearOrders, clearTrans;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +24,18 @@ public class AaUriButton extends AppCompatActivity {
         btnClearTransactions = findViewById(R.id.btnCLearTransactions);
         btnBack = findViewById(R.id.btnBack);
         btnClearOrders = findViewById(R.id.ClearOrders);
+        clearTrans = findViewById(R.id.clearTrans);
 
+        clearTrans.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+
+                String sql = "drop table transactions";
+                SQLiteStatement statement = db.compileStatement(sql);
+                statement.execute();
+            }
+        });
         btnClearProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

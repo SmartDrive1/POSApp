@@ -64,8 +64,13 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="CLear Orders"
         android:id="@+id/ClearOrders"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CLear Trans"
+        android:id="@+id/clearTrans"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
