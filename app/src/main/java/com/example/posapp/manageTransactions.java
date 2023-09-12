@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -19,6 +21,7 @@ public class manageTransactions extends AppCompatActivity {
     ListView lstTrans;
     ArrayList<String> titles = new ArrayList <String>();
     ArrayAdapter arrayAdapter;
+    Integer max_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,40 +39,57 @@ public class manageTransactions extends AppCompatActivity {
             }
         });
         refreshList();
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+            Cursor cursor = db.rawQuery("SELECT MAX(transID) FROM transactions", null);
+
+            if (cursor.moveToFirst()) {
+                max_id = cursor.getInt(0);
+            }
+
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void refreshList(){
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
-        final Cursor c = db.rawQuery("select * from transactions", null);
-        int id = c.getColumnIndex("id");
-        int prodName = c.getColumnIndex("prodName");
-        int quantity = c.getColumnIndex("quantity");
-        int price = c.getColumnIndex("price");
+    public void refreshList() {
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
+            final Cursor c = db.rawQuery("select * from transactions", null);
+            int id = c.getColumnIndex("transID");
+            int prodName = c.getColumnIndex("prodName");
+            int quantity = c.getColumnIndex("quantity");
+            int price = c.getColumnIndex("price");
 
-        titles.clear();
-        arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item,titles);
-        lstTrans.setAdapter(arrayAdapter);
+            titles.clear();
+            arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, titles);
+            lstTrans.setAdapter(arrayAdapter);
 
-        final ArrayList<cTrans> trans = new ArrayList<cTrans>();
-        if(c.moveToFirst())
-        {
-            do{
-                cTrans pr = new cTrans();
-                pr.id = c.getString(id);
-                pr.prodName = c.getString(prodName);
-                pr.quantity = c.getString(quantity);
-                pr.price = c.getString(price);
+            final ArrayList<cTrans> trans = new ArrayList<cTrans>();
+            if (c.moveToFirst()) {
+                do {
+                    cTrans pr = new cTrans();
+                    pr.id = c.getString(id);
+                    pr.prodName = c.getString(prodName);
+                    pr.quantity = c.getString(quantity);
+                    pr.price = c.getString(price);
 
-                trans.add(pr);
+                    trans.add(pr);
 
-                titles.add(c.getString(id) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
+                    titles.add(c.getString(id) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
 
-            }while(c.moveToNext());
-            arrayAdapter.notifyDataSetChanged();
-            lstTrans.invalidateViews();
-            c.close();
-            db.close();
+                } while (c.moveToNext());
+                arrayAdapter.notifyDataSetChanged();
+                lstTrans.invalidateViews();
+                c.close();
+                db.close();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
         }
     }
 }

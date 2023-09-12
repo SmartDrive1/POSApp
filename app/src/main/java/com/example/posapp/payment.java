@@ -103,21 +103,32 @@ public class payment extends AppCompatActivity {
 
     @SuppressLint("Range")
     public void confirmTrans() {
+        int max_id = 0;
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
-            Cursor cursor = db.rawQuery("SELECT * FROM cartlist", null);
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
+            Cursor cursor = db.rawQuery("SELECT MAX(transID) FROM transactions", null);
+
+            if (cursor.moveToNext()) {
+                max_id = cursor.getInt(0);
+            }
+
+            cursor = db.rawQuery("SELECT * FROM cartlist", null);
+
+            max_id += 1;
+
             if(cursor.moveToFirst()){
                 do{
                     String prodName = cursor.getString(cursor.getColumnIndex("prodName"));
                     String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
                     String price = cursor.getString(cursor.getColumnIndex("price"));
 
-                    String sql = "insert into transactions (prodName, quantity, price)values(?,?,?)";
+                    String sql = "insert into transactions (transID, prodName, quantity, price)values(?,?,?,?)";
                     SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1, prodName);
-                    statement.bindString(2, quantity);
-                    statement.bindString(3, price);
+                    statement.bindString(1, String.valueOf(max_id));
+                    statement.bindString(2, prodName);
+                    statement.bindString(3, quantity);
+                    statement.bindString(4, price);
                     statement.execute();
                 }while (cursor.moveToNext());
             }
