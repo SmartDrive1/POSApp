@@ -119,9 +119,9 @@ public class OrderingSystem extends AppCompatActivity {
 
     public void add() {
         Spinner spinner = (Spinner) findViewById(R.id.prodName);
-        if (Quantity.getText().toString().equals("")) {
+        if (Quantity.getText().toString().equals("")) {//check if blank
             Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
-        } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {
+        } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {//check if more than 0
             Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
         }else try {
             total();
