@@ -18,32 +18,34 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class OrderingSystem extends AppCompatActivity {
-    Button btnAdd, btnBack, Total, Orders;
-    EditText Quantity, Price, totalPriceUp;
-    Spinner sp1;
-    ArrayList<String> getP = new ArrayList<>();
+    Button btnAdd, btnBack, Orders;
+    EditText Quantity, Price, totalPriceUp, prodName;
+    ListView lstProds;
+    ArrayList<String> titles = new ArrayList <String>();
     ArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ordering_system);
+        setContentView(R.layout.orderingsystem);
 
 
         btnAdd = findViewById(R.id.btnCart);
         btnBack = findViewById(R.id.btnCancel);
         Quantity = findViewById(R.id.txtQty);
         Price = findViewById(R.id.txtPrice);
-        sp1 = findViewById(R.id.prodName);
+        lstProds = findViewById(R.id.lstProds);
+        prodName = findViewById(R.id.prodName);
         totalPriceUp = findViewById(R.id.txtTotalPrice);
-        Total = findViewById(R.id.btnTotal);
         Orders = findViewById(R.id.btnOrders);
+        final ArrayList<cProd> prods = new ArrayList<cProd>();
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,7 +62,6 @@ public class OrderingSystem extends AppCompatActivity {
 
                 Quantity.setText("");
                 totalPriceUp.setText("");
-                sp1.setSelection(0);
             }
         });
 
@@ -72,54 +73,28 @@ public class OrderingSystem extends AppCompatActivity {
             }
         });
 
-        sp1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+        refreshList();
+
+        String a = titles.get(0);
+        prodName.setText(a);
+        updatePrice();
+
+        lstProds.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                String a = titles.get(position).toString();
+                prodName.setText(a);
                 updatePrice();
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
         });
-
-        getProducts();
-
-        Total.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                total();
-            }
-        });
-    }
-
-    public void getProducts() {
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )");//in case there are no tables yet
-        final Cursor c = db.rawQuery("select * from products", null);
-        int product = c.getColumnIndex("product");
-
-        getP.clear();
-        arrayAdapter = new ArrayAdapter(this, R.layout.spinnerlayout, getP);
-        sp1.setAdapter(arrayAdapter);
-
-        final ArrayList<cProd> prods = new ArrayList<cProd>();
-        if (c.moveToFirst()) {
-            do {
-                cProd pr = new cProd();
-                pr.product = c.getString(product);
-                prods.add(pr);
-                getP.add(c.getString(product));
-
-            } while (c.moveToNext());
-            arrayAdapter.notifyDataSetChanged();
-        }
+        change();
     }
 
     public void add() {
-        Spinner spinner = (Spinner) findViewById(R.id.prodName);
-        if (Quantity.getText().toString().equals("")) {//check if blank
+        if(prodName.getText().toString().equals("")){//Check if ProdName is Blank
+            Toast.makeText(this, "Please Select a Product", Toast.LENGTH_LONG).show();
+        }else if (Quantity.getText().toString().equals("")) {//check if blank
             Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {//check if more than 0
             Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
@@ -127,7 +102,7 @@ public class OrderingSystem extends AppCompatActivity {
             total();
             String tPrice1 = totalPriceUp.getText().toString();
             String qty2 = Quantity.getText().toString();
-            String prodName1 = spinner.getSelectedItem().toString();
+            String prodName1 = prodName.getText().toString();
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
             db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY, quantity INTEGER, price DOUBLE)");
@@ -161,7 +136,7 @@ public class OrderingSystem extends AppCompatActivity {
     public void updatePrice() {
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER)");//in case there are no tables yet
-        final Cursor c = db.rawQuery("SELECT * FROM products WHERE product ='" + sp1.getSelectedItem().toString() + "'", null);
+        final Cursor c = db.rawQuery("SELECT * FROM products WHERE product ='" + prodName.getText() + "'", null);
 
         if (c.moveToFirst()) {
             int prodPriceIndex = c.getColumnIndex("prodPrice");
@@ -171,6 +146,7 @@ public class OrderingSystem extends AppCompatActivity {
             Price.setText("N/A");
         }
         c.close();
+        db.close();
     }
 
     public void total(){
@@ -186,4 +162,60 @@ public class OrderingSystem extends AppCompatActivity {
             totalPriceUp.setText(String.valueOf(Double.valueOf(totalPrice)));
         }
     }
+
+    public void refreshList() {
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+            db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
+            final Cursor c = db.rawQuery("select * from products", null);
+            int product = c.getColumnIndex("product");
+
+            titles.clear();
+            arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, titles);
+            lstProds.setAdapter(arrayAdapter);
+
+            final ArrayList<cProd> prods = new ArrayList<cProd>();
+            if (c.moveToFirst()) {
+                do {
+                    cProd pr = new cProd();
+                    pr.product = c.getString(product);
+                    prods.add(pr);
+
+                    titles.add(c.getString(product));
+
+                } while (c.moveToNext());
+                arrayAdapter.notifyDataSetChanged();
+                lstProds.invalidateViews();
+            }
+        }catch (Exception e) {
+            Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    public void change(){
+        Quantity.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    if (Price.getText().equals("")) {
+                        Toast.makeText(OrderingSystem.this, "No Product Selected", Toast.LENGTH_LONG).show();
+                    } else if (s.length() != 0) {
+                        total();
+                    } else {
+                        totalPriceUp.setText("");
+                    }
+                }catch (Exception e){
+                    Toast.makeText(OrderingSystem.this, "Please Input a Valid Value", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
 }

@@ -90,22 +90,21 @@ public class editProduct extends AppCompatActivity {
             String editPrice1 = editPrice.getText().toString();
             Spinner spinner = (Spinner)findViewById(R.id.catID);
             String spTxt = spinner.getSelectedItem().toString();
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-
-            String sql = "update products set product = ?, category = ?, prodPrice = ? where id = ?";
-            SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1,editName1);
-            statement.bindString(2,spTxt);
-            statement.bindString(3,editPrice1);
-            statement.bindString(4,editID1);
-            statement.execute();
-            Toast.makeText(this,"Product Updated", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(editProduct.this, productList.class);
-            startActivity(i);
-        }catch (Exception e)
-        {
-            Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
+                String sql = "update products set product = ?, category = ?, prodPrice = ? where id = ?";
+                SQLiteStatement statement = db.compileStatement(sql);
+                statement.bindString(1, editName1);
+                statement.bindString(2, spTxt);
+                statement.bindString(3, editPrice1);
+                statement.bindString(4, editID1);
+                statement.execute();
+                Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+                db.close();
+                Intent i = new Intent(editProduct.this, productList.class);
+                startActivity(i);
+        }catch (Exception e) {
+            Toast.makeText(this,"Please Input a Valid Amount", Toast.LENGTH_LONG).show();
         }
     }
 

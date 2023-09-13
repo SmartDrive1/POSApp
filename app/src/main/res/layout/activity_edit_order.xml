@@ -95,6 +95,29 @@
             android:textAlignment="center"/>
     </LinearLayout>
 
+    <!--  Total Price  -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total:"
+            android:textSize="50px"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTPrice"
+            android:layout_weight="1"
+            android:ems="10"
+            android:editable="false"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
     <!--  Buttons  -->
     <LinearLayout
         android:layout_width="wrap_content"
