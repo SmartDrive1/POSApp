@@ -156,7 +156,7 @@ public class OrderingSystem extends AppCompatActivity {
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
         }
 
-}
+    }
 
     public void updatePrice() {
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
