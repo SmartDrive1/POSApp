@@ -37,6 +37,7 @@ public class login extends AppCompatActivity {
         btnForgetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                accessValue.access = "Admin";
                 Intent i = new Intent(login.this, MainScreen.class);
                 startActivity(i);
             }
@@ -56,20 +57,21 @@ public class login extends AppCompatActivity {
         }else if(c.moveToFirst())
         {
             int accessIndex = c.getColumnIndex("access");
-            String accessValue = c.getString(accessIndex);
-            if(accessValue.equals("Admin")){
+            accessValue.access = c.getString(accessIndex);
+            String currentAccess = accessValue.access;
+            if(currentAccess.equals("Admin")){
                 Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(login.this, MainScreen.class);
                 startActivity(i);
             }else{
-                Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show(); //Revise this, create an ordering system class for users
+                Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(login.this, OrderingSystem.class);
                 startActivity(i);
             }
 
         }else
         {
-            Toast.makeText(login.this, "Login failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(login.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 
 public class OrderingSystem extends AppCompatActivity {
     Button btnAdd, btnBack, Orders;
+    ImageButton btnLogout;
     EditText Quantity, Price, totalPriceUp, prodName;
     ListView lstProds;
     ArrayList<String> titles = new ArrayList <String>();
@@ -36,9 +38,9 @@ public class OrderingSystem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.orderingsystem);
 
-
         btnAdd = findViewById(R.id.btnCart);
         btnBack = findViewById(R.id.btnCancel);
+        btnLogout = findViewById(R.id.btnLogout);
         Quantity = findViewById(R.id.txtQty);
         Price = findViewById(R.id.txtPrice);
         lstProds = findViewById(R.id.lstProds);
@@ -46,6 +48,20 @@ public class OrderingSystem extends AppCompatActivity {
         totalPriceUp = findViewById(R.id.txtTotalPrice);
         Orders = findViewById(R.id.btnOrders);
         final ArrayList<cProd> prods = new ArrayList<cProd>();
+
+        if (accessValue.access.equals("User")){
+            btnBack.setVisibility(View.GONE);
+        }else{
+            btnLogout.setVisibility(View.GONE);
+        }
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(OrderingSystem.this, login.class);
+                startActivity(i);
+            }
+        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,6 +203,9 @@ public class OrderingSystem extends AppCompatActivity {
                 arrayAdapter.notifyDataSetChanged();
                 lstProds.invalidateViews();
             }
+
+            c.close();
+            db.close();
         }catch (Exception e) {
             Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
         }

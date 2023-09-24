@@ -70,25 +70,57 @@ public class manageTransactions extends AppCompatActivity {
             lstTrans.setAdapter(arrayAdapter);
 
             final ArrayList<cTrans> trans = new ArrayList<cTrans>();
+            int currentId = -1; // Initialize with a value that is not in your database
+
             if (c.moveToFirst()) {
+                double total = 0; // Initialize the total for the current id
+                int totalQuantity = 0;
                 do {
+                    int idValue = c.getInt(id); // Assuming 'id' is an integer column
+                    String prodNameValue = c.getString(prodName);
+                    String quantityValue = c.getString(quantity);
+                    double priceValue = c.getDouble(price); // Assuming 'price' is a double column
+                    int quantity1 = c.getInt(quantity);
+
+                    if (idValue != currentId) {
+                        // The id has changed, add the total for the previous id
+                        if (currentId != -1) {
+                            titles.add("Transaction ID: " + currentId + " Total Quantity: " + totalQuantity + " Total Price: " + total); // Add total for the previous id
+                        }
+
+                        currentId = idValue; // Set the current id to the new id
+                        totalQuantity = 0; // Reset Quantity Value
+                        total = 0; // Reset the total for the new id
+                    }
+
+                    // Calculate the total for the current id
+                    total += priceValue;
+                    totalQuantity += quantity1;
+
+                    // Create and add the transaction entry
                     cTrans pr = new cTrans();
-                    pr.id = c.getString(id);
-                    pr.prodName = c.getString(prodName);
-                    pr.quantity = c.getString(quantity);
-                    pr.price = c.getString(price);
+                    pr.id = String.valueOf(idValue);
+                    pr.prodName = prodNameValue;
+                    pr.quantity = quantityValue;
+                    pr.price = String.valueOf(priceValue);
 
                     trans.add(pr);
 
-                    titles.add(c.getString(id) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
+                    titles.add(prodNameValue + "\t\t\t\t\t\t\t\t\t\t\t" + quantityValue + "\t\t\t\t\t\t\t" + priceValue);
 
                 } while (c.moveToNext());
-                arrayAdapter.notifyDataSetChanged();
+
+                // Add the total for the last id in the database
+                if (currentId != -1) {
+                    titles.add("Transaction ID: " + currentId + " Total Quantity: " + totalQuantity + " Total Price: " + total);
+                }
+            }
+            arrayAdapter.notifyDataSetChanged();
                 lstTrans.invalidateViews();
                 c.close();
                 db.close();
-            }
-        } catch (Exception e) {
+
+            }catch (Exception e) {
             Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
         }
     }
