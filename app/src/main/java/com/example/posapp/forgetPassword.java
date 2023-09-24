@@ -12,34 +12,34 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class login extends AppCompatActivity {
+public class forgetPassword extends AppCompatActivity {
 
+    Button btnBack, btnLogin;
     EditText txtUser, txtPass;
-    Button btnLogin, btnForgetPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_forget_password);
 
+        btnBack = findViewById(R.id.btnBack);
+        btnLogin = findViewById(R.id.btnLogin);
         txtUser = findViewById(R.id.txtUser);
         txtPass = findViewById(R.id.txtPass);
-        btnLogin = findViewById(R.id.btnLogin);
-        btnForgetPass = findViewById(R.id.btnForgetPass);
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Login();
+            public void onClick(View view) {
+                Intent i = new Intent(forgetPassword.this, login.class);
+                startActivity(i);
+
             }
         });
 
-        btnForgetPass.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                accessValue.access = "Admin";
-                Intent i = new Intent(login.this, forgetPassword.class);
-                startActivity(i);
+                Login();
             }
         });
     }
@@ -53,25 +53,22 @@ public class login extends AppCompatActivity {
         Cursor c = db.rawQuery("select * from users WHERE userName='" + username + "'and password='" + pass + "'", null);
 
         if (username.equals("") || pass.equals("")){
-            Toast.makeText(login.this, "Username or Password Blank", Toast.LENGTH_SHORT).show();
+            Toast.makeText(forgetPassword.this, "Username or Password Blank", Toast.LENGTH_SHORT).show();
         }else if(c.moveToFirst())
         {
             int accessIndex = c.getColumnIndex("access");
             accessValue.access = c.getString(accessIndex);
             String currentAccess = accessValue.access;
             if(currentAccess.equals("Admin")){
-                Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(login.this, MainScreen.class);
+                Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(forgetPassword.this, MainScreen.class);
                 startActivity(i);
             }else{
-                Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(login.this, OrderingSystem.class);
-                startActivity(i);
+                Toast.makeText(forgetPassword.this, "Account is a User", Toast.LENGTH_SHORT).show();
             }
-
         }else
         {
-            Toast.makeText(login.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(forgetPassword.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
         }
     }
 }
