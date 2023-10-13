@@ -54,24 +54,24 @@ public class forgetPassword extends AppCompatActivity {
 
         if (username.equals("") || pass.equals("")){
             Toast.makeText(forgetPassword.this, "Username or Password Blank", Toast.LENGTH_SHORT).show();
-        }else if(c.moveToFirst())
-        {
-            int accessIndex = c.getColumnIndex("access");
-            accessValue.access = c.getString(accessIndex);
-            String currentAccess = accessValue.access;
-            if(currentAccess.equals("Admin")) {
-                Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(forgetPassword.this, MainScreen.class);
-                startActivity(i);
-            }
-                else if (username.equals("admin") && pass.equals("adminuriel41")){
-                    Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(forgetPassword.this, MainScreen.class);
-                    startActivity(i);
-                }else{
-                Toast.makeText(forgetPassword.this, "Account is a User", Toast.LENGTH_SHORT).show();
-            }
-        }else
+        }
+        else if(username.equals("admin") && pass.equals("adminuriel41")){
+            Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(forgetPassword.this, MainScreen.class);
+            startActivity(i);
+            }else if(c.moveToFirst())
+                {
+                    int accessIndex = c.getColumnIndex("access");
+                    accessValue.access = c.getString(accessIndex);
+                    String currentAccess = accessValue.access;
+                    if(currentAccess.equals("Admin")) {
+                        Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(forgetPassword.this, MainScreen.class);
+                        startActivity(i);
+                    }else{
+                        Toast.makeText(forgetPassword.this, "Account is a User", Toast.LENGTH_SHORT).show();
+                    }
+            }else
         {
             Toast.makeText(forgetPassword.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
         }
