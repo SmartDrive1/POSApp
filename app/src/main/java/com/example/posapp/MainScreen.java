@@ -42,7 +42,7 @@ public class MainScreen extends AppCompatActivity {
         btnUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, userList.class);
+                Intent i = new Intent(MainScreen.this, UITest.class);
                 startActivity(i);
             }
         });
