@@ -21,7 +21,7 @@ import java.util.List;
 
 public class UITest extends AppCompatActivity implements ItemClickListener {
 
-    Button back;
+    Button btnAddProduct, back;
     UITestAdapter UIAdapter;
     List<UITestItems> items;
 
@@ -31,7 +31,7 @@ public class UITest extends AppCompatActivity implements ItemClickListener {
         setContentView(R.layout.activity_uitest);
 
         back = findViewById(R.id.btnBack);
-        RecyclerView recyclerView = findViewById(R.id.recycleProds);
+        btnAddProduct = findViewById(R.id.btnAddProduct);
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +42,13 @@ public class UITest extends AppCompatActivity implements ItemClickListener {
             }
         });
 
+        btnAddProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(UITest.this, addproduct.class);
+                startActivity(i);
+            }
+        });
 
         loadProducts();
     }
@@ -58,7 +65,7 @@ public class UITest extends AppCompatActivity implements ItemClickListener {
         int product = c.getColumnIndex("product");
         int category = c.getColumnIndex("category");
         int prodPrice = c.getColumnIndex("prodPrice");
-        items = new ArrayList<UITestItems>();
+        items = new ArrayList<>();
 
         if(c.moveToFirst()){
             do{
@@ -66,13 +73,17 @@ public class UITest extends AppCompatActivity implements ItemClickListener {
             }while(c.moveToNext());
         }
 
-        //recyclerView.setAdapter(new UITestAdapter(getApplicationContext(), items, this));
         UIAdapter = new UITestAdapter(this, items, this);
         recyclerView.setAdapter(UIAdapter);
     }
 
     @Override
     public void onItemClicked(UITestItems view) {
-        Toast.makeText(this, view.getProduct(), Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(getApplicationContext(), editProduct.class);
+        i.putExtra("id", view.getId());
+        i.putExtra("product", view.getProduct());
+        i.putExtra("prodPrice", view.getProdPrice());
+        i.putExtra("category", view.getCategory());
+        startActivity(i);
     }
 }

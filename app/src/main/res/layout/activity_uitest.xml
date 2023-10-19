@@ -56,8 +56,16 @@
                 android:background="@drawable/back"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="Manage\nTransactions"
+                android:text="Manage\nProducts"
                 android:textSize="60px"></TextView>
+
+            <Button
+                android:id="@+id/btnAddProduct"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Add Product"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"></Button>
 
             <Button
                 android:id="@+id/btnBack"

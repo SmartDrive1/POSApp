@@ -48,7 +48,7 @@ public class addproduct extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(addproduct.this, productList.class);
+                Intent i = new Intent(addproduct.this, UITest.class);
                 startActivity(i);
             }
         });

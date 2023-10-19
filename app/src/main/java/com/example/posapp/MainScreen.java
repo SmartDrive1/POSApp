@@ -42,7 +42,7 @@ public class MainScreen extends AppCompatActivity {
         btnUsers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, UITest.class);
+                Intent i = new Intent(MainScreen.this, userList.class);
                 startActivity(i);
             }
         });
@@ -64,7 +64,7 @@ public class MainScreen extends AppCompatActivity {
         btnProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, productList.class);
+                Intent i = new Intent(MainScreen.this, UITest.class);
                 startActivity(i);
             }
         });
