@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:gravity="center"
-    tools:context=".addproduct"
+    tools:context=".prodAdd"
     android:weightSum="20">
     <!-- Text -->
     <LinearLayout

@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class UITestAdapter extends RecyclerView.Adapter<prodViewHolder> {
+public class productListAdapter extends RecyclerView.Adapter<prodViewHolder> {
 
     Context context;
-    List<UITestItems> items;
-    ItemClickListener mClickListener;
+    List<prodItems> items;
+    prodClickListener mClickListener;
 
-    public UITestAdapter(Context context, List<UITestItems> items, ItemClickListener mClickListener) {
+    public productListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
         this.context = context;
         this.items = items;
         this.mClickListener = mClickListener;

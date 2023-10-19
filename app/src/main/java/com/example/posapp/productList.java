@@ -2,7 +2,6 @@ package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -11,24 +10,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UITest extends AppCompatActivity implements ItemClickListener {
+public class productList extends AppCompatActivity implements prodClickListener {
 
     Button btnAddProduct, back;
-    UITestAdapter UIAdapter;
-    List<UITestItems> items;
+    productListAdapter UIAdapter;
+    List<prodItems> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_uitest);
+        setContentView(R.layout.activity_productlist);
 
         back = findViewById(R.id.btnBack);
         btnAddProduct = findViewById(R.id.btnAddProduct);
@@ -37,7 +33,7 @@ public class UITest extends AppCompatActivity implements ItemClickListener {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(UITest.this, MainScreen.class);
+                Intent i = new Intent(productList.this, MainScreen.class);
                 startActivity(i);
             }
         });
@@ -45,7 +41,7 @@ public class UITest extends AppCompatActivity implements ItemClickListener {
         btnAddProduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(UITest.this, addproduct.class);
+                Intent i = new Intent(productList.this, prodAdd.class);
                 startActivity(i);
             }
         });
@@ -69,16 +65,16 @@ public class UITest extends AppCompatActivity implements ItemClickListener {
 
         if(c.moveToFirst()){
             do{
-                items.add(new UITestItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
+                items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
             }while(c.moveToNext());
         }
 
-        UIAdapter = new UITestAdapter(this, items, this);
+        UIAdapter = new productListAdapter(this, items, this);
         recyclerView.setAdapter(UIAdapter);
     }
 
     @Override
-    public void onItemClicked(UITestItems view) {
+    public void onItemClicked(prodItems view) {
         Intent i = new Intent(getApplicationContext(), editProduct.class);
         i.putExtra("id", view.getId());
         i.putExtra("product", view.getProduct());

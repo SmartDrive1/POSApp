@@ -1,12 +1,12 @@
 package com.example.posapp;
 
-public class UITestItems {
+public class prodItems {
     String id;
     String product;
     String category;
     String prodPrice;
 
-    public UITestItems(String id, String product, String category, String prodPrice) {
+    public prodItems(String id, String product, String category, String prodPrice) {
         this.id = id;
         this.product = product;
         this.category = category;

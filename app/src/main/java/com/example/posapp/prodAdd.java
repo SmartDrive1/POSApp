@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class addproduct extends AppCompatActivity {
+public class prodAdd extends AppCompatActivity {
 
     EditText txtProduct, txtPrice;
     Button btnAdd, btnCancel;
@@ -48,7 +48,7 @@ public class addproduct extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(addproduct.this, UITest.class);
+                Intent i = new Intent(prodAdd.this, productList.class);
                 startActivity(i);
             }
         });

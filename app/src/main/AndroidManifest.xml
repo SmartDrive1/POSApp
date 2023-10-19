@@ -13,7 +13,7 @@
         android:theme="@style/Theme.POSApp"
         tools:targetApi="31">
         <activity
-            android:name=".UITest"
+            android:name=".productList"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -156,7 +156,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".addproduct"
+            android:name=".prodAdd"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
