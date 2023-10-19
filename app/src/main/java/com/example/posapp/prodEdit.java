@@ -14,7 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class editProduct extends AppCompatActivity {
+public class prodEdit extends AppCompatActivity {
 
     EditText editID, editName, editPrice;
 
@@ -77,7 +77,7 @@ public class editProduct extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(editProduct.this, productList.class);
+                Intent i = new Intent(prodEdit.this, productList.class);
                 startActivity(i);
             }
         });
@@ -101,7 +101,7 @@ public class editProduct extends AppCompatActivity {
                 statement.execute();
                 Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
                 db.close();
-                Intent i = new Intent(editProduct.this, productList.class);
+                Intent i = new Intent(prodEdit.this, productList.class);
                 startActivity(i);
         }catch (Exception e) {
             Toast.makeText(this,"Please Input a Valid Amount", Toast.LENGTH_LONG).show();
@@ -119,7 +119,8 @@ public class editProduct extends AppCompatActivity {
             statement.bindString(1,editID1);
             statement.execute();
             Toast.makeText(this,"Product Deleted", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(editProduct.this, productList.class);
+            db.close();
+            Intent i = new Intent(prodEdit.this, productList.class);
             startActivity(i);
         }catch (Exception e)
         {

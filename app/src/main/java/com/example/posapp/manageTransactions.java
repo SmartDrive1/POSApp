@@ -21,7 +21,6 @@ public class manageTransactions extends AppCompatActivity {
     ListView lstTrans;
     ArrayList<String> titles = new ArrayList <String>();
     ArrayAdapter arrayAdapter;
-    Integer max_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,20 +38,6 @@ public class manageTransactions extends AppCompatActivity {
             }
         });
         refreshList();
-        try {
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-
-            Cursor cursor = db.rawQuery("SELECT MAX(transID) FROM transactions", null);
-
-            if (cursor.moveToFirst()) {
-                max_id = cursor.getInt(0);
-            }
-
-            cursor.close();
-            db.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public void refreshList() {

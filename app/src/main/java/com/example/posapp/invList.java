@@ -15,7 +15,7 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class inventory extends AppCompatActivity {
+public class invList extends AppCompatActivity {
 
     ListView lstInventory;
     Button btnBack, btnAddItem;
@@ -34,7 +34,7 @@ public class inventory extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(inventory.this,MainScreen.class);
+                Intent i = new Intent(invList.this,MainScreen.class);
                 startActivity(i);
             }
         });
@@ -42,13 +42,13 @@ public class inventory extends AppCompatActivity {
         btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(inventory.this, addItem.class);
+                Intent i = new Intent(invList.this, invAdd.class);
                 startActivity(i);
             }
         });
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS inventory(id INTEGER PRIMARY KEY AUTOINCREMENT, itemName VARCHAR, stock INTEGER )"); //Create database if non-existent, to avoid crash
+        db.execSQL("CREATE TABLE IF NOT EXISTS inventory(id INTEGER PRIMARY KEY, itemName VARCHAR, stock INTEGER )"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from inventory", null);
         int id = c.getColumnIndex("id");
         int itemName = c.getColumnIndex("itemName");
@@ -74,18 +74,19 @@ public class inventory extends AppCompatActivity {
             arrayAdapter.notifyDataSetChanged();
             lstInventory.invalidateViews();
         }
+        c.close();
+        db.close();
 
         lstInventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String a = titles.get(position).toString();
                 cInventory pr = inv.get((position));
-                Intent i = new Intent(getApplicationContext(), editItem.class);
+                Intent i = new Intent(getApplicationContext(), invEdit.class);
                 i.putExtra("id",pr.id);
                 i.putExtra("itemName",pr.itemName);
                 i.putExtra("itemStock",pr.stock);
                 startActivity(i);
-
             }
         });
     }

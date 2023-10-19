@@ -34,8 +34,22 @@ public class AaUriButton extends AppCompatActivity {
                 String sql = "drop table transactions";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.execute();
+                db.close();
             }
         });
+
+        btnClearInventory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+
+                String sql = "drop table inventory";
+                SQLiteStatement statement = db.compileStatement(sql);
+                statement.execute();
+                db.close();
+            }
+        });
+
         btnClearProducts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,6 +58,7 @@ public class AaUriButton extends AppCompatActivity {
                 String sql = "drop table products";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.execute();
+                db.close();
             }
         });
 
@@ -55,6 +70,7 @@ public class AaUriButton extends AppCompatActivity {
                 String sql = "drop table cartlist";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.execute();
+                db.close();
             }
         });
 
@@ -66,6 +82,7 @@ public class AaUriButton extends AppCompatActivity {
                 String sql = "drop table users";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.execute();
+                db.close();
             }
         });
 

@@ -55,7 +55,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
         recyclerView.setLayoutManager(new GridLayoutManager(this,1));
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
+        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from products", null);
         int id = c.getColumnIndex("id");
         int product = c.getColumnIndex("product");
@@ -68,14 +68,15 @@ public class productList extends AppCompatActivity implements prodClickListener 
                 items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
             }while(c.moveToNext());
         }
-
+        c.close();
+        db.close();
         UIAdapter = new productListAdapter(this, items, this);
         recyclerView.setAdapter(UIAdapter);
     }
 
     @Override
     public void onItemClicked(prodItems view) {
-        Intent i = new Intent(getApplicationContext(), editProduct.class);
+        Intent i = new Intent(getApplicationContext(), prodEdit.class);
         i.putExtra("id", view.getId());
         i.putExtra("product", view.getProduct());
         i.putExtra("prodPrice", view.getProdPrice());

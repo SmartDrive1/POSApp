@@ -79,7 +79,7 @@ public class MainScreen extends AppCompatActivity {
         btnInventory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, inventory.class);
+                Intent i = new Intent(MainScreen.this, invList.class);
                 startActivity(i);
             }
         });

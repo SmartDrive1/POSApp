@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:weightSum="7"
-    tools:context=".editUsers">
+    tools:context=".userEdit">
 
     <LinearLayout
         android:layout_width="wrap_content"

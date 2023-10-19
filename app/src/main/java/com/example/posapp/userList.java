@@ -42,13 +42,13 @@ public class userList extends AppCompatActivity {
         btnAddUser.setOnClickListener(new View.OnClickListener() { //Add User
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(userList.this, addUser.class);
+                Intent i = new Intent(userList.this, userAdd.class);
                 startActivity(i);
             }
         });
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
+        db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from users", null);
         int id = c.getColumnIndex("id");
         int fullName = c.getColumnIndex("fullName");
@@ -76,6 +76,8 @@ public class userList extends AppCompatActivity {
                         + c.getString(userName) + "\t\t\t\t\t\t\t" + c.getString(password) + "\t\t\t\t\t\t\t" + c.getString(access));
 
             }while(c.moveToNext());
+            c.close();
+            db.close();
             arrayAdapter.notifyDataSetChanged();
             lstUsers.invalidateViews();
         }
@@ -83,16 +85,14 @@ public class userList extends AppCompatActivity {
         lstUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String a = titles.get(position).toString();
                 cUsers ul = userL.get((position));
-                Intent i = new Intent(getApplicationContext(), editUsers.class);
+                Intent i = new Intent(getApplicationContext(), userEdit.class);
                 i.putExtra("id",ul.id);
                 i.putExtra("fullName",ul.fullName);
                 i.putExtra("userName",ul.userName);
                 i.putExtra("password",ul.password);
                 i.putExtra("access",ul.access);
                 startActivity(i);
-
             }
         });
     }

@@ -8,13 +8,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-public class editItem extends AppCompatActivity {
+public class invEdit extends AppCompatActivity {
 
     EditText editID, txtEditItemName, txtEditItemStock;
 
@@ -60,7 +58,7 @@ public class editItem extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(editItem.this, inventory.class);
+                Intent i = new Intent(invEdit.this, invList.class);
                 startActivity(i);
             }
         });
@@ -84,7 +82,8 @@ public class editItem extends AppCompatActivity {
                 statement.bindString(3,upID);
                 statement.execute();
                 Toast.makeText(this,"Product Updated", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(editItem.this, inventory.class);
+                db.close();
+                Intent i = new Intent(invEdit.this, invList.class);
                 startActivity(i);
             }
             }catch (Exception e)
@@ -104,7 +103,8 @@ public class editItem extends AppCompatActivity {
             statement.bindString(1,editID1);
             statement.execute();
             Toast.makeText(this,"Product Deleted", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(editItem.this, inventory.class);
+            db.close();
+            Intent i = new Intent(invEdit.this, invList.class);
             startActivity(i);
         }catch (Exception e)
         {

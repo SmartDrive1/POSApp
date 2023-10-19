@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -14,10 +15,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class addUser extends AppCompatActivity {
+public class userAdd extends AppCompatActivity {
 
     EditText  txtFullName, txtUserName, txtPassword;
     Button btnAddUser, btnCancel;
+    Integer max_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +50,28 @@ public class addUser extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(addUser.this, userList.class);
+                Intent i = new Intent(userAdd.this, userList.class);
                 startActivity(i);
             }
         });
     }
 
+    public void getMax(){
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+            Cursor cursor = db.rawQuery("SELECT MAX(id) FROM users", null);
+
+            if (cursor.moveToFirst()) {
+                max_id = cursor.getInt(0);
+            }
+
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void insert()
     {
@@ -61,6 +79,9 @@ public class addUser extends AppCompatActivity {
         String uName = txtUserName.getText().toString();
         String pass = txtPassword.getText().toString();
         Spinner spinner = (Spinner)findViewById(R.id.accID);
+
+        getMax();
+        max_id += 1;
         if(fName.equals("") || uName.equals("") || pass.equals(""))
         {
             Toast.makeText(this,"Full Name, UserName, or Password is Blank", Toast.LENGTH_LONG).show();
@@ -71,21 +92,23 @@ public class addUser extends AppCompatActivity {
                 String pass1 = txtPassword.getText().toString();
                 String spTxt = spinner.getSelectedItem().toString();
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
+                db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
 
 
-                String sql = "insert into users (fullName, userName, password, access)values(?,?,?,?)";
+                String sql = "insert into users (id, fullName, userName, password, access)values(?,?,?,?,?)";
                 SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1,fName1);
-                statement.bindString(2,uName1);
-                statement.bindString(3,pass1);
-                statement.bindString(4,spTxt);
+                statement.bindString(1,String.valueOf(max_id));
+                statement.bindString(2,fName1);
+                statement.bindString(3,uName1);
+                statement.bindString(4,pass1);
+                statement.bindString(5,spTxt);
                 statement.execute();
                 Toast.makeText(this,"User Added", Toast.LENGTH_LONG).show();
                 txtFullName.setText("");
                 txtUserName.setText("");
                 txtPassword.setText("");
                 txtFullName.requestFocus();
+                db.close();
             }catch (Exception e)
             {
                 Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();

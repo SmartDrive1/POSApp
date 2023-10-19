@@ -14,9 +14,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class editUsers extends AppCompatActivity {
+public class userEdit extends AppCompatActivity {
 
-    EditText editID, editName, editUserName, editPassword, editAccess;
+    EditText editID, editName, editUserName, editPassword;
 
     Button btnEdit, btnDelete, btnCancel;
 
@@ -79,7 +79,7 @@ public class editUsers extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(editUsers.this, userList.class);
+                Intent i = new Intent(userEdit.this, userList.class);
                 startActivity(i);
             }
         });
@@ -102,10 +102,11 @@ public class editUsers extends AppCompatActivity {
             statement.bindString(2,editUserName1);
             statement.bindString(3,editPassword1);
             statement.bindString(4,spTxt);
-            statement.bindString(5, editID1);
+            statement.bindString(5,editID1);
             statement.execute();
             Toast.makeText(this,"User Updated", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(editUsers.this, userList.class);
+            db.close();
+            Intent i = new Intent(userEdit.this, userList.class);
             startActivity(i);
         }catch (Exception e)
         {
@@ -123,8 +124,9 @@ public class editUsers extends AppCompatActivity {
             SQLiteStatement statement = db.compileStatement(sql);
             statement.bindString(1,editID1);
             statement.execute();
-            Toast.makeText(this,"Product Deleted", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(editUsers.this, editUsers.class);
+            Toast.makeText(this,"User Deleted", Toast.LENGTH_LONG).show();
+            db.close();
+            Intent i = new Intent(userEdit.this, userList.class);
             startActivity(i);
         }catch (Exception e)
         {

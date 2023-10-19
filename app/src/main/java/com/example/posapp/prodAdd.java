@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class prodAdd extends AppCompatActivity {
 
     EditText txtProduct, txtPrice;
     Button btnAdd, btnCancel;
+    Integer max_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +56,31 @@ public class prodAdd extends AppCompatActivity {
         });
     }
 
+    public void getMax(){
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+            Cursor cursor = db.rawQuery("SELECT MAX(id) FROM products", null);
+
+            if (cursor.moveToFirst()) {
+                max_id = cursor.getInt(0);
+            }
+
+            cursor.close();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void insert()
     {
         String prodName = txtProduct.getText().toString();
         String price = txtPrice.getText().toString();
         Spinner spinner = (Spinner)findViewById(R.id.catID);
+
+        getMax();
+        max_id += 1;
         if(prodName.equals("") || price.equals(""))
         {
             Toast.makeText(this,"Product Name or Price is Blank", Toast.LENGTH_LONG).show();
@@ -71,18 +93,20 @@ public class prodAdd extends AppCompatActivity {
                 String prodPrice = txtPrice.getText().toString();
                 String spTxt = spinner.getSelectedItem().toString();
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )");
+                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )");
 
-                String sql = "insert into products (product, category, prodPrice)values(?,?,?)";
+                String sql = "insert into products (id, product, category, prodPrice)values(?,?,?,?)";
                 SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1,product);
-                statement.bindString(2,spTxt);
-                statement.bindString(3,prodPrice);
+                statement.bindString(1,String.valueOf(max_id));
+                statement.bindString(2,product);
+                statement.bindString(3,spTxt);
+                statement.bindString(4,prodPrice);
                 statement.execute();
                 Toast.makeText(this,"Product Added", Toast.LENGTH_LONG).show();
                 txtProduct.setText("");
                 txtPrice.setText("");
                 txtProduct.requestFocus();
+                db.close();
             }catch (Exception e)
             {
                 Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();

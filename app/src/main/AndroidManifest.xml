@@ -68,7 +68,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".editItem"
+            android:name=".invEdit"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -76,7 +76,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".addItem"
+            android:name=".invAdd"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -84,7 +84,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".inventory"
+            android:name=".invList"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -100,7 +100,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".editUsers"
+            android:name=".userEdit"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -108,7 +108,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".addUser"
+            android:name=".userAdd"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -132,7 +132,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".editProduct"
+            android:name=".prodEdit"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
