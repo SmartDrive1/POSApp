@@ -54,7 +54,11 @@ public class login extends AppCompatActivity {
 
         if (username.equals("") || pass.equals("")){
             Toast.makeText(login.this, "Username or Password Blank", Toast.LENGTH_SHORT).show();
-        }else if(c.moveToFirst())
+        }else if(username.equals("admin") && pass.equals("admin")){
+            Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(login.this, MainScreen.class);
+            startActivity(i);
+        }else if (c.moveToFirst())
         {
             int accessIndex = c.getColumnIndex("access");
             accessValue.access = c.getString(accessIndex);

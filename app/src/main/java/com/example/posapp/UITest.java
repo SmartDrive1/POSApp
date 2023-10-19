@@ -1,6 +1,7 @@
 package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +19,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UITest extends AppCompatActivity {
+public class UITest extends AppCompatActivity implements ItemClickListener {
 
     Button back;
+    UITestAdapter UIAdapter;
+    List<UITestItems> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class UITest extends AppCompatActivity {
         back = findViewById(R.id.btnBack);
         RecyclerView recyclerView = findViewById(R.id.recycleProds);
 
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,11 +42,37 @@ public class UITest extends AppCompatActivity {
             }
         });
 
-        List<UITestItems> items = new ArrayList<UITestItems>();
-        items.add(new UITestItems("a","cs","ld","ds"));
-        items.add(new UITestItems("a","cs","ld","ds"));
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new UITestAdapter(getApplicationContext(), items));
+        loadProducts();
+    }
+
+    public void loadProducts(){
+        RecyclerView recyclerView = findViewById(R.id.recycleProds);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(this,1));
+
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
+        final Cursor c = db.rawQuery("select * from products", null);
+        int id = c.getColumnIndex("id");
+        int product = c.getColumnIndex("product");
+        int category = c.getColumnIndex("category");
+        int prodPrice = c.getColumnIndex("prodPrice");
+        items = new ArrayList<UITestItems>();
+
+        if(c.moveToFirst()){
+            do{
+                items.add(new UITestItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
+            }while(c.moveToNext());
+        }
+
+        //recyclerView.setAdapter(new UITestAdapter(getApplicationContext(), items, this));
+        UIAdapter = new UITestAdapter(this, items, this);
+        recyclerView.setAdapter(UIAdapter);
+    }
+
+    @Override
+    public void onItemClicked(UITestItems view) {
+        Toast.makeText(this, view.getProduct(), Toast.LENGTH_SHORT).show();
     }
 }
