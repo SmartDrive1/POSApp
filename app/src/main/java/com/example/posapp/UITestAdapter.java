@@ -1,6 +1,8 @@
 package com.example.posapp;
 
 import java.util.List;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +30,7 @@ public class UITestAdapter extends RecyclerView.Adapter<prodViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull prodViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull prodViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.txtID.setText(items.get(position).getId());
         holder.txtName.setText(items.get(position).getProduct());
         holder.txtCat.setText(items.get(position).getCategory());
