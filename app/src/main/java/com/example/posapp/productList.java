@@ -24,7 +24,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_productlist);
+        setContentView(R.layout.activity_prod_list);
 
         back = findViewById(R.id.btnBack);
         btnAddProduct = findViewById(R.id.btnAddProduct);

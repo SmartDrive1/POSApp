@@ -23,7 +23,7 @@ public class editProduct extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_product);
+        setContentView(R.layout.activity_prod_edit);
 
         String[] s1 = new String[] {
                 "Drinks", "Food", "Others"

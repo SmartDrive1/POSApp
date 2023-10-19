@@ -22,7 +22,7 @@ public class prodAdd extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addproduct);
+        setContentView(R.layout.activity_prod_add);
 
         String[] s1 = new String[] {
                 "Drinks", "Food", "Others"
