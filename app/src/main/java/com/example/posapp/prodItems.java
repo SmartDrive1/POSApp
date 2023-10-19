@@ -39,7 +39,7 @@ public class prodItems {
 
     public String getProdPrice() {
         return prodPrice;
-    }
+    } //da
 
     public void setProdPrice(String prodPrice) {
         this.prodPrice = prodPrice;
