@@ -107,18 +107,33 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="10sp"
+            android:background="@drawable/button1"
             android:layout_margin="5dp"
             android:id="@+id/btnEdit"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="10sp"
+            android:background="@drawable/button1"
             android:layout_margin="5dp"
             android:id="@+id/btnDelete"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="10sp"
+            android:background="@drawable/button1"
             android:layout_margin="5dp"
             android:id="@+id/btnCancel"/>
     </LinearLayout>

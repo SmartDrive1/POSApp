@@ -89,6 +89,10 @@
             android:layout_margin="5dp"
             android:id="@+id/btnAddItem"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="10sp"
+            android:background="@drawable/button1"
             android:maxLines="1"/>
         <Button
             android:layout_width="wrap_content"
@@ -97,6 +101,10 @@
             android:layout_margin="5dp"
             android:id="@+id/btnCancel"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="10sp"
+            android:background="@drawable/button1"
             android:maxLines="1"/>
     </LinearLayout>
 

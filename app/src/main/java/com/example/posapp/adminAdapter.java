@@ -11,16 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class userAdapter extends RecyclerView.Adapter<userViewHolder> {
+public class adminAdapter extends RecyclerView.Adapter<userViewHolder> {
     Context context;
     List<userItems> items;
     userClickListener mClickListener;
 
-    public userAdapter(Context context, List<userItems> items, userClickListener mClickListener) {
+    public adminAdapter(Context context, List<userItems> items, userClickListener mClickListener) {
         this.context = context;
         this.items = items;
         this.mClickListener = mClickListener;
     }
+
 
     @NonNull
     @Override
@@ -35,11 +36,11 @@ public class userAdapter extends RecyclerView.Adapter<userViewHolder> {
         holder.uName.setText("Username: " + items.get(position).getUserName());
         holder.password.setText("Password: " + items.get(position).getPassword());
         holder.access.setText("Access: " + items.get(position).getAccess());
-        
+
         holder.cardview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    mClickListener.onItemClicked(items.get(position));
+                mClickListener.onItemClicked(items.get(position));
             }
         });
     }

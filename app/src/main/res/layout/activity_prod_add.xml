@@ -113,6 +113,10 @@
             android:layout_margin="5dp"
             android:id="@+id/btnCart"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="20sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="20sp"
+            android:background="@drawable/button1"
             android:maxLines="1"/>
         <Button
             android:layout_width="wrap_content"
@@ -121,6 +125,10 @@
             android:layout_margin="5dp"
             android:id="@+id/btnCancel"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="20sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="20sp"
+            android:background="@drawable/button1"
             android:maxLines="1"/>
     </LinearLayout>
 

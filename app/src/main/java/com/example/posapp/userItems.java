@@ -7,6 +7,14 @@ public class userItems {
     String password;
     String access;
 
+    public userItems(String id, String fullName, String userName, String password, String access) {
+        this.id = id;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.password = password;
+        this.access = access;
+    }
+
     public String getId() {
         return id;
     }

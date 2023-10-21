@@ -2,63 +2,64 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
     android:layout_centerInParent="true"
     tools:context=".invList">
 
     <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:weightSum="10">
-        <TextView
-            android:id="@+id/txtTitles"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:text="ID\t\t\t\t\t\t\t Item Name\t\t\t\t\t\t\t Stock"
-            android:textSize="75px">
-        </TextView>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_below="@+id/linearLayout1"
-        android:weightSum="10"
-        >
+        android:weightSum="3">
 
-        <ListView
-            android:id="@+id/lstInventory"
+        <!--            Items-->
+        <LinearLayout
+            android:id="@+id/layout1"
             android:layout_width="0dp"
-            android:layout_weight="9"
-            android:layout_height="fill_parent"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="1dp"
-            android:background="@drawable/back">
-        </ListView>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:background="@drawable/border"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/black"
+                android:gravity="left"
+                android:maxLines="2"
+                android:paddingLeft="10dp"
+                android:text="Inventory"
+                android:background="@drawable/button1"
+                android:layout_margin="3dp"></TextView>
+
+            <!--        recyclerview-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleInv"
+                android:layout_width="wrap_content"
+                android:orientation="horizontal"
+                android:layout_height="fill_parent"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/btns"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
-            app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout2"
             android:layout_margin="2dp"
             android:layout_weight="1"
             android:weightSum="3">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:textSize="70px"
                 android:gravity="center"
                 android:background="@drawable/back"
@@ -68,17 +69,27 @@
             <Button
                 android:id="@+id/btnAddItem"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Add"
+                android:layout_height="wrap_content"
+                android:text="Add Item"
+                android:background="@drawable/button1"
                 android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:layout_margin="3dp"
                 android:maxLines="1"></Button>
 
             <Button
                 android:id="@+id/btnBack"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Back"
+                android:background="@drawable/button1"
                 android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:layout_margin="3dp"
                 android:maxLines="1"></Button>
         </LinearLayout>
     </LinearLayout>

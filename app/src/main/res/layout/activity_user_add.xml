@@ -147,6 +147,10 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="15sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="20sp"
+            android:background="@drawable/button1"
             android:maxLines="2"
             android:id="@+id/btnAddUser"/>
 
@@ -157,6 +161,10 @@
             android:layout_margin="5dp"
             android:layout_weight="1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="15sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="20sp"
+            android:background="@drawable/button1"
             android:maxLines="1"
             android:id="@+id/btnCancel"/>
     </LinearLayout>

@@ -15,11 +15,13 @@
         android:weightSum="3">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="2"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:background="@drawable/border"
+            android:layout_gravity="center">
 
             <!--            Admin-->
             <LinearLayout
@@ -84,7 +86,7 @@
 
         <LinearLayout
             android:id="@+id/btns"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:orientation="vertical"

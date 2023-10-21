@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class foodListAdapter extends RecyclerView.Adapter<prodViewHolder> {
-
+public class invListAdapter extends RecyclerView.Adapter<invViewHolder> {
     Context context;
-    List<prodItems> items;
-    prodClickListener mClickListener;
+    List<invItems> items;
+    invClickListener mClickListener;
 
-    public foodListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
+    public invListAdapter(Context context, List<invItems> items, invClickListener mClickListener) {
         this.context = context;
         this.items = items;
         this.mClickListener = mClickListener;
@@ -25,15 +24,15 @@ public class foodListAdapter extends RecyclerView.Adapter<prodViewHolder> {
 
     @NonNull
     @Override
-    public prodViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new prodViewHolder(LayoutInflater.from(context).inflate(R.layout.prodrecycleview, parent, false));
+    public invViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new invViewHolder(LayoutInflater.from(context).inflate(R.layout.invrecycleview,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull prodViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.txtID.setText("ID: " + items.get(position).getId());
-        holder.txtName.setText("Prod Name: " + items.get(position).getProduct());
-        holder.txtPrice.setText("Price: " + items.get(position).getProdPrice());
+    public void onBindViewHolder(@NonNull invViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        holder.itemID.setText("ID: " + items.get(position).getItemID());
+        holder.itemName.setText("Name: " + items.get(position).getItemName());
+        holder.itemStock.setText("Stock: " + items.get(position).getItemStock());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

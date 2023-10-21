@@ -1,6 +1,8 @@
 package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,19 +10,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class invList extends AppCompatActivity {
+public class invList extends AppCompatActivity implements invClickListener {
 
-    ListView lstInventory;
     Button btnBack, btnAddItem;
-    ArrayList<String> titles = new ArrayList <String>();
-    ArrayAdapter arrayAdapter;
+    invListAdapter invListAdapter;
+    List<invItems> items = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,6 @@ public class invList extends AppCompatActivity {
 
         btnBack = findViewById(R.id.btnBack);
         btnAddItem = findViewById(R.id.btnAddItem);
-        lstInventory = findViewById(R.id.lstInventory);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,47 +46,46 @@ public class invList extends AppCompatActivity {
             }
         });
 
+        refreshList();
+    }
+
+    public void refreshList(){
+        RecyclerView invRecycleView = findViewById(R.id.recycleInv);
+        invRecycleView.setHasFixedSize(true);
+        invRecycleView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS inventory(id INTEGER PRIMARY KEY, itemName VARCHAR, stock INTEGER )"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from inventory", null);
-        int id = c.getColumnIndex("id");
-        int itemName = c.getColumnIndex("itemName");
-        int stock = c.getColumnIndex("stock");
+        int count = c.getCount();
 
-        titles.clear();
-        arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item,titles);
-        lstInventory.setAdapter(arrayAdapter);
+        if(count == 0){
+            c.close();
+            db.close();
+            Toast.makeText(this,"No Items Found", Toast.LENGTH_LONG).show();
+        }else {
+            int id = c.getColumnIndex("id");
+            int itemName = c.getColumnIndex("itemName");
+            int stock = c.getColumnIndex("stock");
 
-        final ArrayList<cInventory> inv = new ArrayList<cInventory>();
-        if(c.moveToFirst())
-        {
-            do{
-                cInventory pr = new cInventory();
-                pr.id = c.getString(id);
-                pr.itemName = c.getString(itemName);
-                pr.stock = c.getString(stock);
-                inv.add(pr);
-
-                titles.add(c.getString(id) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(itemName) + "\t\t\t\t\t\t\t" + c.getString(stock));
-
-            }while(c.moveToNext());
-            arrayAdapter.notifyDataSetChanged();
-            lstInventory.invalidateViews();
-        }
-        c.close();
-        db.close();
-
-        lstInventory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String a = titles.get(position).toString();
-                cInventory pr = inv.get((position));
-                Intent i = new Intent(getApplicationContext(), invEdit.class);
-                i.putExtra("id",pr.id);
-                i.putExtra("itemName",pr.itemName);
-                i.putExtra("itemStock",pr.stock);
-                startActivity(i);
+            if(c.moveToFirst()){
+                do{
+                    items.add(new invItems(c.getString(id), c.getString(itemName), c.getString(stock)));
+                    invListAdapter = new invListAdapter(this, items, this);
+                    invRecycleView.setAdapter(invListAdapter);
+                }while (c.moveToNext());
             }
-        });
+            c.close();
+            db.close();
+        }
     }
+
+    @Override
+    public void onItemClicked(invItems view) {
+        Intent i = new Intent(getApplicationContext(), invEdit.class);
+        i.putExtra("id", view.getItemID());
+        i.putExtra("itemName", view.getItemName());
+        i.putExtra("itemStock", view.getItemStock());
+        startActivity(i);
     }
+}

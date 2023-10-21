@@ -1,7 +1,6 @@
 package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,7 +20,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
 
     Button btnAddProduct, back;
     productListAdapter productListAdapter;
-    foodListAdapter foodListAdapter;
+    prodFoodListAdapter foodListAdapter;
     othersListAdapter othersListAdapter;
     List<prodItems> items = new ArrayList<>();
     List<prodItems> foods = new ArrayList<>();
@@ -89,7 +88,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
                         recyclerView.setAdapter(productListAdapter);
                     }else if(c.getString(category).equals("Food")){
                         foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
-                        foodListAdapter = new foodListAdapter(this, foods, this);
+                        foodListAdapter = new prodFoodListAdapter(this, foods, this);
                         foodRecyclerView.setAdapter(foodListAdapter);
                     }else{
                         others.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
