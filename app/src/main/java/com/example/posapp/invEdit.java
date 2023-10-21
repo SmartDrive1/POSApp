@@ -21,7 +21,7 @@ public class invEdit extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_item);
+        setContentView(R.layout.activity_inv_edit);
 
 
         editID = findViewById(R.id.txtEditID);

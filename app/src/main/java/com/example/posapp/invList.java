@@ -25,7 +25,7 @@ public class invList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_inventory);
+        setContentView(R.layout.activity_inv_list);
 
         btnBack = findViewById(R.id.btnBack);
         btnAddItem = findViewById(R.id.btnAddItem);

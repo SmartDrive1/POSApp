@@ -89,7 +89,6 @@ public class OrderingSystem extends AppCompatActivity {
             }
         });
 
-
         refreshList();
 
         String a = titles.get(0);
@@ -114,7 +113,8 @@ public class OrderingSystem extends AppCompatActivity {
             Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {//check if more than 0
             Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
-        }else try {
+        }else
+            try {
             total();
             String tPrice1 = totalPriceUp.getText().toString();
             String qty2 = Quantity.getText().toString();
@@ -146,7 +146,6 @@ public class OrderingSystem extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
         }
-
     }
 
     public void updatePrice() {
@@ -182,15 +181,14 @@ public class OrderingSystem extends AppCompatActivity {
     public void refreshList() {
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
+            db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )");
+
             final Cursor c = db.rawQuery("select * from products", null);
             int product = c.getColumnIndex("product");
 
             titles.clear();
-            arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, titles);
-            lstProds.setAdapter(arrayAdapter);
-
             final ArrayList<cProd> prods = new ArrayList<cProd>();
+
             if (c.moveToFirst()) {
                 do {
                     cProd pr = new cProd();
@@ -200,13 +198,15 @@ public class OrderingSystem extends AppCompatActivity {
                     titles.add(c.getString(product));
 
                 } while (c.moveToNext());
-                arrayAdapter.notifyDataSetChanged();
-                lstProds.invalidateViews();
             }
+
+            arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, titles);
+            lstProds.setAdapter(arrayAdapter);
+            arrayAdapter.notifyDataSetChanged();
 
             c.close();
             db.close();
-        }catch (Exception e) {
+        } catch (Exception e) {
             Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
         }
     }

@@ -6,41 +6,81 @@
     android:layout_height="match_parent"
     tools:context=".userList">
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:weightSum="10">
-        <TextView
-            android:id="@+id/txtTitles"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="10"
-            android:text="ID\t\t\t\t\t\t\t Full Name\t\t\t\t\t\t\t UserName\t\t\t\t\t\t\t Password\t\t\t\t\t\t\tAccess"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1">>
-        </TextView>
-    </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_below="@+id/linearLayout1"
-        android:weightSum="10"
-        >
+        android:weightSum="3">
 
-        <ListView
-            android:id="@+id/lstUsers"
-            android:layout_width="0dp"
-            android:layout_weight="9"
-            android:layout_height="fill_parent"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="1dp"
-            android:background="@drawable/back">
-        </ListView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:layout_margin="5dp">
+
+            <!--            Admin-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Admin"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleAdmin"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+
+            <!--            User-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="User"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleUser"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/btns"
@@ -63,13 +103,22 @@
                 android:background="@drawable/back"
                 android:text="Manage\nUsers"
                 android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="1sp"
+                android:layout_margin="3dp"
                 android:maxLines="2"></TextView>
             <Button
                 android:id="@+id/btnAddUser"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Add User"
+                android:background="@drawable/button1"
                 android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="1sp"
+                android:layout_margin="3dp"
                 android:maxLines="1"></Button>
 
             <Button
@@ -77,7 +126,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Back"
+                android:background="@drawable/button1"
                 android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="1sp"
+                android:layout_margin="3dp"
                 android:maxLines="1"></Button>
         </LinearLayout>
     </LinearLayout>

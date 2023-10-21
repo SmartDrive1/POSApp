@@ -24,7 +24,7 @@ public class userAdd extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_user);
+        setContentView(R.layout.activity_user_add);
 
         String[] s1 = new String[] {
                 "Admin", "User"

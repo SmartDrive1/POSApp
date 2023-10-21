@@ -4,76 +4,181 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
     android:layout_centerInParent="true"
     tools:context=".productList">
-
-    <LinearLayout
-        android:id="@+id/linearLayout1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:weightSum="9"
-        android:orientation="horizontal" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_below="@+id/linearLayout1"
-        android:weightSum="10"
-        >
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleProds"
-            android:layout_width="0dp"
-            android:layout_weight="9"
-            android:layout_height="fill_parent">
-        </androidx.recyclerview.widget.RecyclerView>
+        android:weightSum="3">
 
         <LinearLayout
-            android:id="@+id/btns"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_gravity="center"
+            android:weightSum="3"
+            android:layout_margin="3dp"
+            android:background="@drawable/border"
+            android:orientation="vertical">
+
+<!--            drinks-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Drinks"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleProds"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+
+<!--            foods-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Foods"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleFoods"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+
+<!--            others-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Others"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleOthers"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+<!--        buttons layout-->
+        <LinearLayout
+            android:id="@+id/btns"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="2dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="2dp"
             android:layout_marginBottom="2dp"
+            android:weightSum="1"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:weightSum="2"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
             app:layout_constraintTop_toTopOf="@+id/linearLayout2">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="1sp"
                 android:textColor="@color/black"
                 android:background="@drawable/back"
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="Manage\nProducts"
+                android:layout_margin="3dp"
                 android:textSize="60px"></TextView>
 
             <Button
                 android:id="@+id/btnAddProduct"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Add Product"
                 android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="20sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="20sp"
+                android:background="@drawable/button1"
+                android:layout_margin="3dp"
                 android:maxLines="1"></Button>
 
             <Button
                 android:id="@+id/btnBack"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Back"
                 android:autoSizeTextType="uniform"
-                android:maxLines="1"
-                android:text="Back"></Button>
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:layout_margin="3dp"
+                android:background="@drawable/button1"
+                android:maxLines="1"></Button>
         </LinearLayout>
+
+<!--&lt;!&ndash;        for space&ndash;&gt;-->
+<!--        <TextView-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"/>-->
     </LinearLayout>
 </RelativeLayout>

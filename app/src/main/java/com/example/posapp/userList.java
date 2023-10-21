@@ -29,7 +29,7 @@ public class userList extends AppCompatActivity {
 
         btnBack = findViewById(R.id.btnBack);
         btnAddUser = findViewById(R.id.btnAddUser);
-        lstUsers = findViewById(R.id.lstUsers);
+//        lstUsers = findViewById(R.id.lstUsers);
 
         btnBack.setOnClickListener(new View.OnClickListener() { //Back
             @Override

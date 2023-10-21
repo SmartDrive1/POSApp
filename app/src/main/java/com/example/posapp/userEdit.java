@@ -23,7 +23,7 @@ public class userEdit extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_users);
+        setContentView(R.layout.activity_user_edit);
 
         String[] s1 = new String[] {
                 "Admin", "User"

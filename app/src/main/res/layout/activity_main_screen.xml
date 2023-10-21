@@ -41,7 +41,11 @@
             android:text="Manage\nUsers"
             android:id="@+id/btnUsers"
             android:layout_margin="5dp"
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="4sp"
             android:maxLines="2"/>
         <Button
             android:layout_width="0dp"
@@ -50,7 +54,11 @@
             android:text="Products"
             android:id="@+id/btnProducts"
             android:layout_margin="5dp"
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="9sp"
             android:maxLines="1"/>
         <Button
             android:layout_width="0dp"
@@ -59,12 +67,20 @@
             android:text="Manage Transactions"
             android:id="@+id/btnTransactions"
             android:layout_margin="5dp"
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="3sp"
             android:maxLines="2"/>
         <Button
             android:layout_width="120dp"
             android:layout_height="60dp"
-            android:textSize="27px"
+            android:background="@drawable/button1"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="1sp"
             android:text="(Si Uri lang pwede pumindot)"
             android:id="@+id/btnAdmin"
             android:layout_margin="5dp"/>
@@ -83,7 +99,11 @@
             android:text="Ordering System"
             android:id="@+id/btnOrderingSystem"
             android:layout_margin="5dp"
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="5sp"
             android:maxLines="2"/>
         <Button
             android:layout_width="0dp"
@@ -92,7 +112,11 @@
             android:layout_weight="1"
             android:id="@+id/btnAnalysis"
             android:layout_margin="5dp"
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="6sp"
             android:maxLines="1"/>
         <Button
             android:layout_width="0dp"
@@ -101,7 +125,11 @@
             android:layout_weight="1"
             android:id="@+id/btnMoreInfo"
             android:layout_margin="5dp"
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="6sp"
             android:maxLines="2"/>
     </LinearLayout>
 
@@ -119,9 +147,13 @@
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_margin="5dp"
-            android:text="Inventory "
             android:layout_weight="1"
+            android:text="Inventory "
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="2sp"
             android:maxLines="1"/>
         <Button
             android:layout_width="0dp"
@@ -130,7 +162,11 @@
             android:layout_weight="1"
             android:id="@+id/btnLogout"
             android:layout_margin="5dp"
+            android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="8sp"
             android:maxLines="1"/>
     </LinearLayout>
 

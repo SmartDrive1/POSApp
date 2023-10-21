@@ -1,76 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
-    android:paddingLeft="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_columnWeight="1"
+    android:layout_rowWeight="1"
+    android:layout_gravity="fill"
+    app:cardElevation="8dp"
+    app:cardCornerRadius="8dp"
+    android:layout_margin="8dp"
     android:id="@+id/main_container">
+
 <RelativeLayout
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:padding="3dp">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/prodIDH"
-        android:textColor="@color/black"
-        android:text="ID: "/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/prodID"
-        android:layout_toRightOf="@id/prodIDH"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeStepGranularity="1sp"
         android:textColor="@color/black"
         android:text="ID"/>
 
     <TextView
-        android:id="@+id/prodNameH"
+        android:id="@+id/prodName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/prodIDH"
-        android:textColor="@color/black"
-        android:text="Product Name: "/>
-
-    <TextView
-        android:id="@+id/prodName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/prodIDH"
-        android:layout_toRightOf="@id/prodNameH"
+        android:layout_below="@id/prodID"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeStepGranularity="1sp"
         android:text="Name"
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/prodCatH"
+        android:id="@+id/prodPrice"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/prodNameH"
-        android:textColor="@color/black"
-        android:text="Category: "/>
-
-    <TextView
-        android:id="@+id/prodCat"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/prodName"
-        android:layout_toRightOf="@id/prodCatH"
-        android:text="Category"
-        android:textColor="@color/black" />
-
-    <TextView
-        android:id="@+id/prodPriceH"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/prodCatH"
-        android:textColor="@color/black"
-        android:text="Price: "/>
-
-    <TextView
-        android:id="@+id/prodPrice"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/prodCat"
-        android:layout_toRightOf="@id/prodPriceH"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeStepGranularity="1sp"
         android:text="Price"
         android:textColor="@color/black"/>
 </RelativeLayout>
