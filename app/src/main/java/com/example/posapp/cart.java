@@ -32,7 +32,7 @@ public class cart extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
+        setContentView(R.layout.activity_os_cart);
 
         btnBack = findViewById(R.id.btnBack);
         lstCart1 = findViewById(R.id.lstCart1);

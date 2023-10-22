@@ -42,7 +42,7 @@
                     android:maxLines="2"
                     android:paddingLeft="10dp"
                     android:text="Admin"
-                    android:background="@drawable/button1"
+                    android:background="@drawable/textbackground"
                     android:layout_margin="3dp"></TextView>
 
                 <!--        recyclerview-->
@@ -72,7 +72,7 @@
                     android:maxLines="2"
                     android:paddingLeft="10dp"
                     android:text="User"
-                    android:background="@drawable/button1"
+                    android:background="@drawable/textbackground"
                     android:layout_margin="3dp"></TextView>
 
                 <!--        recyclerview-->

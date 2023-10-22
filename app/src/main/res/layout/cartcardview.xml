@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_columnWeight="3"
+    android:layout_rowWeight="1"
+    android:layout_gravity="fill"
+    app:cardElevation="2dp"
+    android:layout_margin="5dp"
+    android:id="@+id/invContainer">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="3dp">
+
+        <TextView
+            android:id="@+id/nameP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="1sp"
+            android:textColor="@color/black"
+            android:text="Name"
+            android:ems="5"
+            android:maxLines="2"/>
+
+        <TextView
+            android:id="@+id/quantityP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/nameP"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="1sp"
+            android:textColor="@color/black"
+            android:text="Quantity"
+            android:ems="5"
+            android:maxLines="2"/>
+
+        <TextView
+            android:id="@+id/priceP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/quantityP"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="1sp"
+            android:textColor="@color/black"
+            android:text="Price"
+            android:ems="5"
+            android:maxLines="2"/>
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
