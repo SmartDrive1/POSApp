@@ -76,7 +76,7 @@
                 <!--        recyclerview-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycleProds"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:orientation="horizontal"
                     android:layout_height="fill_parent"/>
             </LinearLayout>
@@ -106,7 +106,7 @@
                 <!--        recyclerview-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycleFoods"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:orientation="horizontal"
                     android:layout_height="fill_parent"/>
             </LinearLayout>
@@ -136,7 +136,7 @@
                 <!--        recyclerview-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycleOthers"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:orientation="horizontal"
                     android:layout_height="fill_parent"/>
             </LinearLayout>
@@ -261,7 +261,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add"
-                    android:layout_margin="5dp"
+                    android:layout_margin="3dp"
                     android:autoSizeTextType="uniform"
                     android:autoSizeMinTextSize="20sp"
                     android:autoSizeMaxTextSize="100sp"
@@ -273,7 +273,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cart"
-                    android:layout_margin="5dp"
+                    android:layout_margin="3dp"
                     android:autoSizeTextType="uniform"
                     android:autoSizeMinTextSize="20sp"
                     android:autoSizeMaxTextSize="100sp"
@@ -293,7 +293,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Back"
-                    android:layout_margin="5dp"
+                    android:layout_margin="3dp"
                     android:autoSizeTextType="uniform"
                     android:autoSizeMinTextSize="20sp"
                     android:autoSizeMaxTextSize="100sp"
@@ -301,12 +301,6 @@
                     android:background="@drawable/button1"
                     android:id="@+id/btnCancel"/>
             </LinearLayout>
-
         </LinearLayout>
-
-
-
-
     </LinearLayout>
-
 </RelativeLayout>

@@ -1,9 +1,10 @@
 package com.example.posapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,12 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class payment extends AppCompatActivity {
+public class OSPayment extends AppCompatActivity {
 
-    ListView lstCart1;
-    ArrayList<String> titles = new ArrayList<String>();
-    ArrayAdapter arrayAdapter;
+    OSPaymentAdapter OSPaymentAdapter;
+    List<OSItems> items = new ArrayList<>();
     TextView price, change, pay;
     Button back, confirm;
     Double eChange;
@@ -38,7 +39,6 @@ public class payment extends AppCompatActivity {
         pay = findViewById(R.id.txtPay);
         change = findViewById(R.id.txtChange);
         confirm = findViewById(R.id.btnConfirm);
-        lstCart1 = findViewById(R.id.lstCart1);
 
         Intent i = getIntent();
         String tPrice = i.getStringExtra("tPrice");
@@ -53,7 +53,7 @@ public class payment extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(payment.this, cart.class);
+                Intent i = new Intent(OSPayment.this, osCart.class);
                 startActivity(i);
             }
         });
@@ -62,7 +62,7 @@ public class payment extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 confirmTrans();
-                Intent i = new Intent(payment.this, confirmTransaction.class);
+                Intent i = new Intent(OSPayment.this, confirmTransaction.class);
                 startActivity(i);
             }
         });
@@ -72,30 +72,29 @@ public class payment extends AppCompatActivity {
     }
 
     public void refreshList() {
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+        RecyclerView recyclerView = findViewById(R.id.recycleCart1);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from cartlist", null);
-        int prodName = c.getColumnIndex("prodName");
-        int quantity = c.getColumnIndex("quantity");
-        int price = c.getColumnIndex("price");
+        int count = c.getCount();
 
-        titles.clear();
-        arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, titles);
-        lstCart1.setAdapter(arrayAdapter);
+        if(count == 0){
+            Toast.makeText(this,"No Products Found", Toast.LENGTH_LONG).show();
+        }else{
+            int prodName = c.getColumnIndex("prodName");
+            int quantity = c.getColumnIndex("quantity");
+            int price = c.getColumnIndex("price");
 
-        final ArrayList<carttmp> cart = new ArrayList<carttmp>();
-        if (c.moveToFirst()) {
-            do {
-                carttmp pr = new carttmp();
-                pr.prodName = c.getString(prodName);
-                pr.quantity = c.getString(quantity);
-                pr.price = c.getString(price);
-
-                cart.add(pr);
-                titles.add(c.getString(prodName) + "\t\t\t\t\t\t\t\t\t\t\t" + c.getString(quantity) + "\t\t\t\t\t\t\t" + c.getString(price));
-            } while (c.moveToNext());
-            arrayAdapter.notifyDataSetChanged();
-            lstCart1.invalidateViews();
+            if(c.moveToFirst()){
+                do{
+                    items.add(new OSItems(c.getString(prodName),c.getString(quantity),c.getString(price)));
+                    OSPaymentAdapter = new OSPaymentAdapter(this, items);
+                    recyclerView.setAdapter(OSPaymentAdapter);
+                }while(c.moveToNext());
+            }
         }
         c.close();
         db.close();
@@ -143,6 +142,5 @@ public class payment extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(this, "Failed to transfer data", Toast.LENGTH_LONG).show();
         }
-
     }
 }

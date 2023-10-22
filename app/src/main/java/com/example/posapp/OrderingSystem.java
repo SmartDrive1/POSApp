@@ -81,7 +81,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         Orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(OrderingSystem.this, cart.class);
+                Intent i = new Intent(OrderingSystem.this, osCart.class);
                 startActivity(i);
             }
         });

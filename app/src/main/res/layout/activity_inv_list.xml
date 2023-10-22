@@ -42,7 +42,7 @@
             <!--        recyclerview-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycleInv"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:orientation="horizontal"
                 android:layout_height="fill_parent"/>
         </LinearLayout>

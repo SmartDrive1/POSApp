@@ -45,7 +45,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".payment"
+            android:name=".OSPayment"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -61,7 +61,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".cart"
+            android:name=".osCart"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data

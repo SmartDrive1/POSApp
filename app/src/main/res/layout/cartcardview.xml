@@ -8,7 +8,7 @@
     android:layout_gravity="fill"
     app:cardElevation="2dp"
     android:layout_margin="5dp"
-    android:id="@+id/invContainer">
+    android:id="@+id/cartContainer">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -40,6 +40,7 @@
             android:autoSizeStepGranularity="1sp"
             android:textColor="@color/black"
             android:text="Quantity"
+            android:textAlignment="center"
             android:ems="5"
             android:maxLines="2"/>
 
@@ -53,11 +54,10 @@
             android:autoSizeMaxTextSize="30sp"
             android:autoSizeStepGranularity="1sp"
             android:textColor="@color/black"
+            android:textAlignment="textEnd"
             android:text="Price"
             android:ems="5"
             android:maxLines="2"/>
-
-
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

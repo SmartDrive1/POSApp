@@ -74,7 +74,7 @@ public class OSEditOrder extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(OSEditOrder.this, cart.class);
+                Intent i = new Intent(OSEditOrder.this, osCart.class);
                 startActivity(i);
             }
         });
@@ -122,7 +122,7 @@ public class OSEditOrder extends AppCompatActivity {
             statement.bindString(1, product1);
             statement.execute();
             Toast.makeText(this, "Cart Item Deleted", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(OSEditOrder.this, cart.class);
+            Intent i = new Intent(OSEditOrder.this, osCart.class);
             startActivity(i);
         } catch (Exception e) {
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
