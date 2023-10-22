@@ -31,7 +31,6 @@ public class prodFoodListAdapter extends RecyclerView.Adapter<prodViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull prodViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.txtID.setText("ID: " + items.get(position).getId());
         holder.txtName.setText("Prod Name: " + items.get(position).getProduct());
         holder.txtPrice.setText("Price: " + items.get(position).getProdPrice());
 

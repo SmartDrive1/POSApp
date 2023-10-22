@@ -11,13 +11,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class productListAdapter extends RecyclerView.Adapter<prodViewHolder> {
+public class prodDrinksListAdapter extends RecyclerView.Adapter<prodViewHolder> {
 
     Context context;
     List<prodItems> items;
     prodClickListener mClickListener;
 
-    public productListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
+    public prodDrinksListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
         this.context = context;
         this.items = items;
         this.mClickListener = mClickListener;
@@ -31,7 +31,6 @@ public class productListAdapter extends RecyclerView.Adapter<prodViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull prodViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.txtID.setText("ID: " + items.get(position).getId());
         holder.txtName.setText("Prod Name: " +items.get(position).getProduct());
         holder.txtPrice.setText("Price: " + items.get(position).getProdPrice());
 

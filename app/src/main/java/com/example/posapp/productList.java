@@ -19,7 +19,7 @@ import java.util.List;
 public class productList extends AppCompatActivity implements prodClickListener {
 
     Button btnAddProduct, back;
-    productListAdapter productListAdapter;
+    prodDrinksListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
     prodOthersListAdapter othersListAdapter;
     List<prodItems> items = new ArrayList<>();
@@ -83,7 +83,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
                 do{
                     if(c.getString(category).equals("Drinks")){
                         items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
-                        productListAdapter = new productListAdapter(this, items, this);
+                        productListAdapter = new prodDrinksListAdapter(this, items, this);
                         recyclerView.setAdapter(productListAdapter);
                     }else if(c.getString(category).equals("Food")){
                         foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));

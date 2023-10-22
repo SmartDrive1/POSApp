@@ -9,13 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class prodViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView txtID, txtName, txtPrice;
+    public TextView txtName, txtPrice;
     public CardView cardView;
 
     public prodViewHolder(@NonNull View itemView) {
         super(itemView);
 
-        txtID = itemView.findViewById(R.id.prodID);
         txtName = itemView.findViewById(R.id.prodName);
         txtPrice = itemView.findViewById(R.id.prodPrice);
         cardView = itemView.findViewById(R.id.main_container);

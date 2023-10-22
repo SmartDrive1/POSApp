@@ -38,15 +38,15 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Manage\nUsers"
+            android:text="Users"
             android:id="@+id/btnUsers"
             android:layout_margin="5dp"
             android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="4sp"
-            android:maxLines="2"/>
+            android:autoSizeStepGranularity="10sp"
+            android:maxLines="1"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -58,21 +58,21 @@
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="9sp"
+            android:autoSizeStepGranularity="7sp"
             android:maxLines="1"/>
         <Button
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:text="Manage Transactions"
+            android:text="Transactions"
             android:id="@+id/btnTransactions"
             android:layout_margin="5dp"
             android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="3sp"
-            android:maxLines="2"/>
+            android:autoSizeStepGranularity="5sp"
+            android:maxLines="1"/>
         <Button
             android:layout_width="120dp"
             android:layout_height="60dp"
@@ -116,7 +116,7 @@
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="6sp"
+            android:autoSizeStepGranularity="8sp"
             android:maxLines="1"/>
         <Button
             android:layout_width="0dp"
@@ -129,7 +129,7 @@
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="6sp"
+            android:autoSizeStepGranularity="8sp"
             android:maxLines="2"/>
     </LinearLayout>
 
@@ -148,12 +148,12 @@
             android:layout_height="60dp"
             android:layout_margin="5dp"
             android:layout_weight="1"
-            android:text="Inventory "
+            android:text="Inventory"
             android:background="@drawable/button1"
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="2sp"
+            android:autoSizeStepGranularity="5sp"
             android:maxLines="1"/>
         <Button
             android:layout_width="0dp"

@@ -13,12 +13,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     Button btnAdd, btnBack, Orders;
     ImageButton btnLogout;
     EditText Quantity, Price, totalPriceUp, prodName;
-    productListAdapter productListAdapter;
+    prodDrinksListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
     prodOthersListAdapter othersListAdapter;
     List<prodItems> items = new ArrayList<>();
@@ -195,7 +192,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 do{
                     if(c.getString(category).equals("Drinks")){
                         items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
-                        productListAdapter = new productListAdapter(this, items, this);
+                        productListAdapter = new prodDrinksListAdapter(this, items, this);
                         recyclerView.setAdapter(productListAdapter);
                     }else if(c.getString(category).equals("Food")){
                         foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));

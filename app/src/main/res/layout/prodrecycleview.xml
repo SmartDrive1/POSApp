@@ -16,22 +16,11 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:padding="3dp">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/prodID"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1sp"
-        android:autoSizeMaxTextSize="30sp"
-        android:autoSizeStepGranularity="1sp"
-        android:textColor="@color/black"
-        android:text="ID"/>
 
     <TextView
         android:id="@+id/prodName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/prodID"
         android:autoSizeTextType="uniform"
         android:autoSizeMinTextSize="1sp"
         android:autoSizeMaxTextSize="30sp"
