@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class othersListAdapter extends RecyclerView.Adapter<prodViewHolder> {
+public class prodOthersListAdapter extends RecyclerView.Adapter<prodViewHolder> {
 
     Context context;
     List<prodItems> items;
     prodClickListener mClickListener;
 
-    public othersListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
+    public prodOthersListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
         this.context = context;
         this.items = items;
         this.mClickListener = mClickListener;

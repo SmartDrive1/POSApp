@@ -107,7 +107,7 @@ public class cart extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 String a = titles.get(position).toString();
                 carttmp pr = cart.get((position));
-                Intent i = new Intent(getApplicationContext(), editOrder.class);
+                Intent i = new Intent(getApplicationContext(), OSEditOrder.class);
                 i.putExtra("prodName",pr.prodName);
                 i.putExtra("quantity",pr.quantity);
                 i.putExtra("price",pr.price);

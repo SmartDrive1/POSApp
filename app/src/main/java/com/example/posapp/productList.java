@@ -21,7 +21,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
     Button btnAddProduct, back;
     productListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
-    othersListAdapter othersListAdapter;
+    prodOthersListAdapter othersListAdapter;
     List<prodItems> items = new ArrayList<>();
     List<prodItems> foods = new ArrayList<>();
     List<prodItems> others = new ArrayList<>();
@@ -50,7 +50,6 @@ public class productList extends AppCompatActivity implements prodClickListener 
                 startActivity(i);
             }
         });
-
         loadProducts();
     }
 
@@ -92,7 +91,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
                         foodRecyclerView.setAdapter(foodListAdapter);
                     }else{
                         others.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
-                        othersListAdapter = new othersListAdapter(this, others, this);
+                        othersListAdapter = new prodOthersListAdapter(this, others, this);
                         othersRecyclerView.setAdapter(othersListAdapter);
                     }
                 }while(c.moveToNext());

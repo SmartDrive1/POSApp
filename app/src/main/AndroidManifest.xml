@@ -53,7 +53,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".editOrder"
+            android:name=".OSEditOrder"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data

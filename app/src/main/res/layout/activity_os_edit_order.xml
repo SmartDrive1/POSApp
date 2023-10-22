@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:weightSum="5"
-    tools:context=".editOrder">
+    tools:context=".OSEditOrder">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -130,18 +130,33 @@
             android:layout_height="wrap_content"
             android:text="Edit"
             android:layout_margin="5dp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="15sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="5sp"
+            android:background="@drawable/button1"
             android:id="@+id/btnEdit"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Remove"
             android:layout_margin="5dp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="15sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="5sp"
+            android:background="@drawable/button1"
             android:id="@+id/btnRemove"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Back"
             android:layout_margin="5dp"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="15sp"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeStepGranularity="5sp"
+            android:background="@drawable/button1"
             android:id="@+id/btnCancel"/>
     </LinearLayout>
 

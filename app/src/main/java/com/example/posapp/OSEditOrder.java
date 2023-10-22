@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class editOrder extends AppCompatActivity {
+public class OSEditOrder extends AppCompatActivity {
 
     EditText editProduct, qty, editPrice, txtTprice;
     Button edit, remove, back;
@@ -24,7 +24,7 @@ public class editOrder extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_order);
+        setContentView(R.layout.activity_os_edit_order);
 
         Intent i = getIntent();
         String prodName = i.getStringExtra("prodName".toString());
@@ -74,7 +74,7 @@ public class editOrder extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(editOrder.this, cart.class);
+                Intent i = new Intent(OSEditOrder.this, cart.class);
                 startActivity(i);
             }
         });
@@ -103,7 +103,7 @@ public class editOrder extends AppCompatActivity {
                 statement.bindString(3, prodName);
                 statement.execute();
                 Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(editOrder.this, OrderingSystem.class);
+                Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
                 startActivity(i);
             }
         } catch (Exception e) {
@@ -122,7 +122,7 @@ public class editOrder extends AppCompatActivity {
             statement.bindString(1, product1);
             statement.execute();
             Toast.makeText(this, "Cart Item Deleted", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(editOrder.this, cart.class);
+            Intent i = new Intent(OSEditOrder.this, cart.class);
             startActivity(i);
         } catch (Exception e) {
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
@@ -138,9 +138,9 @@ public class editOrder extends AppCompatActivity {
 
     public void total(){
         if (String.valueOf(qty.getText()).equals("")){
-            Toast.makeText(editOrder.this,"Please Input a Quantity", Toast.LENGTH_LONG).show();
+            Toast.makeText(OSEditOrder.this,"Please Input a Quantity", Toast.LENGTH_LONG).show();
         }else if(Integer.parseInt(String.valueOf(qty.getText())) <= 0){
-            Toast.makeText(editOrder.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
+            Toast.makeText(OSEditOrder.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
         }else{
             double qty1 = Double.parseDouble(qty.getText().toString());
             double price1 = Double.parseDouble(editPrice.getText().toString());
@@ -165,14 +165,14 @@ public class editOrder extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     if (qty.getText().equals("")) {
-                        Toast.makeText(editOrder.this, "No Product Selected", Toast.LENGTH_LONG).show();
+                        Toast.makeText(OSEditOrder.this, "No Product Selected", Toast.LENGTH_LONG).show();
                     } else if (s.length() != 0) {
                         total();
                     } else {
                         txtTprice.setText("");
                     }
                 } catch (Exception e) {
-                    Toast.makeText(editOrder.this, "Please Input a Valid Value", Toast.LENGTH_LONG).show();
+                    Toast.makeText(OSEditOrder.this, "Please Input a Valid Value", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:gravity="center"
     tools:context=".OrderingSystem"
     android:weightSum="100">
+
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/layout1"
         android:gravity="center"
         android:layout_weight="10"
         android:weightSum="100">
+
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -31,25 +33,120 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_weight="90"
-        android:weightSum="2">
+        android:layout_below="@+id/layout1"
+        android:weightSum="6">
+<!--Left Side-->
 
-        <ListView
-            android:id="@+id/lstProds"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:background="@drawable/back">
-        </ListView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:weightSum="3"
+            android:layout_margin="3dp"
+            android:background="@drawable/border"
+            android:orientation="vertical">
+
+            <!--            drinks-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Drinks"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleProds"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+
+            <!--            foods-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Foods"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleFoods"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+
+            <!--            others-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Others"
+                    android:background="@drawable/button1"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleOthers"
+                    android:layout_width="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+        </LinearLayout>
+
         <!-- Right Side -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:weightSum="20"
             android:orientation="vertical"
             android:gravity="center">
@@ -59,6 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center"
                 android:layout_weight="1">
 
                 <TextView
@@ -164,6 +262,11 @@
                     android:layout_height="wrap_content"
                     android:text="Add"
                     android:layout_margin="5dp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="20sp"
+                    android:autoSizeMaxTextSize="100sp"
+                    android:autoSizeStepGranularity="20sp"
+                    android:background="@drawable/button1"
                     android:id="@+id/btnCart"/>
 
                 <Button
@@ -171,6 +274,11 @@
                     android:layout_height="wrap_content"
                     android:text="Cart"
                     android:layout_margin="5dp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="20sp"
+                    android:autoSizeMaxTextSize="100sp"
+                    android:autoSizeStepGranularity="20sp"
+                    android:background="@drawable/button1"
                     android:id="@+id/btnOrders"/>
             </LinearLayout>
 
@@ -186,6 +294,11 @@
                     android:layout_height="wrap_content"
                     android:text="Back"
                     android:layout_margin="5dp"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="20sp"
+                    android:autoSizeMaxTextSize="100sp"
+                    android:autoSizeStepGranularity="20sp"
+                    android:background="@drawable/button1"
                     android:id="@+id/btnCancel"/>
             </LinearLayout>
 
@@ -196,4 +309,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
