@@ -1,97 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     tools:context=".login"
-    android:weightSum="10">
+    android:background="#EDEAE6">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/wave">
+    </RelativeLayout>
 <!-- Text -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
 
-        <TextView
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tea'll I Met You Cafe\nOrdering System"
-            android:gravity="center"
-            android:textSize="100px"
-            android:textColor="@color/black"/>
-    </LinearLayout>
+            android:layout_gravity="center"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="30sp"
+            android:layout_margin="20sp">
 
-<!--  Username Textbox  -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1">
-
-            <EditText
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/txtUser"
-                android:layout_weight="1"
-                android:drawableStart="@drawable/userpic"
-                android:ems="10"
-                android:textAlignment="center"/>
-        </LinearLayout>
+                android:text="Tea'll I Met You Cafe\nOrdering System"
+                android:gravity="center"
+                android:textSize="45sp"
+                android:maxEms="4"
+                android:textColor="@color/black"
+                android:padding="5sp"
+                android:maxLines="5"/>
+        </androidx.cardview.widget.CardView>
 
-<!--  Username Textbox  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
 
-        <EditText
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/txtPass"
-            android:inputType="textPassword"
-            android:drawableStart="@drawable/lockpic"
-            android:layout_weight="1"
-            android:ems="10"
-            android:textAlignment="center"/>
+            android:layout_gravity="center"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="30sp"
+            android:layout_margin="20sp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="10sp">
+
+                <!--  Username Textbox  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtUser"
+                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:drawableStart="@drawable/userpic"
+                        android:ems="10"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+
+                <!--  Username Textbox  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtPass"
+                        android:inputType="textPassword"
+                        android:textColor="@color/black"
+                        android:drawableStart="@drawable/lockpic"
+                        android:layout_weight="1"
+                        android:ems="10"
+                        android:textAlignment="center"/>
+                </LinearLayout>
+
+                <!--  Buttons  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:weightSum="2"
+                    android:layout_weight="1">
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Login"
+                        android:layout_weight="1"
+                        android:layout_margin="3dp"
+                        android:textColor="@color/black"
+                        android:background="@drawable/button1"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="1sp"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeStepGranularity="20sp"
+                        android:id="@+id/btnLogin"/>
+                    <Button
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Forget Password"
+                        android:background="@drawable/button1"
+                        android:textColor="@color/black"
+                        android:layout_weight="1"
+                        android:padding="1dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="1sp"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:id="@+id/btnForgetPass"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
-
-<!--  Buttons  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:weightSum="2"
-        android:layout_weight="1">
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:layout_weight="1"
-            android:layout_margin="3dp"
-            android:background="@drawable/button1"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="1sp"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="20sp"
-            android:id="@+id/btnLogin"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Forget Password"
-            android:background="@drawable/button1"
-            android:layout_weight="1"
-            android:padding="1dp"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="1sp"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="1sp"
-            android:id="@+id/btnForgetPass"/>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

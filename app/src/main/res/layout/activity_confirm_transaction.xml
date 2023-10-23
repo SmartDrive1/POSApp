@@ -24,9 +24,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:layout_weight="0.5"
         android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeStepGranularity="1sp"
+        android:background="@drawable/button1"
         android:maxLines="2"
-        android:text="New Order"></Button>
+        android:text="New\nOrder"></Button>
 
 </LinearLayout>
