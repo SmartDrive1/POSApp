@@ -5,4 +5,5 @@ public class cTrans {
     String prodName;
     String quantity;
     String price;
+    String time;
 }

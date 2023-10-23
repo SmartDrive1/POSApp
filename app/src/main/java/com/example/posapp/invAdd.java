@@ -88,7 +88,7 @@ public class invAdd extends AppCompatActivity {
                 statement.bindString(2,itemName);
                 statement.bindString(3,Stock);
                 statement.execute();
-                Toast.makeText(this,"Product Added", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Item Added", Toast.LENGTH_LONG).show();
                 txtItemName.setText("");
                 txtStock.setText("");
                 txtItemName.requestFocus();

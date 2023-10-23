@@ -13,9 +13,11 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.List;
 public class OrderingSystem extends AppCompatActivity implements prodClickListener {
     Button btnAdd, btnBack, Orders;
     ImageButton btnLogout;
+    TextView txtView;
     EditText Quantity, Price, totalPriceUp, prodName;
     prodDrinksListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
@@ -43,6 +46,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         Quantity = findViewById(R.id.txtQty);
         Price = findViewById(R.id.txtPrice);
         prodName = findViewById(R.id.prodName);
+        txtView = findViewById(R.id.txtView);
         totalPriceUp = findViewById(R.id.txtTotalPrice);
         Orders = findViewById(R.id.btnOrders);
 
@@ -50,6 +54,9 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             btnBack.setVisibility(View.GONE);
         }else{
             btnLogout.setVisibility(View.GONE);
+            ViewGroup.LayoutParams params = txtView.getLayoutParams();
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            txtView.setLayoutParams(params);
         }
 
         btnLogout.setOnClickListener(new View.OnClickListener() {

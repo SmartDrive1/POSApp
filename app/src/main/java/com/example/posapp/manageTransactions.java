@@ -14,7 +14,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class manageTransactions extends AppCompatActivity {
     Button back;
@@ -41,14 +44,18 @@ public class manageTransactions extends AppCompatActivity {
     }
 
     public void refreshList() {
+        String formattedDate;
         try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
             final Cursor c = db.rawQuery("select * from transactions", null);
             int id = c.getColumnIndex("transID");
             int prodName = c.getColumnIndex("prodName");
             int quantity = c.getColumnIndex("quantity");
             int price = c.getColumnIndex("price");
+            int time = c.getColumnIndex("time");
 
             titles.clear();
             arrayAdapter = new ArrayAdapter(this, com.google.android.material.R.layout.support_simple_spinner_dropdown_item, titles);
@@ -66,11 +73,13 @@ public class manageTransactions extends AppCompatActivity {
                     String quantityValue = c.getString(quantity);
                     double priceValue = c.getDouble(price); // Assuming 'price' is a double column
                     int quantity1 = c.getInt(quantity);
+                    long time1 = c.getLong(time); //Get Date using Long
+                    formattedDate = dateFormat.format(new Date(time1));//Convert Long to Date Format
 
                     if (idValue != currentId) {
                         // The id has changed, add the total for the previous id
                         if (currentId != -1) {
-                            titles.add("Transaction ID: " + currentId + " Total Quantity: " + totalQuantity + " Total Price: " + total); // Add total for the previous id
+                            titles.add("Transaction ID: " + currentId + " Total Quantity: " + totalQuantity + " Total Price: " + total + " Date: " + formattedDate); // Add total for the previous id
                         }
 
                         currentId = idValue; // Set the current id to the new id
@@ -88,6 +97,7 @@ public class manageTransactions extends AppCompatActivity {
                     pr.prodName = prodNameValue;
                     pr.quantity = quantityValue;
                     pr.price = String.valueOf(priceValue);
+                    pr.time = formattedDate;
 
                     trans.add(pr);
 
@@ -97,7 +107,7 @@ public class manageTransactions extends AppCompatActivity {
 
                 // Add the total for the last id in the database
                 if (currentId != -1) {
-                    titles.add("Transaction ID: " + currentId + " Total Quantity: " + totalQuantity + " Total Price: " + total);
+                    titles.add("Transaction ID: " + currentId + " Total Quantity: " + totalQuantity + " Total Price: " + "Date" + formattedDate);
                 }
             }
             arrayAdapter.notifyDataSetChanged();

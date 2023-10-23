@@ -94,20 +94,25 @@ public class userAdd extends AppCompatActivity {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
 
-
-                String sql = "insert into users (id, fullName, userName, password, access)values(?,?,?,?,?)";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1,String.valueOf(max_id));
-                statement.bindString(2,fName1);
-                statement.bindString(3,uName1);
-                statement.bindString(4,pass1);
-                statement.bindString(5,spTxt);
-                statement.execute();
-                Toast.makeText(this,"User Added", Toast.LENGTH_LONG).show();
-                txtFullName.setText("");
-                txtUserName.setText("");
-                txtPassword.setText("");
-                txtFullName.requestFocus();
+                Cursor c = db.rawQuery("SELECT * FROM users WHERE userName =?", new String[]{uName1});
+                if(c.getCount() > 0){
+                    Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
+                }else{
+                    String sql = "INSERT INTO users (id, fullName, userName, password, access)values(?,?,?,?,?)";
+                    SQLiteStatement statement = db.compileStatement(sql);
+                    statement.bindString(1,String.valueOf(max_id));
+                    statement.bindString(2,fName1);
+                    statement.bindString(3,uName1);
+                    statement.bindString(4,pass1);
+                    statement.bindString(5,spTxt);
+                    statement.execute();
+                    Toast.makeText(this,"User Added", Toast.LENGTH_LONG).show();
+                    txtFullName.setText("");
+                    txtUserName.setText("");
+                    txtPassword.setText("");
+                    txtFullName.requestFocus();
+                }
+                c.close();
                 db.close();
             }catch (Exception e)
             {

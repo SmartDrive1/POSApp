@@ -12,9 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -103,9 +101,10 @@ public class OSPayment extends AppCompatActivity {
     @SuppressLint("Range")
     public void confirmTrans() {
         int max_id = 0;
+
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(id INTEGER PRIMARY KEY AUTOINCREMENT, transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
             Cursor cursor = db.rawQuery("SELECT MAX(transID) FROM transactions", null);
 
             if (cursor.moveToNext()) {
@@ -121,13 +120,15 @@ public class OSPayment extends AppCompatActivity {
                     String prodName = cursor.getString(cursor.getColumnIndex("prodName"));
                     String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
                     String price = cursor.getString(cursor.getColumnIndex("price"));
+                    long currentTime = System.currentTimeMillis();
 
-                    String sql = "insert into transactions (transID, prodName, quantity, price)values(?,?,?,?)";
+                    String sql = "insert into transactions (transID, prodName, quantity, price, time)values(?,?,?,?,?)";
                     SQLiteStatement statement = db.compileStatement(sql);
                     statement.bindString(1, String.valueOf(max_id));
                     statement.bindString(2, prodName);
                     statement.bindString(3, quantity);
                     statement.bindString(4, price);
+                    statement.bindString(5, String.valueOf(currentTime));
                     statement.execute();
                 }while (cursor.moveToNext());
             }
