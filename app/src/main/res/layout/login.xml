@@ -20,23 +20,17 @@
         android:gravity="center">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="180sp"
+            android:layout_height="180sp"
             android:layout_gravity="center"
             app:cardElevation="5dp"
             app:cardCornerRadius="30sp"
             android:layout_margin="20sp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tea'll I Met You Cafe\nOrdering System"
-                android:gravity="center"
-                android:textSize="45sp"
-                android:maxEms="4"
-                android:textColor="@color/black"
-                android:padding="5sp"
-                android:maxLines="5"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/logo"/>
         </androidx.cardview.widget.CardView>
 
 
@@ -50,7 +44,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="180sp"
                 android:orientation="vertical"
                 android:gravity="center"
                 android:padding="10sp">
