@@ -6,7 +6,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical"
     android:layout_centerInParent="true"
-    tools:context=".manageTransactions">
+    tools:context=".transactions.manageTransactions">
 
     <LinearLayout
         android:id="@+id/linearLayout1"

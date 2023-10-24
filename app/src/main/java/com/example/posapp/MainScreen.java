@@ -7,6 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.posapp.OrderingSystem.OrderingSystem;
+
+import com.example.posapp.inventory.invList;
+import com.example.posapp.products.productList;
+import com.example.posapp.transactions.manageTransactions;
+import com.example.posapp.users.userList;
+
 public class MainScreen extends AppCompatActivity {
     Button btnUsers, btnTransactions, btnOrderingSystem, btnAnalysis, btnMoreInfo, btnProducts, btnInventory, btnLogout, btnAdmin;
     @Override

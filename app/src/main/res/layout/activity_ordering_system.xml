@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    tools:context=".OrderingSystem"
+    tools:context=".OrderingSystem.OrderingSystem"
     android:weightSum="100">
 
     <LinearLayout

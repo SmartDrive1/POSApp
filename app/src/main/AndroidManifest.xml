@@ -13,7 +13,7 @@
         android:theme="@style/Theme.POSApp"
         tools:targetApi="31">
         <activity
-            android:name=".productList"
+            android:name=".products.productList"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -29,7 +29,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".confirmTransaction"
+            android:name=".OrderingSystem.confirmTransaction"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -37,7 +37,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".manageTransactions"
+            android:name=".transactions.manageTransactions"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -45,7 +45,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".OSPayment"
+            android:name=".OrderingSystem.OSPayment"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -53,7 +53,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".OSEditOrder"
+            android:name=".OrderingSystem.OSEditOrder"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -61,7 +61,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".osCart"
+            android:name=".OrderingSystem.osCart"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -69,7 +69,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".invEdit"
+            android:name=".inventory.invEdit"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -77,7 +77,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".invAdd"
+            android:name=".inventory.invAdd"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -85,7 +85,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".invList"
+            android:name=".inventory.invList"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -101,7 +101,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".userEdit"
+            android:name=".users.userEdit"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -109,7 +109,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".userAdd"
+            android:name=".users.userAdd"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -117,7 +117,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".userList"
+            android:name=".users.userList"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -125,7 +125,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".OrderingSystem"
+            android:name=".OrderingSystem.OrderingSystem"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -133,7 +133,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".prodEdit"
+            android:name=".products.prodEdit"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
@@ -157,7 +157,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".prodAdd"
+            android:name=".products.prodAdd"
             android:exported="false"
             android:screenOrientation="landscape">
             <meta-data
