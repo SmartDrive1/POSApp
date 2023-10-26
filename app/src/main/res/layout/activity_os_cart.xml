@@ -1,174 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal"
     tools:context=".OrderingSystem.osCart"
-    android:weightSum="3">
+    android:background="#EDEAE6">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="2"
-        android:weightSum="100"
-        android:layout_gravity="center"
-        android:gravity="center">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:padding="3dp"
-            android:background="@drawable/bottomline">
-
-            <TextView
-                android:id="@+id/nameP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="1sp"
-                android:textColor="@color/black"
-                android:text="Name"
-                android:ems="5"
-                android:maxLines="2"/>
-
-            <TextView
-                android:id="@+id/quantityP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/nameP"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="1sp"
-                android:textColor="@color/black"
-                android:text="Quantity"
-                android:textAlignment="center"
-                android:ems="5"
-                android:maxLines="2"/>
-
-            <TextView
-                android:id="@+id/priceP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/quantityP"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="1sp"
-                android:textColor="@color/black"
-                android:text="Price"
-                android:textAlignment="textEnd"
-                android:ems="5"
-                android:maxLines="2"/>
-        </RelativeLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleCart1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="90"
-            android:layout_gravity="center">
-        </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/wave">
+    </RelativeLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_margin="2dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:weightSum="2">
-
+        android:weightSum="3">
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="@drawable/back">
+            android:layout_weight="2"
+            android:weightSum="100"
+            android:layout_gravity="center"
+            android:gravity="center">
 
-            <TextView
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:autoSizeTextType="uniform"
-                android:textColor="@color/black"
-                android:background="@drawable/back"
                 android:gravity="center"
-                android:maxLines="2"
-                android:text="Cart"
-                android:textSize="30sp"></TextView>
+                android:paddingLeft="3dp"
+                android:padding="3dp"
+                android:background="@drawable/bottomline">
 
-            <TextView
-                android:id="@+id/totalPrice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoSizeTextType="uniform"
-                android:textColor="@color/black"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text="Total: 0"
-                android:textSize="30sp"></TextView>
+                <TextView
+                    android:id="@+id/nameP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:text="Name"
+                    android:ems="5"
+                    android:maxLines="2"/>
+
+                <TextView
+                    android:id="@+id/quantityP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/nameP"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:text="Quantity"
+                    android:textAlignment="center"
+                    android:ems="5"
+                    android:maxLines="2"/>
+
+                <TextView
+                    android:id="@+id/priceP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/quantityP"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:text="Price"
+                    android:textAlignment="textEnd"
+                    android:ems="5"
+                    android:maxLines="2"/>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleCart1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="90"
+                android:layout_gravity="center">
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:weightSum="2">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="3"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:background="@drawable/back">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="₱"
+                    android:autoSizeTextType="uniform"
+                    android:textColor="@color/black"
+                    android:background="@drawable/back"
+                    android:gravity="center"
+                    android:maxLines="2"
+                    android:text="Cart"
+                    android:textSize="30sp"></TextView>
+
+                <TextView
+                    android:id="@+id/totalPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:textColor="@color/black"
+                    android:gravity="center"
                     android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textAlignment="textEnd"
-                    android:textSize="70px"/>
+                    android:text="Total: 0"
+                    android:textSize="30sp"></TextView>
 
-                <EditText
-                    android:id="@+id/txtPayment"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="3"
+                    android:background="@drawable/back">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="₱"
+                        android:maxLines="1"
+                        android:textColor="@color/black"
+                        android:textAlignment="textEnd"
+                        android:textSize="70px"/>
+
+                    <EditText
+                        android:id="@+id/txtPayment"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:ems="2"
+                        android:inputType="number"
+                        android:textAlignment="textStart"
+                        android:textColor="@color/black"
+                        android:textSize="70px" />
+                </LinearLayout>
+                <Button
+                    android:id="@+id/btnPayment"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:ems="2"
-                    android:inputType="number"
-                    android:textAlignment="textStart"
-                    android:textColor="@color/black"
-                    android:textSize="70px" />
-            </LinearLayout>
-            <Button
-                android:id="@+id/btnPayment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button1"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="7sp"
-                android:maxLines="1"
-                android:layout_margin="3dp"
-                android:text="Proceed"></Button>
+                    android:background="@drawable/button1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="7sp"
+                    android:maxLines="1"
+                    android:layout_margin="3dp"
+                    android:text="Proceed"></Button>
 
-            <Button
-                android:id="@+id/btnBack"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button1"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="7sp"
-                android:maxLines="1"
-                android:layout_margin="3dp"
-                android:text="Back"></Button>
+                <Button
+                    android:id="@+id/btnBack"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="7sp"
+                    android:maxLines="1"
+                    android:layout_margin="3dp"
+                    android:text="Back"></Button>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>

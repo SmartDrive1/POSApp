@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/catID"
             android:autoSizeTextType="uniform"
+            android:gravity="center"
             android:maxLines="1"
             ></Spinner>
     </LinearLayout>

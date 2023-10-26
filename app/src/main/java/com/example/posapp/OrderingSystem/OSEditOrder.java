@@ -22,15 +22,18 @@ public class OSEditOrder extends AppCompatActivity {
     EditText editProduct, qty, editPrice, txtTprice;
     Button edit, remove, back;
     String newPrice;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_os_edit_order);
+        db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
         Intent i = getIntent();
         String prodName = i.getStringExtra("prodName".toString());
         String quantity = i.getStringExtra("quantity".toString());
+        String price = i.getStringExtra("price".toString());
 
         edit = findViewById(R.id.btnEdit);
         remove = findViewById(R.id.btnRemove);
@@ -42,21 +45,7 @@ public class OSEditOrder extends AppCompatActivity {
 
         editProduct.setText(prodName);
         qty.setText(quantity);
-
-
-
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null); //set Price
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY AUTOINCREMENT,product VARCHAR, category VARCHAR, prodPrice INTEGER)");//in case there are no tables yet
-        final Cursor c = db.rawQuery("SELECT * FROM products WHERE product ='" + editProduct.getText().toString() + "'", null);
-
-        if (c.moveToFirst()) {
-            int prodPriceIndex = c.getColumnIndex("prodPrice");
-            int productPrice = c.getInt(prodPriceIndex);
-            editPrice.setText(String.valueOf(productPrice));
-        } else {
-            editPrice.setText("N/A");
-        }
-        c.close();
+        txtTprice.setText(price);
 
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,13 +70,12 @@ public class OSEditOrder extends AppCompatActivity {
             }
         });
 
-        total();
+        setPrice();
         change();
     }
 
     public void edit() {
         try {
-            newTotal();
             String qty1 = qty.getText().toString();
             String prodName = editProduct.getText().toString();
 
@@ -136,20 +124,12 @@ public class OSEditOrder extends AppCompatActivity {
         nPrice = Double.parseDouble(qty.getText().toString()) * Double.parseDouble(editPrice.getText().toString());
 
         newPrice = String.valueOf(nPrice);
+        txtTprice.setText(String.valueOf(nPrice));
     }
 
-    public void total(){
-        if (String.valueOf(qty.getText()).equals("")){
-            Toast.makeText(OSEditOrder.this,"Please Input a Quantity", Toast.LENGTH_LONG).show();
-        }else if(Integer.parseInt(String.valueOf(qty.getText())) <= 0){
-            Toast.makeText(OSEditOrder.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
-        }else{
-            double qty1 = Double.parseDouble(qty.getText().toString());
-            double price1 = Double.parseDouble(editPrice.getText().toString());
-            double totalPrice = qty1 * price1;
-
-            txtTprice.setText(String.valueOf(Double.valueOf(totalPrice)));
-        }
+    public void setPrice(){
+        Double inPrice = Double.parseDouble(txtTprice.getText().toString())/Double.parseDouble(qty.getText().toString());
+        editPrice.setText(String.valueOf(inPrice));
     }
 
     public void change() {
@@ -167,9 +147,9 @@ public class OSEditOrder extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     if (qty.getText().equals("")) {
-                        Toast.makeText(OSEditOrder.this, "No Product Selected", Toast.LENGTH_LONG).show();
+                        Toast.makeText(OSEditOrder.this, "Quantity is Blank", Toast.LENGTH_LONG).show();
                     } else if (s.length() != 0) {
-                        total();
+                        newTotal();
                     } else {
                         txtTprice.setText("");
                     }

@@ -25,8 +25,10 @@ public class productList extends AppCompatActivity implements prodClickListener 
     prodDrinksListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
     prodOthersListAdapter othersListAdapter;
+    addOnsListAdapter addOnsListAdapter;
     List<prodItems> items = new ArrayList<>();
     List<prodItems> foods = new ArrayList<>();
+    List<prodItems> addOns = new ArrayList<>();
     List<prodItems> others = new ArrayList<>();
 
     @Override
@@ -53,6 +55,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
                 startActivity(i);
             }
         });
+
         loadProducts();
     }
 
@@ -64,6 +67,10 @@ public class productList extends AppCompatActivity implements prodClickListener 
         RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
         foodRecyclerView.setHasFixedSize(true);
         foodRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        RecyclerView addOnsRecycle = findViewById(R.id.recycleAddOns);
+        addOnsRecycle.setHasFixedSize(true);
+        addOnsRecycle.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
         RecyclerView othersRecyclerView = findViewById(R.id.recycleOthers);
         othersRecyclerView.setHasFixedSize(true);
@@ -87,16 +94,19 @@ public class productList extends AppCompatActivity implements prodClickListener 
                     if(c.getString(category).equals("Drinks")){
                         items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
                         productListAdapter = new prodDrinksListAdapter(this, items, this);
-                        recyclerView.setAdapter(productListAdapter);
-                    }else if(c.getString(category).equals("Food")){
+                        recyclerView.setAdapter(productListAdapter);}
+                    if(c.getString(category).equals("Food")){
                         foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
                         foodListAdapter = new prodFoodListAdapter(this, foods, this);
-                        foodRecyclerView.setAdapter(foodListAdapter);
-                    }else{
+                        foodRecyclerView.setAdapter(foodListAdapter);}
+                    if (c.getString(category).equals("AddOns")){
+                        addOns.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
+                        addOnsListAdapter = new addOnsListAdapter(this, addOns, this);
+                        addOnsRecycle.setAdapter(addOnsListAdapter);}
+                    if (c.getString(category).equals("Others")){
                         others.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
                         othersListAdapter = new prodOthersListAdapter(this, others, this);
-                        othersRecyclerView.setAdapter(othersListAdapter);
-                    }
+                        othersRecyclerView.setAdapter(othersListAdapter);}
                 }while(c.moveToNext());
             }
             c.close();

@@ -87,6 +87,8 @@ public class userAdd extends AppCompatActivity {
         if(fName.equals("") || uName.equals("") || pass.equals(""))
         {
             Toast.makeText(this,"Full Name, UserName, or Password is Blank", Toast.LENGTH_LONG).show();
+        }else if(uName.equals("Admin") || uName.equals("admin")) {
+            Toast.makeText(this,"Please Choose Another Username", Toast.LENGTH_LONG).show();
         }else{
             try{
                 String fName1 = txtFullName.getText().toString();
@@ -122,4 +124,4 @@ public class userAdd extends AppCompatActivity {
             }
         }
     }
-    }
+}

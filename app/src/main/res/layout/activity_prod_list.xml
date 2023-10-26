@@ -7,6 +7,7 @@
     android:layout_centerInParent="true"
     tools:context=".products.productList">
 
+<!--    Whole page-->
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
@@ -14,17 +15,18 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
+<!--        Recycleview-->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_gravity="center"
-            android:weightSum="3"
+            android:weightSum="4"
             android:layout_margin="3dp"
             android:background="@drawable/border"
             android:orientation="vertical">
 
-<!--            drinks-->
+<!--        drinks-->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -84,6 +86,36 @@
                     android:layout_height="fill_parent"/>
             </LinearLayout>
 
+            <!--        Add-Ons-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    android:maxLines="2"
+                    android:paddingLeft="10dp"
+                    android:text="Add-Ons"
+                    android:background="@drawable/textbackground"
+                    android:layout_margin="3dp"></TextView>
+
+                <!--        recyclerview-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleAddOns"
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="fill_parent"/>
+            </LinearLayout>
+
 <!--            others-->
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,7 +148,7 @@
         </LinearLayout>
 
 
-<!--        buttons layout-->
+<!--        Right layout-->
         <LinearLayout
             android:id="@+id/btns"
             android:layout_width="0dp"

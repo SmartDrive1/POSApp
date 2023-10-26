@@ -84,6 +84,7 @@
             </LinearLayout>
         </LinearLayout>
 
+<!--        Right Layout-->
         <LinearLayout
             android:id="@+id/btns"
             android:layout_width="0dp"

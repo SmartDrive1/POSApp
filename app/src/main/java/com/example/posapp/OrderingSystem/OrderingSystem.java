@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,10 +14,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderingSystem extends AppCompatActivity implements prodClickListener {
-    Button btnAdd, btnBack, Orders;
+    Button btnAdd, Orders;
     ImageButton btnLogout;
     TextView txtView;
     EditText Quantity, Price, totalPriceUp, prodName;
@@ -43,14 +46,18 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     List<prodItems> items = new ArrayList<>();
     List<prodItems> foods = new ArrayList<>();
     List<prodItems> others = new ArrayList<>();
+    List<String> addOns = new ArrayList<>();
+    Integer addOnPrice;
+    Spinner spinner;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ordering_system);
+        db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
         btnAdd = findViewById(R.id.btnCart);
-        btnBack = findViewById(R.id.btnCancel);
         btnLogout = findViewById(R.id.btnLogout);
         Quantity = findViewById(R.id.txtQty);
         Price = findViewById(R.id.txtPrice);
@@ -58,29 +65,22 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         txtView = findViewById(R.id.txtView);
         totalPriceUp = findViewById(R.id.txtTotalPrice);
         Orders = findViewById(R.id.btnOrders);
+        spinner = (Spinner)findViewById(R.id.spAO);
 
-        if (accessValue.access.equals("User")){
-            btnBack.setVisibility(View.GONE);
-        }else{
-            btnLogout.setVisibility(View.GONE);
-            ViewGroup.LayoutParams params = txtView.getLayoutParams();
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            txtView.setLayoutParams(params);
-        }
+        spinner.setEnabled(false);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(OrderingSystem.this, login.class);
-                startActivity(i);
-            }
-        });
-
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(OrderingSystem.this, MainScreen.class);
-                startActivity(i);
+                if (accessValue.access.equals("User")){
+                    db.close();
+                    Intent i = new Intent(OrderingSystem.this, login.class);
+                    startActivity(i);
+                }else{
+                    db.close();
+                    Intent i = new Intent(OrderingSystem.this, MainScreen.class);
+                    startActivity(i);
+                }
             }
         });
 
@@ -97,11 +97,14 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         Orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                db.close();
                 Intent i = new Intent(OrderingSystem.this, osCart.class);
                 startActivity(i);
             }
         });
 
+        setSpinner();
+        spinnerChange();
         refreshList();
         change();
     }
@@ -120,7 +123,10 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             String qty2 = Quantity.getText().toString();
             String prodName1 = prodName.getText().toString();
 
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+            if(!spinner.getSelectedItem().toString().equals("None")){
+                prodName1 = prodName1 + " w/ " + spinner.getSelectedItem().toString();
+            }
+
             db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY, quantity INTEGER, price DOUBLE)");
 
             // Check if an item with the same prodName already exists
@@ -149,24 +155,31 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     }
 
     public void updatePrice() {
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER)");//in case there are no tables yet
+        Double total;
         final Cursor c = db.rawQuery("SELECT * FROM products WHERE product ='" + prodName.getText() + "'", null);
 
         if (c.moveToFirst()) {
+            @SuppressLint("Range") String cat = c.getString(c.getColumnIndex("category"));
+            if(cat.equals("Drinks")){
+                spinner.setEnabled(true);
+            }else{
+                spinner.setSelection(0);
+                spinner.setEnabled(false);
+            }
+
             int prodPriceIndex = c.getColumnIndex("prodPrice");
             int productPrice = c.getInt(prodPriceIndex);
-            Price.setText(String.valueOf(productPrice));
+            total = Double.valueOf(productPrice + addOnPrice);
+            Price.setText(String.valueOf(total));
         } else {
-            Price.setText("N/A");
+            Price.setText("");
         }
         c.close();
-        db.close();
     }
 
     public void total(){
         if (String.valueOf(Quantity.getText()).equals("")){
-            Toast.makeText(OrderingSystem.this,"Please Input a Quantity", Toast.LENGTH_LONG).show();
+
         }else if(Integer.parseInt(String.valueOf(Quantity.getText())) <= 0){
             Toast.makeText(OrderingSystem.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
         }else{
@@ -191,8 +204,6 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         othersRecyclerView.setHasFixedSize(true);
         othersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from products", null);
         int count = c.getCount();
 
@@ -214,7 +225,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                         foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
                         foodListAdapter = new prodFoodListAdapter(this, foods, this);
                         foodRecyclerView.setAdapter(foodListAdapter);
-                    }else{
+                    }else if (c.getString(category).equals("Others")){
                         others.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
                         othersListAdapter = new prodOthersListAdapter(this, others, this);
                         othersRecyclerView.setAdapter(othersListAdapter);
@@ -222,13 +233,11 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 }while(c.moveToNext());
             }
             c.close();
-            db.close();
         }
     }
 
     public void change(){//text change
         Quantity.addTextChangedListener(new TextWatcher() {
-
             @Override
             public void afterTextChanged(Editable s) {}
 
@@ -239,7 +248,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     if (Price.getText().equals("")) {
-                        Toast.makeText(OrderingSystem.this, "No Product Selected", Toast.LENGTH_LONG).show();
+
                     } else if (s.length() != 0) {
                         total();
                     } else {
@@ -252,9 +261,55 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         });
     }
 
+    public void spinnerChange(){
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @SuppressLint("Range")
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                String spinnerItem = spinner.getSelectedItem().toString();
+                String[] selectionArgs = {"AddOns", spinnerItem};
+                if (spinnerItem.equals("None")) {
+                    addOnPrice = 0;
+                } else {
+                    Cursor c = db.rawQuery("SELECT * FROM products WHERE category=? AND product=?", selectionArgs);
+
+                    if (c != null && c.moveToFirst()) {
+                        // Ensure the cursor has data before accessing columns
+                        addOnPrice = c.getInt(c.getColumnIndex("prodPrice"));
+                    } else {
+                        // Handle the case where no data is found for the product
+                        addOnPrice = 100000;
+                    }
+                }
+                updatePrice();
+                total();
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+        });
+    }
+
     @Override
     public void onItemClicked(prodItems view) {
         prodName.setText(view.getProduct());
         updatePrice();
+    }
+
+    public void setSpinner(){
+        addOns.clear();
+        addOns.add("None");
+
+        Cursor c = db.rawQuery("SELECT * FROM products WHERE category= 'AddOns'", null);
+
+        while(c.moveToNext()){
+            @SuppressLint("Range") String addOnName = c.getString(c.getColumnIndex("product"));
+            addOns.add(addOnName);
+        }
+        c.close();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, addOns);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
     }
 }

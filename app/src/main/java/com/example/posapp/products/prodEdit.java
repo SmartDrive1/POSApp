@@ -28,7 +28,7 @@ public class prodEdit extends AppCompatActivity {
         setContentView(R.layout.activity_prod_edit);
 
         String[] s1 = new String[] {
-                "Drinks", "Food", "Others"
+                "Drinks", "Food", "Add-Ons","Others"
         };
         Spinner s = (Spinner) findViewById(R.id.catID);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, s1);
@@ -52,15 +52,25 @@ public class prodEdit extends AppCompatActivity {
         editID.setText(id);
         editName.setText(product);
         editPrice.setText(prodPrice);
-        if (category.equals("Drinks")){
-            category1 = 0;
-        }else if (category.equals("Food")){
-            category1 = 1;
-        }else{
-            category1 = 2;
+
+        switch (category) {
+            case "Drinks":
+                category1 = 0;
+                break;
+            case "Food":
+                category1 = 1;
+                break;
+            case "AddOns":
+                category1 = 2;
+                break;
+            case "Others":
+                category1 = 3;
+                break;
+            default:
+                category1 = 0;
+                break;
         }
         s.setSelection(category1);
-
 
         btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,8 +102,10 @@ public class prodEdit extends AppCompatActivity {
             String editPrice1 = editPrice.getText().toString();
             Spinner spinner = (Spinner)findViewById(R.id.catID);
             String spTxt = spinner.getSelectedItem().toString();
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-
+            if(spTxt.equals("Add-Ons")){
+                spTxt = "AddOns";
+            }
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 String sql = "update products set product = ?, category = ?, prodPrice = ? where id = ?";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.bindString(1, editName1);
