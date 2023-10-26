@@ -4,8 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_centerInParent="true"
+    android:background="#EDEAE6"
     tools:context=".products.productList">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/wave">
+    </RelativeLayout>
 
 <!--    Whole page-->
     <LinearLayout

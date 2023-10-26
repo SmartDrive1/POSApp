@@ -117,7 +117,6 @@ public class prodAdd extends AppCompatActivity {
                 {
                     Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
                 }
-            }
         }
     }
 }

@@ -1,111 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     tools:context=".inventory.invAdd"
+    android:background="#EDEAE6"
     android:weightSum="20">
-    <!-- Text -->
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/wave">
+    </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Item"
-            android:textSize="80px"
-            android:textColor="@color/black"/>
-    </LinearLayout>
-
-    <!--  Product  -->
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Item Name:"
-            android:textAlignment="textEnd"
-            android:textColor="@color/black"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtItemName"
-            android:ems="10"
-            android:textAlignment="center"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"/>
-    </LinearLayout>
-
-    <!--  Stock  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Stock:"
-            android:textAlignment="textEnd"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"
-            android:textColor="@color/black"/>
-
-        <EditText
-            android:id="@+id/txtStock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:textAlignment="center" />
-    </LinearLayout>
-
-    <!--  Buttons  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:layout_weight="1">
+        android:orientation="vertical"
+        android:weightSum="20">
+        <!-- Text -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-        <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Item"
+                android:textSize="80px"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <!--  Product  -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add"
-            android:layout_margin="5dp"
-            android:id="@+id/btnAddItem"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="1sp"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="10sp"
-            android:background="@drawable/button1"
-            android:maxLines="1"/>
-        <Button
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Item Name:"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtItemName"
+                android:ems="10"
+                android:textAlignment="center"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"/>
+        </LinearLayout>
+
+        <!--  Stock  -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_margin="5dp"
-            android:id="@+id/btnCancel"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="1sp"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="10sp"
-            android:background="@drawable/button1"
-            android:maxLines="1"/>
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stock:"
+                android:textAlignment="textEnd"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/txtStock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <!--  Buttons  -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:layout_margin="5dp"
+                android:id="@+id/btnAddItem"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:background="@drawable/button1"
+                android:maxLines="1"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:layout_margin="5dp"
+                android:id="@+id/btnCancel"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:background="@drawable/button1"
+                android:maxLines="1"/>
+        </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

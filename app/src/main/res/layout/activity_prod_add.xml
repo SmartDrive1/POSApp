@@ -1,136 +1,150 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    tools:context=".products.prodAdd"
-    android:weightSum="20">
-    <!-- Text -->
-    <LinearLayout
+    android:background="#EDEAE6"
+    tools:context=".products.prodAdd">
+
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/wave">
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Product"
-            android:textSize="80px"
-            android:textColor="@color/black"/>
-    </LinearLayout>
-
-    <!--  Product  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Product:"
-            android:textAlignment="textEnd"
-            android:textColor="@color/black"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"/>
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txtProduct"
-            android:ems="10"
-            android:textAlignment="center"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"/>
-    </LinearLayout>
-
-<!--  Category  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category:"
-            android:textColor="@color/black"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"/>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/catID"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
-            android:maxLines="1"
-            ></Spinner>
-    </LinearLayout>
-
-    <!--  Price  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_weight="1">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Price:"
-            android:textAlignment="textEnd"
-            android:autoSizeTextType="uniform"
-            android:maxLines="1"
-            android:textColor="@color/black"/>
-
-        <EditText
-            android:id="@+id/txtPrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="number"
-            android:textAlignment="center" />
-    </LinearLayout>
-
-    <!--  Buttons  -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center"
-        android:layout_weight="1">
+        android:weightSum="20">
 
-        <Button
+        <!-- Text -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add"
-            android:layout_margin="5dp"
-            android:id="@+id/btnCart"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="20sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="20sp"
-            android:background="@drawable/button1"
-            android:maxLines="1"/>
-        <Button
+            android:orientation="vertical"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Product"
+                android:textSize="80px"
+                android:textColor="@color/black"/>
+        </LinearLayout>
+
+        <!--  Product  -->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Back"
-            android:layout_margin="5dp"
-            android:id="@+id/btnCancel"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="20sp"
-            android:autoSizeMaxTextSize="100sp"
-            android:autoSizeStepGranularity="20sp"
-            android:background="@drawable/button1"
-            android:maxLines="1"/>
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Product:"
+                android:textAlignment="textEnd"
+                android:textColor="@color/black"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtProduct"
+                android:ems="10"
+                android:textAlignment="center"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"/>
+        </LinearLayout>
+
+        <!--  Category  -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category:"
+                android:textColor="@color/black"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/catID"
+                android:autoSizeTextType="uniform"
+                android:gravity="center"
+                android:maxLines="1"
+                ></Spinner>
+        </LinearLayout>
+
+        <!--  Price  -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price:"
+                android:textAlignment="textEnd"
+                android:autoSizeTextType="uniform"
+                android:maxLines="1"
+                android:textColor="@color/black"/>
+
+            <EditText
+                android:id="@+id/txtPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <!--  Buttons  -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_weight="1">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add"
+                android:layout_margin="5dp"
+                android:id="@+id/btnCart"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="20sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="20sp"
+                android:background="@drawable/button1"
+                android:maxLines="1"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:layout_margin="5dp"
+                android:id="@+id/btnCancel"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="20sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="20sp"
+                android:background="@drawable/button1"
+                android:maxLines="1"/>
+        </LinearLayout>
+
     </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

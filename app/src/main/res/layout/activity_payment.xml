@@ -1,163 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal"
     tools:context=".OrderingSystem.OSPayment"
+    android:background="#EDEAE6"
     android:weightSum="3">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="2"
-        android:weightSum="100"
-        android:layout_gravity="center"
-        android:gravity="center">
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:padding="3dp"
-            android:background="@drawable/bottomline">
-
-            <TextView
-                android:id="@+id/nameP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="1sp"
-                android:textColor="@color/black"
-                android:text="Name"
-                android:ems="5"
-                android:maxLines="2"/>
-
-            <TextView
-                android:id="@+id/quantityP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/nameP"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="1sp"
-                android:textColor="@color/black"
-                android:text="Quantity"
-                android:textAlignment="center"
-                android:ems="5"
-                android:maxLines="2"/>
-
-            <TextView
-                android:id="@+id/priceP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/quantityP"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="1sp"
-                android:textColor="@color/black"
-                android:text="Price"
-                android:textAlignment="textEnd"
-                android:ems="5"
-                android:maxLines="2"/>
-        </RelativeLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleCart1"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="90"
-            android:layout_gravity="center">
-        </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/wave">
+    </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="@drawable/border"
-        android:layout_weight="1"
-        android:weightSum="10">
+        android:orientation="horizontal"
+        android:weightSum="3">
 
-        <TextView
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:autoSizeTextType="uniform"
-            android:textColor="@color/black"
-            android:background="@drawable/back"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:weightSum="100"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:padding="3dp"
+                android:background="@drawable/bottomline">
+
+                <TextView
+                    android:id="@+id/nameP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:text="Name"
+                    android:ems="5"
+                    android:maxLines="2"/>
+
+                <TextView
+                    android:id="@+id/quantityP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/nameP"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:text="Quantity"
+                    android:textAlignment="center"
+                    android:ems="5"
+                    android:maxLines="2"/>
+
+                <TextView
+                    android:id="@+id/priceP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/quantityP"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:text="Price"
+                    android:textAlignment="textEnd"
+                    android:ems="5"
+                    android:maxLines="2"/>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycleCart1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="90"
+                android:layout_gravity="center">
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
             android:gravity="center"
-            android:maxLines="2"
-            android:text="Confirm\nOrder"
-            android:textSize="60px"></TextView>
+            android:layout_weight="1"
+            android:weightSum="10">
 
-        <TextView
-            android:id="@+id/totalPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoSizeTextType="uniform"
-            android:textColor="@color/black"
-            android:background="@drawable/back"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="Total: 0"
-            android:textSize="60px"></TextView>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Confirm\nOrder"
+                android:textSize="60px"></TextView>
 
-        <TextView
-            android:id="@+id/txtPay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoSizeTextType="uniform"
-            android:textColor="@color/black"
-            android:background="@drawable/back"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="Pay: 0"
-            android:textSize="60px"></TextView>
+            <TextView
+                android:id="@+id/totalPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Total: 0"
+                android:textSize="60px"></TextView>
 
-        <TextView
-            android:id="@+id/txtChange"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoSizeTextType="uniform"
-            android:textColor="@color/black"
-            android:background="@drawable/back"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="Change: 0"
-            android:textSize="60px"></TextView>
+            <TextView
+                android:id="@+id/txtPay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Pay: 0"
+                android:textSize="60px"></TextView>
 
-        <Button
-            android:id="@+id/btnConfirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button1"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="1sp"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="7sp"
-            android:layout_margin="3dp"
-            android:maxLines="1"
-            android:text="Confirm"></Button>
+            <TextView
+                android:id="@+id/txtChange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Change: 0"
+                android:textSize="60px"></TextView>
 
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button1"
-            android:autoSizeTextType="uniform"
-            android:autoSizeMinTextSize="1sp"
-            android:autoSizeMaxTextSize="30sp"
-            android:autoSizeStepGranularity="7sp"
-            android:layout_margin="3dp"
-            android:maxLines="1" android:text="Back"></Button>
+            <Button
+                android:id="@+id/btnConfirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button1"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="7sp"
+                android:layout_margin="3dp"
+                android:maxLines="1"
+                android:text="Confirm"></Button>
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button1"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="7sp"
+                android:layout_margin="3dp"
+                android:maxLines="1" android:text="Back"></Button>
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
