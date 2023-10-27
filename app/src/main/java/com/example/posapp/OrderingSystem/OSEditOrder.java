@@ -23,6 +23,7 @@ public class OSEditOrder extends AppCompatActivity {
     Button edit, remove, back;
     String newPrice;
     SQLiteDatabase db;
+    String quantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class OSEditOrder extends AppCompatActivity {
 
         Intent i = getIntent();
         String prodName = i.getStringExtra("prodName".toString());
-        String quantity = i.getStringExtra("quantity".toString());
+        quantity = i.getStringExtra("quantity".toString());
         String price = i.getStringExtra("price".toString());
 
         edit = findViewById(R.id.btnEdit);
@@ -81,7 +82,11 @@ public class OSEditOrder extends AppCompatActivity {
 
             if (qty1.equals("")) {
                 Toast.makeText(this, "Quantity is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
-            } else if (Integer.parseInt(qty1) <= 0) {
+            } else if(quantity.equals(qty1)){
+                Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
+                startActivity(i);
+            }else if (Integer.parseInt(qty1) <= 0) {
                 Toast.makeText(this, "Quantity is Invalid. Please Input More Than 0", Toast.LENGTH_LONG).show();
             } else {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);

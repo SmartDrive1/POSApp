@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#EDEAE6"
-    tools:context=".transactions.manageTransactions">
+    tools:context=".transactions.transEdit">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -40,61 +40,46 @@
                 android:background="@drawable/bottomline">
 
                 <TextView
-                    android:id="@+id/nameP"
+                    android:id="@+id/pName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
                     android:autoSizeTextType="uniform"
                     android:autoSizeMinTextSize="1sp"
                     android:autoSizeMaxTextSize="30sp"
                     android:autoSizeStepGranularity="1sp"
                     android:textColor="@color/black"
-                    android:text="Trans ID"
+                    android:text="Product Name"
+                    android:textAlignment="center"
                     android:ems="5"
                     android:maxLines="2"/>
 
                 <TextView
-                    android:id="@+id/quantityP"
+                    android:id="@+id/pQuantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/nameP"
+                    android:layout_toRightOf="@id/pName"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:text="Quantity"
+
+                    android:ems="5"
+                    android:maxLines="2"/>
+
+                <TextView
+                    android:id="@+id/pTPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/pQuantity"
                     android:autoSizeTextType="uniform"
                     android:autoSizeMinTextSize="1sp"
                     android:autoSizeMaxTextSize="30sp"
                     android:autoSizeStepGranularity="1sp"
                     android:textColor="@color/black"
                     android:text="Total Price"
-                    android:textAlignment="center"
-                    android:ems="5"
-                    android:maxLines="2"/>
-
-                <TextView
-                    android:id="@+id/priceP"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/quantityP"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:text="Total Quantity"
-
-                    android:ems="5"
-                    android:maxLines="2"/>
-
-                <TextView
-                    android:id="@+id/dateP"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/priceP"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:textColor="@color/black"
-                    android:text="Trans Date"
                     android:textAlignment="textEnd"
                     android:ems="5"
                     android:maxLines="2"/>
@@ -133,8 +118,8 @@
                 android:background="@drawable/back"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="Manage\nTransactions"
-                android:textSize="60px"></TextView>
+                android:text="Transaction ID: "
+                android:textSize="20sp"></TextView>
 
             <Button
                 android:id="@+id/btnBack"

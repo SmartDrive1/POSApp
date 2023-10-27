@@ -13,6 +13,13 @@
         android:theme="@style/Theme.POSApp"
         tools:targetApi="31">
         <activity
+            android:name=".transactions.transEdit"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".products.productList"
             android:exported="false"
             android:screenOrientation="landscape">

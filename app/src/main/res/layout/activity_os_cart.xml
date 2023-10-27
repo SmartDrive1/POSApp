@@ -86,7 +86,6 @@
                 android:layout_weight="90"
                 android:layout_gravity="center">
             </androidx.recyclerview.widget.RecyclerView>
-
         </LinearLayout>
 
         <LinearLayout
@@ -107,6 +106,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
                     android:autoSizeTextType="uniform"
                     android:textColor="@color/black"
                     android:background="@drawable/back"
@@ -119,6 +119,7 @@
                     android:id="@+id/totalPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="3dp"
                     android:autoSizeTextType="uniform"
                     android:textColor="@color/black"
                     android:gravity="center"
@@ -131,29 +132,34 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:weightSum="3"
+                    android:weightSum="4"
+                    android:layout_margin="3dp"
                     android:background="@drawable/back">
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="₱"
-                        android:maxLines="1"
+                        android:autoSizeTextType="uniform"
                         android:textColor="@color/black"
+                        android:maxLines="1"
+                        android:text="₱"
                         android:textAlignment="textEnd"
-                        android:textSize="70px"/>
+                        android:textSize="30sp"/>
 
                     <EditText
                         android:id="@+id/txtPayment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
+                        android:autoSizeTextType="uniform"
+                        android:textColor="@color/black"
+                        android:maxLines="1"
                         android:ems="2"
+                        android:padding="4dp"
                         android:inputType="number"
                         android:textAlignment="textStart"
-                        android:textColor="@color/black"
-                        android:textSize="70px" />
+                        android:textSize="30sp" />
                 </LinearLayout>
                 <Button
                     android:id="@+id/btnPayment"
