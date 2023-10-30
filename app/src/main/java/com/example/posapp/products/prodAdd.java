@@ -77,8 +77,8 @@ public class prodAdd extends AppCompatActivity {
 
     public void insert()
     {
-        String prodName = txtProduct.getText().toString();
-        String price = txtPrice.getText().toString();
+        String prodName = txtProduct.getText().toString().trim();
+        String price = txtPrice.getText().toString().trim();
         Spinner spinner = (Spinner)findViewById(R.id.catID);
 
         getMax();
@@ -92,8 +92,8 @@ public class prodAdd extends AppCompatActivity {
                 Toast.makeText(this,"Please Enter a Price Greater Than 0", Toast.LENGTH_LONG).show();
             }else{
                 try{
-                    String product = txtProduct.getText().toString();
-                    String prodPrice = txtPrice.getText().toString();
+                    String product = txtProduct.getText().toString().trim();
+                    String prodPrice = txtPrice.getText().toString().trim();
                     String spTxt = spinner.getSelectedItem().toString();
                     if (spTxt.equals("Add-Ons")){
                         spTxt = "AddOns";

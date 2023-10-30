@@ -54,10 +54,10 @@ public class osCart extends AppCompatActivity implements cartClickListener {
 
                 if(tPrice <= 0){
                     Toast.makeText(getApplicationContext(), "No Items in Cart", Toast.LENGTH_SHORT).show();
-                }else if (tPayment.getText().toString().equals("")) {
+                }else if (tPayment.getText().toString().trim().equals("")) {
                     Toast.makeText(getApplicationContext(), "Payment Value is Blank", Toast.LENGTH_SHORT).show();
                     } else {
-                        xPayment = Double.parseDouble(tPayment.getText().toString());
+                        xPayment = Double.parseDouble(tPayment.getText().toString().trim());
                         if (xPayment < tPrice) {
                             Toast.makeText(getApplicationContext(), "Input Payment Value More Than the Price", Toast.LENGTH_SHORT).show();
                         } else {

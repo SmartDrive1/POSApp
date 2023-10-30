@@ -77,8 +77,8 @@ public class OSEditOrder extends AppCompatActivity {
 
     public void edit() {
         try {
-            String qty1 = qty.getText().toString();
-            String prodName = editProduct.getText().toString();
+            String qty1 = qty.getText().toString().trim();
+            String prodName = editProduct.getText().toString().trim();
 
             if (qty1.equals("")) {
                 Toast.makeText(this, "Quantity is Blank. Please Input a Value", Toast.LENGTH_LONG).show();

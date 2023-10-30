@@ -9,12 +9,19 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.posapp.MainScreen;
 import com.example.posapp.R;
+import com.example.posapp.users.adminAdapter;
+import com.example.posapp.users.userAdapter;
+import com.example.posapp.users.userItems;
+import com.example.posapp.users.userList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +29,7 @@ import java.util.List;
 public class productList extends AppCompatActivity implements prodClickListener {
 
     Button btnAddProduct, back;
+    TextView txtSearch;
     prodDrinksListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
     prodOthersListAdapter othersListAdapter;
@@ -37,8 +45,8 @@ public class productList extends AppCompatActivity implements prodClickListener 
         setContentView(R.layout.activity_prod_list);
 
         back = findViewById(R.id.btnBack);
+        txtSearch = findViewById(R.id.txtSearch);
         btnAddProduct = findViewById(R.id.btnAddProduct);
-
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +65,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
         });
 
         loadProducts();
+        search();
     }
 
     public void loadProducts(){
@@ -122,5 +131,91 @@ public class productList extends AppCompatActivity implements prodClickListener 
         i.putExtra("prodPrice", view.getProdPrice());
         i.putExtra("category", view.getCategory());
         startActivity(i);
+    }
+
+    public void search(){
+        txtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(txtSearch.getText().equals("")){
+                    loadProducts();
+                }else{
+                    clearTable();
+                    String searchItem;
+                    searchItem = txtSearch.getText().toString();
+                    RecyclerView recyclerView = findViewById(R.id.recycleProds);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+
+                    RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
+                    foodRecyclerView.setHasFixedSize(true);
+                    foodRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+
+                    RecyclerView addOnsRecycle = findViewById(R.id.recycleAddOns);
+                    addOnsRecycle.setHasFixedSize(true);
+                    addOnsRecycle.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+
+                    RecyclerView othersRecyclerView = findViewById(R.id.recycleOthers);
+                    othersRecyclerView.setHasFixedSize(true);
+                    othersRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+
+                    SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+                    db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
+                    String query = "SELECT * FROM products WHERE product LIKE ?";
+                    String[] selectionArgs = {"%" + searchItem + "%"};
+
+                    Cursor c = db.rawQuery(query, selectionArgs);
+                    count = c.getCount();
+
+                    if(count == 0){
+                        Toast.makeText(productList.this,"No Products Found", Toast.LENGTH_LONG).show();
+                    }else{
+                        int id = c.getColumnIndex("id");
+                        int product = c.getColumnIndex("product");
+                        int category = c.getColumnIndex("category");
+                        int prodPrice = c.getColumnIndex("prodPrice");
+
+                        if(c.moveToFirst()){
+                            do{
+                                if(c.getString(category).equals("Drinks")){
+                                    items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
+                                    productListAdapter = new prodDrinksListAdapter(productList.this, items, productListAdapter.mClickListener);
+                                    recyclerView.setAdapter(productListAdapter);}
+                                if(c.getString(category).equals("Food")){
+                                    foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
+                                    foodListAdapter = new prodFoodListAdapter(productList.this, foods, foodListAdapter.mClickListener);
+                                    foodRecyclerView.setAdapter(foodListAdapter);}
+                                if (c.getString(category).equals("AddOns")){
+                                    addOns.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
+                                    addOnsListAdapter = new addOnsListAdapter(productList.this, addOns, addOnsListAdapter.mClickListener);
+                                    addOnsRecycle.setAdapter(addOnsListAdapter);}
+                                if (c.getString(category).equals("Others")){
+                                    others.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice)));
+                                    othersListAdapter = new prodOthersListAdapter(productList.this, others, othersListAdapter.mClickListener);
+                                    othersRecyclerView.setAdapter(othersListAdapter);}
+                            }while(c.moveToNext());
+                        }
+                        c.close();
+                        db.close();
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+
+    public void clearTable(){
+        items.clear();
+        foods.clear();
+        addOns.clear();
+        others.clear();
     }
 }

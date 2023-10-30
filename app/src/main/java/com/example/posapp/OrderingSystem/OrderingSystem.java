@@ -110,18 +110,18 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     }
 
     public void add() {
-        if(prodName.getText().toString().equals("")){//Check if ProdName is Blank
+        if(prodName.getText().toString().trim().equals("")){//Check if ProdName is Blank
             Toast.makeText(this, "Please Select a Product", Toast.LENGTH_LONG).show();
-        }else if (Quantity.getText().toString().equals("")) {//check if blank
+        }else if (Quantity.getText().toString().trim().equals("")) {//check quantity if blank
             Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {//check if more than 0
             Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
         }else
             try {
             total();
-            String tPrice1 = totalPriceUp.getText().toString();
-            String qty2 = Quantity.getText().toString();
-            String prodName1 = prodName.getText().toString();
+            String tPrice1 = totalPriceUp.getText().toString().trim();
+            String qty2 = Quantity.getText().toString().trim();
+            String prodName1 = prodName.getText().toString().trim();
 
             if(!spinner.getSelectedItem().toString().equals("None")){
                 prodName1 = prodName1 + " w/ " + spinner.getSelectedItem().toString();

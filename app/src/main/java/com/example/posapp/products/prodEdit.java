@@ -97,15 +97,20 @@ public class prodEdit extends AppCompatActivity {
 
     public void edit(){
         try{
-            String editID1 = editID.getText().toString();
-            String editName1 = editName.getText().toString();
-            String editPrice1 = editPrice.getText().toString();
+            String editID1 = editID.getText().toString().trim();
+            String editName1 = editName.getText().toString().trim();
+            String editPrice1 = editPrice.getText().toString().trim();
             Spinner spinner = (Spinner)findViewById(R.id.catID);
             String spTxt = spinner.getSelectedItem().toString();
             if(spTxt.equals("Add-Ons")){
                 spTxt = "AddOns";
             }
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+            if (editName1.equals("")){
+                Toast.makeText(this,"Please Input a Valid Product Name", Toast.LENGTH_LONG).show();
+            }else if (editPrice1.equals("")) {
+                Toast.makeText(this,"Please Input a Valid Amount", Toast.LENGTH_LONG).show();
+            }else{
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 String sql = "update products set product = ?, category = ?, prodPrice = ? where id = ?";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.bindString(1, editName1);
@@ -117,14 +122,15 @@ public class prodEdit extends AppCompatActivity {
                 db.close();
                 Intent i = new Intent(prodEdit.this, productList.class);
                 startActivity(i);
+            }
         }catch (Exception e) {
-            Toast.makeText(this,"Please Input a Valid Amount", Toast.LENGTH_LONG).show();
+
         }
     }
 
     public void delete(){
         try{
-            String editID1 = editID.getText().toString();
+            String editID1 = editID.getText().toString().trim();
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
 

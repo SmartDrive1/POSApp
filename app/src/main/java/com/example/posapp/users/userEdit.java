@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -89,27 +90,38 @@ public class userEdit extends AppCompatActivity {
 
     public void edit(){
         try{
-            String editID1 = editID.getText().toString();
-            String editName1 = editName.getText().toString();
-            String editUserName1 = editUserName.getText().toString();
-            String editPassword1 = editPassword.getText().toString();
+            String editID1 = editID.getText().toString().trim();
+            String editName1 = editName.getText().toString().trim();
+            String editUserName1 = editUserName.getText().toString().trim();
+            String editPassword1 = editPassword.getText().toString().trim();
             Spinner spinner = (Spinner)findViewById(R.id.accID);
             String spTxt = spinner.getSelectedItem().toString();
-
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-
-            String sql = "update users set fullName = ?, userName = ?, password = ?, access = ? where id = ?";
-            SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1,editName1);
-            statement.bindString(2,editUserName1);
-            statement.bindString(3,editPassword1);
-            statement.bindString(4,spTxt);
-            statement.bindString(5,editID1);
-            statement.execute();
-            Toast.makeText(this,"User Updated", Toast.LENGTH_LONG).show();
-            db.close();
-            Intent i = new Intent(userEdit.this, userList.class);
-            startActivity(i);
+            if(editName1.equals("")){
+                Toast.makeText(this,"Full Name is Blank. Please Enter a Valid Name", Toast.LENGTH_LONG).show();
+            }else if(editUserName1.equals("")){
+                Toast.makeText(this,"username is Blank. Please Enter a Valid Username", Toast.LENGTH_LONG).show();
+            }else if(editPassword1.equals("")){
+                Toast.makeText(this,"Password is Blank. Please Enter a Valid Password", Toast.LENGTH_LONG).show();
+            }else{
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+                Cursor c = db.rawQuery("SELECT * FROM users WHERE userName = ?", new String[]{editUserName1});
+                if(c.getCount() >= 0) {
+                    Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
+                }else {
+                    String sql = "update users set fullName = ?, userName = ?, password = ?, access = ? where id = ?";
+                    SQLiteStatement statement = db.compileStatement(sql);
+                    statement.bindString(1, editName1);
+                    statement.bindString(2, editUserName1);
+                    statement.bindString(3, editPassword1);
+                    statement.bindString(4, spTxt);
+                    statement.bindString(5, editID1);
+                    statement.execute();
+                    Toast.makeText(this, "User Updated", Toast.LENGTH_LONG).show();
+                    db.close();
+                    Intent i = new Intent(userEdit.this, userList.class);
+                    startActivity(i);
+                }
+            }
         }catch (Exception e)
         {
             Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();

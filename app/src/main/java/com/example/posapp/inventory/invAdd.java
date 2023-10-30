@@ -68,8 +68,8 @@ public class invAdd extends AppCompatActivity {
 
     public void insert()
     {
-        String itemName = txtItemName.getText().toString();
-        String Stock = txtStock.getText().toString();
+        String itemName = txtItemName.getText().toString().trim();
+        String Stock = txtStock.getText().toString().trim();
 
         getMax();
         max_id += 1;

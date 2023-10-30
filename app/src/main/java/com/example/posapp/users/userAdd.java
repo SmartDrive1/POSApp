@@ -77,9 +77,9 @@ public class userAdd extends AppCompatActivity {
 
     public void insert()
     {
-        String fName = txtFullName.getText().toString();
-        String uName = txtUserName.getText().toString();
-        String pass = txtPassword.getText().toString();
+        String fName = txtFullName.getText().toString().trim();
+        String uName = txtUserName.getText().toString().trim();
+        String pass = txtPassword.getText().toString().trim();
         Spinner spinner = (Spinner)findViewById(R.id.accID);
 
         getMax();
@@ -91,9 +91,9 @@ public class userAdd extends AppCompatActivity {
             Toast.makeText(this,"Please Choose Another Username", Toast.LENGTH_LONG).show();
         }else{
             try{
-                String fName1 = txtFullName.getText().toString();
-                String uName1 = txtUserName.getText().toString();
-                String pass1 = txtPassword.getText().toString();
+                String fName1 = txtFullName.getText().toString().trim();
+                String uName1 = txtUserName.getText().toString().trim();
+                String pass1 = txtPassword.getText().toString().trim();
                 String spTxt = spinner.getSelectedItem().toString();
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash

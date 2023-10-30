@@ -185,7 +185,20 @@
                 android:maxLines="2"
                 android:text="Manage\nProducts"
                 android:layout_margin="3dp"
-                android:textSize="60px"></TextView>
+                android:textSize="60px"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtSearch"
+                android:textColor="@color/black"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:drawableStart="@drawable/search"
+                android:background="@drawable/back"
+                android:ems="10"
+                android:hint="Search Product Name"
+                android:textAlignment="center"/>
 
             <Button
                 android:id="@+id/btnAddProduct"

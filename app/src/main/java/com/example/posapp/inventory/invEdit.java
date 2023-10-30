@@ -69,8 +69,8 @@ public class invEdit extends AppCompatActivity {
     public void edit(){
         try{
             String upID = editID.getText().toString();
-            String editItemName1 = txtEditItemName.getText().toString();
-            String editItemStock1 = txtEditItemStock.getText().toString();
+            String editItemName1 = txtEditItemName.getText().toString().trim();
+            String editItemStock1 = txtEditItemStock.getText().toString().trim();
 
             if (editItemStock1.equals("") || editItemName1.equals("")){
                 Toast.makeText(this,"Item Name or Item Stock is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
