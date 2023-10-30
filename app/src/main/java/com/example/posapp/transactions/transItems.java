@@ -2,7 +2,6 @@ package com.example.posapp.transactions;
 
 public class transItems {
     String transID;
-    String pName;
     String pQuantity;
     String pPrice;
     String tDate;
@@ -14,14 +13,6 @@ public class transItems {
 
     public void setTransID(String transID) {
         this.transID = transID;
-    }
-
-    public String getpName() {
-        return pName;
-    }
-
-    public void setpName(String pName) {
-        this.pName = pName;
     }
 
     public String getpQuantity() {
@@ -50,7 +41,6 @@ public class transItems {
 
     public transItems(String transID, String pName, String pQuantity, String pPrice, String tDate) {
         this.transID = transID;
-        this.pName = pName;
         this.pQuantity = String.valueOf(pQuantity);
         this.pPrice = String.valueOf(pPrice);
         this.tDate = tDate;

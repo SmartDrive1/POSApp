@@ -15,9 +15,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.posapp.MainScreen;
-import com.example.posapp.OrderingSystem.OSAdapter;
-import com.example.posapp.OrderingSystem.OSEditOrder;
-import com.example.posapp.OrderingSystem.OSItems;
 import com.example.posapp.R;
 
 import java.text.SimpleDateFormat;
@@ -51,13 +48,12 @@ public class manageTransactions extends AppCompatActivity implements transClickL
     @SuppressLint("Range")
     public void refreshList() {
         String formattedDate;
-        int specificId = 1;
         RecyclerView recyclerView = findViewById(R.id.recycleTrans);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
 
-//        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
             db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
@@ -72,7 +68,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
 
             while(cursor.moveToNext()){
                 formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
-                items.add(new transItems(cursor.getString(id), "", cursor.getString(totalAmount), cursor.getString(totalQuantity), formattedDate));
+                items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), formattedDate));
                 transAdapter = new transAdapter(this, items, this);
                 recyclerView.setAdapter(transAdapter);
             }
@@ -80,15 +76,15 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             cursor.close();
             db.close();
 
-//            }catch (Exception e) {
-//            Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
-//        }
+            }catch (Exception e) {
+            Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onItemClicked(transItems view) {
         Intent i = new Intent(getApplicationContext(), transEdit.class);
-//        i.putExtra("id",view.getTransID());
+        i.putExtra("id",view.getTransID());
         startActivity(i);
     }
 }

@@ -85,7 +85,7 @@
                     android:maxLines="2"/>
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycleTrans"
+                android:id="@+id/recycleTransEdit"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="90"
@@ -113,6 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
+                android:id="@+id/txtTransID"
                 android:autoSizeTextType="uniform"
                 android:textColor="@color/black"
                 android:background="@drawable/back"
@@ -120,6 +121,45 @@
                 android:maxLines="2"
                 android:text="Transaction ID: "
                 android:textSize="20sp"></TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="3dp"
+                android:id="@+id/txtDateTime"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Date/Time: "
+                android:textSize="20sp"></TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/txtTotalPrice"
+                android:layout_margin="3dp"
+                android:autoSizeTextType="uniform"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Total: "
+                android:textSize="20sp"></TextView>
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button1"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="7sp"
+                android:maxLines="1"
+                android:layout_margin="3dp"
+                android:text="Delete"></Button>
 
             <Button
                 android:id="@+id/btnBack"
