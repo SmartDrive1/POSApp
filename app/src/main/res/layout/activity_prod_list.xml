@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="#EDEAE6"
     tools:context=".products.productList">
 
@@ -14,227 +14,225 @@
             android:background="@drawable/wave">
         </RelativeLayout>
 
-    <ScrollView
+<!--    whole page-->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3">
 
+<!--        left side-->
+        <ScrollView
+            android:id="@+id/scroll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:layout_weight="2"
+            android:layout_toLeftOf="@+id/layout2">
 
-    </ScrollView>
-    <!--    Whole page-->
+                <!--        Recycleview-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="4"
+                    android:background="@drawable/border"
+                    android:orientation="vertical">
+
+                    <!--        drinks-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeMinTextSize="1sp"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeStepGranularity="1sp"
+                            android:textColor="@color/black"
+                            android:gravity="left"
+                            android:maxLines="2"
+                            android:paddingLeft="10dp"
+                            android:text="Drinks"
+                            android:background="@drawable/textbackground"
+                            android:layout_margin="3dp"></TextView>
+
+                        <!--        recyclerview-->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleProds"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:orientation="horizontal" />
+                    </LinearLayout>
+
+                    <!--            foods-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeMinTextSize="1sp"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeStepGranularity="1sp"
+                            android:textColor="@color/black"
+                            android:gravity="left"
+                            android:maxLines="2"
+                            android:paddingLeft="10dp"
+                            android:text="Foods"
+                            android:background="@drawable/textbackground"
+                            android:layout_margin="3dp"></TextView>
+
+                        <!--        recyclerview-->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleFoods"
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_height="fill_parent"/>
+                    </LinearLayout>
+
+                    <!--        Add-Ons-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeMinTextSize="1sp"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeStepGranularity="1sp"
+                            android:textColor="@color/black"
+                            android:gravity="left"
+                            android:maxLines="2"
+                            android:paddingLeft="10dp"
+                            android:text="Add-Ons"
+                            android:background="@drawable/textbackground"
+                            android:layout_margin="3dp"></TextView>
+
+                        <!--        recyclerview-->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleAddOns"
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_height="fill_parent"/>
+                    </LinearLayout>
+
+                    <!--            others-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:autoSizeTextType="uniform"
+                            android:autoSizeMinTextSize="1sp"
+                            android:autoSizeMaxTextSize="30sp"
+                            android:autoSizeStepGranularity="1sp"
+                            android:textColor="@color/black"
+                            android:gravity="left"
+                            android:maxLines="2"
+                            android:paddingLeft="10dp"
+                            android:text="Others"
+                            android:background="@drawable/textbackground"
+                            android:layout_margin="3dp"></TextView>
+
+                        <!--        recyclerview-->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycleOthers"
+                            android:layout_width="match_parent"
+                            android:orientation="horizontal"
+                            android:layout_marginRight="5dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_height="match_parent"/>
+                    </LinearLayout>
+                </LinearLayout>
+        </ScrollView>
+        <!--        Right layout-->
         <LinearLayout
-            android:id="@+id/linearLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="2dp"
+            android:weightSum="1"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <!--        Recycleview-->
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:layout_gravity="center"
-                android:weightSum="4"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="1sp"
+                android:textColor="@color/black"
+                android:background="@drawable/back"
+                android:gravity="center"
+                android:maxLines="2"
+                android:text="Manage\nProducts"
                 android:layout_margin="3dp"
-                android:background="@drawable/border"
-                android:orientation="vertical">
+                android:textSize="60px"/>
 
-    <!--        drinks-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="1sp"
-                        android:textColor="@color/black"
-                        android:gravity="left"
-                        android:maxLines="2"
-                        android:paddingLeft="10dp"
-                        android:text="Drinks"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
-
-                    <!--        recyclerview-->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleProds"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:orientation="horizontal" />
-                </LinearLayout>
-
-    <!--            foods-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="1sp"
-                        android:textColor="@color/black"
-                        android:gravity="left"
-                        android:maxLines="2"
-                        android:paddingLeft="10dp"
-                        android:text="Foods"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
-
-                    <!--        recyclerview-->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleFoods"
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_height="fill_parent"/>
-                </LinearLayout>
-
-                <!--        Add-Ons-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="1sp"
-                        android:textColor="@color/black"
-                        android:gravity="left"
-                        android:maxLines="2"
-                        android:paddingLeft="10dp"
-                        android:text="Add-Ons"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
-
-                    <!--        recyclerview-->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleAddOns"
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_height="fill_parent"/>
-                </LinearLayout>
-
-    <!--            others-->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="1sp"
-                        android:textColor="@color/black"
-                        android:gravity="left"
-                        android:maxLines="2"
-                        android:paddingLeft="10dp"
-                        android:text="Others"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
-
-                    <!--        recyclerview-->
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleOthers"
-                        android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_height="fill_parent"/>
-                </LinearLayout>
-            </LinearLayout>
-
-
-    <!--        Right layout-->
-            <LinearLayout
-                android:layout_width="0dp"
+            <EditText
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginBottom="2dp"
-                android:weightSum="1"
+                android:id="@+id/txtSearch"
+                android:textColor="@color/black"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:layout_margin="3dp"
+                android:drawableStart="@drawable/search"
+                android:background="@drawable/back"
+                android:ems="10"
+                android:hint="Search Product Name"
+                android:textAlignment="center"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:textColor="@color/black"
-                    android:background="@drawable/back"
-                    android:gravity="center"
-                    android:maxLines="2"
-                    android:text="Manage\nProducts"
-                    android:layout_margin="3dp"
-                    android:textSize="60px"/>
+            <Button
+                android:id="@+id/btnAddProduct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Product"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="20sp"
+                android:autoSizeMaxTextSize="100sp"
+                android:autoSizeStepGranularity="20sp"
+                android:background="@drawable/button1"
+                android:layout_margin="3dp"
+                android:maxLines="1"></Button>
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txtSearch"
-                    android:textColor="@color/black"
-                    android:layout_weight="1"
-                    android:layout_margin="3dp"
-                    android:drawableStart="@drawable/search"
-                    android:background="@drawable/back"
-                    android:ems="10"
-                    android:hint="Search Product Name"
-                    android:textAlignment="center"/>
-
-                <Button
-                    android:id="@+id/btnAddProduct"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Add Product"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="20sp"
-                    android:autoSizeMaxTextSize="100sp"
-                    android:autoSizeStepGranularity="20sp"
-                    android:background="@drawable/button1"
-                    android:layout_margin="3dp"
-                    android:maxLines="1"></Button>
-
-                <Button
-                    android:id="@+id/btnBack"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Back"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="10sp"
-                    android:layout_margin="3dp"
-                    android:background="@drawable/button1"
-                    android:maxLines="1"></Button>
-            </LinearLayout>
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Back"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="1sp"
+                android:autoSizeMaxTextSize="30sp"
+                android:autoSizeStepGranularity="10sp"
+                android:layout_margin="3dp"
+                android:background="@drawable/button1"
+                android:maxLines="1"></Button>
         </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>
