@@ -9,13 +9,8 @@ import android.widget.Button;
 
 import com.example.posapp.OrderingSystem.OrderingSystem;
 
-import com.example.posapp.inventory.invList;
-import com.example.posapp.products.productList;
-import com.example.posapp.transactions.manageTransactions;
-import com.example.posapp.users.userList;
-
 public class MainScreen extends AppCompatActivity {
-    Button btnUsers, btnTransactions, btnOrderingSystem, btnAnalysis, btnMoreInfo, btnProducts, btnInventory, btnLogout, btnAdmin;
+    Button btnOrderingSystem, btnAnalysis, btnMoreInfo, btnManagement, btnLogout, btnAdmin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,20 +18,10 @@ public class MainScreen extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
         btnMoreInfo = findViewById(R.id.btnMoreInfo);
-        btnUsers = findViewById(R.id.btnUsers);
-        btnProducts = findViewById(R.id.btnProducts);
+        btnManagement = findViewById(R.id.btnManagement);
         btnOrderingSystem = findViewById(R.id.btnOrderingSystem);
-        btnInventory = findViewById(R.id.btnInventory);
-        btnTransactions = findViewById(R.id.btnTransactions);
         btnAdmin = findViewById(R.id.btnAdmin); //Remove This
 
-        btnTransactions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, manageTransactions.class);
-                startActivity(i);
-            }
-        });
 
         btnAdmin.setOnClickListener(new View.OnClickListener() { //Remove This
             @Override
@@ -46,13 +31,6 @@ public class MainScreen extends AppCompatActivity {
             }
         });
 
-        btnUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, userList.class);
-                startActivity(i);
-            }
-        });
         btnOrderingSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,13 +46,6 @@ public class MainScreen extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        btnProducts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, productList.class);
-                startActivity(i);
-            }
-        });
 
         btnMoreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,10 +54,11 @@ public class MainScreen extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        btnInventory.setOnClickListener(new View.OnClickListener() {
+
+        btnManagement.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, invList.class);
+            public void onClick(View v) {
+                Intent i = new Intent(MainScreen.this, mainManageScreen.class);
                 startActivity(i);
             }
         });

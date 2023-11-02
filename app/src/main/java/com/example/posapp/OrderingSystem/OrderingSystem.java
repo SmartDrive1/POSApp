@@ -192,6 +192,9 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     }
 
     public void refreshList() {
+        items.clear();
+        foods.clear();
+        others.clear();
         RecyclerView recyclerView = findViewById(R.id.recycleProds);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
@@ -248,10 +251,12 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
                     if (Price.getText().equals("")) {
-
+                        refreshList();
                     } else if (s.length() != 0) {
+                        refreshList();
                         total();
                     } else {
+                        refreshList();
                         totalPriceUp.setText("");
                     }
                 }catch (Exception e){
@@ -278,7 +283,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                         addOnPrice = c.getInt(c.getColumnIndex("prodPrice"));
                     } else {
                         // Handle the case where no data is found for the product
-                        addOnPrice = 100000;
+                        //addOnPrice = 100000;
                     }
                 }
                 updatePrice();

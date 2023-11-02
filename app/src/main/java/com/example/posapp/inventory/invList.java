@@ -25,6 +25,7 @@ import com.example.posapp.users.userList;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.example.posapp.mainManageScreen;
 
 public class invList extends AppCompatActivity implements invClickListener {
 
@@ -45,7 +46,7 @@ public class invList extends AppCompatActivity implements invClickListener {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(invList.this, MainScreen.class);
+                Intent i = new Intent(invList.this, mainManageScreen.class);
                 startActivity(i);
             }
         });

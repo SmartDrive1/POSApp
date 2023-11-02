@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import com.example.posapp.mainManageScreen;
 
 public class manageTransactions extends AppCompatActivity implements transClickListener {
     Button back;
@@ -38,7 +39,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(manageTransactions.this, MainScreen.class);
+                Intent i = new Intent(manageTransactions.this, mainManageScreen.class);
                 startActivity(i);
             }
         });

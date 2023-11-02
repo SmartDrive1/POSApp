@@ -1,326 +1,336 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#EDEAE6"
-
-    tools:context=".OrderingSystem.OrderingSystem"
-    >
+    tools:context=".OrderingSystem.OrderingSystem">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/wave3"/>
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/layout1"
-        android:gravity="center"
-        android:layout_weight="10"
-        android:weightSum="100">
-
-        <TextView
-            android:id="@+id/txtView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Ordering System"
-            android:layout_weight="95"
-            android:textSize="100px"
-            android:textColor="@color/black"/>
-
-        <ImageButton
-            android:id="@+id/btnLogout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="5"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/logout"
-            android:background="@drawable/button1"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_weight="90"
-        android:layout_below="@+id/layout1"
-        android:weightSum="6">
-<!--Left Side-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/wave3"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:layout_gravity="center"
-            android:weightSum="3"
-            android:layout_margin="3dp"
-            android:background="@drawable/border"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout1"
+            android:gravity="center"
+            android:layout_weight="10"
+            android:weightSum="100">
 
-            <!--            drinks-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
+            <TextView
+                android:id="@+id/txtView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Ordering System"
+                android:layout_weight="95"
+                android:textSize="100px"
+                android:textColor="@color/black"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:textColor="@color/black"
-                    android:gravity="left"
-                    android:maxLines="2"
-                    android:paddingLeft="10dp"
-                    android:text="Drinks"
-                    android:background="@drawable/textbackground"
-                    android:layout_margin="3dp"></TextView>
-
-                <!--        recyclerview-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleProds"
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="fill_parent"/>
-            </LinearLayout>
-
-            <!--            foods-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:textColor="@color/black"
-                    android:gravity="left"
-                    android:maxLines="2"
-                    android:paddingLeft="10dp"
-                    android:text="Foods"
-                    android:background="@drawable/textbackground"
-                    android:layout_margin="3dp"></TextView>
-
-                <!--        recyclerview-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleFoods"
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="fill_parent"/>
-            </LinearLayout>
-
-            <!--            others-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="1sp"
-                    android:textColor="@color/black"
-                    android:gravity="left"
-                    android:maxLines="2"
-                    android:paddingLeft="10dp"
-                    android:text="Others"
-                    android:background="@drawable/textbackground"
-                    android:layout_margin="3dp"></TextView>
-
-                <!--        recyclerview-->
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycleOthers"
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="fill_parent"/>
-            </LinearLayout>
+            <ImageButton
+                android:id="@+id/btnLogout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/logout"
+                android:background="@drawable/button1"/>
         </LinearLayout>
 
-        <!-- Right Side -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:weightSum="20"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:orientation="horizontal"
+            android:layout_weight="90"
+            android:layout_below="@+id/layout1"
+            android:weightSum="6">
+            <!--Left Side-->
 
-            <!--Product Name-->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_weight="1">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:layout_gravity="center"
+                android:weightSum="3"
+                android:layout_margin="3dp"
+                android:background="@drawable/border"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Product:"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
+                <!--            drinks-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-                <EditText
-                    android:id="@+id/prodName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:editable="false"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
-                    android:ems="8"
-                    android:textAlignment="center" />
-            </LinearLayout>
-            <!--Quantity-->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="1sp"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:textColor="@color/black"
+                        android:gravity="left"
+                        android:maxLines="2"
+                        android:paddingLeft="10dp"
+                        android:text="Drinks"
+                        android:background="@drawable/textbackground"
+                        android:layout_margin="3dp"></TextView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quantity:"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
+                    <!--        recyclerview-->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleProds"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_height="fill_parent"/>
+                </LinearLayout>
 
-                <EditText
-                    android:id="@+id/txtQty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="20sp"
-                    android:ems="8"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-            </LinearLayout>
+                <!--            foods-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-            <!--  Access  -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="1sp"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:textColor="@color/black"
+                        android:gravity="left"
+                        android:maxLines="2"
+                        android:paddingLeft="10dp"
+                        android:text="Foods"
+                        android:background="@drawable/textbackground"
+                        android:layout_margin="3dp"></TextView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add-ons:"
-                    android:autoSizeTextType="uniform"
-                    android:maxLines="1"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
+                    <!--        recyclerview-->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleFoods"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_height="fill_parent"/>
+                </LinearLayout>
 
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/spAO"
-                    android:textSize="20sp"
-                    android:maxLines="1"/>
-            </LinearLayout>
+                <!--            others-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-            <!--  Price  -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="1sp"
+                        android:autoSizeMaxTextSize="30sp"
+                        android:autoSizeStepGranularity="1sp"
+                        android:textColor="@color/black"
+                        android:gravity="left"
+                        android:maxLines="2"
+                        android:paddingLeft="10dp"
+                        android:text="Others"
+                        android:background="@drawable/textbackground"
+                        android:layout_margin="3dp"></TextView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Price:"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
-
-                <EditText
-                    android:id="@+id/txtPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:textColor="@color/black"
-                    android:ems="8"
-                    android:textSize="20sp"
-                    android:inputType="number"
-                    android:textAlignment="center" />
-            </LinearLayout>
-
-            <!--    Total Price-->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Total:"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"/>
-
-                <EditText
-                    android:id="@+id/txtTotalPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:enabled="false"
-                    android:textSize="20sp"
-                    android:textColor="@color/black"
-                    android:ems="8"
-                    android:inputType="number"
-                    android:textAlignment="center" />
+                    <!--        recyclerview-->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleOthers"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_height="fill_parent"/>
+                </LinearLayout>
             </LinearLayout>
 
-            <!--  Buttons  -->
+            <!-- Right Side -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_weight="1">
+                android:layout_weight="2"
+                android:weightSum="20"
+                android:orientation="vertical"
+                android:layout_gravity="center_vertical"
+                android:gravity="center">
 
-                <Button
+                <!--Product Name-->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add"
-                    android:layout_margin="3dp"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="20sp"
-                    android:autoSizeMaxTextSize="100sp"
-                    android:autoSizeStepGranularity="20sp"
-                    android:background="@drawable/button1"
-                    android:id="@+id/btnCart"/>
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1">
 
-                <Button
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Product:"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/prodName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:editable="false"
+                        android:layout_weight="1"
+                        android:textSize="20sp"
+                        android:ems="8"
+                        android:textAlignment="center" />
+                </LinearLayout>
+                <!--Quantity-->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cart"
-                    android:layout_margin="3dp"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="20sp"
-                    android:autoSizeMaxTextSize="100sp"
-                    android:autoSizeStepGranularity="20sp"
-                    android:background="@drawable/button1"
-                    android:id="@+id/btnOrders"/>
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Quantity:"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/txtQty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="20sp"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <!--  Access  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add-ons:"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"/>
+
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spAO"
+                        android:textSize="20sp"
+                        android:maxLines="1"/>
+                </LinearLayout>
+
+                <!--  Price  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Price:"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/txtPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:textColor="@color/black"
+                        android:ems="8"
+                        android:textSize="20sp"
+                        android:inputType="number"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <!--    Total Price-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total:"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"/>
+
+                    <EditText
+                        android:id="@+id/txtTotalPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:textSize="20sp"
+                        android:textColor="@color/black"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:textAlignment="center" />
+                </LinearLayout>
+
+                <!--  Buttons  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Add"
+                        android:layout_margin="3dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeMaxTextSize="100sp"
+                        android:autoSizeStepGranularity="20sp"
+                        android:background="@drawable/button1"
+                        android:id="@+id/btnCart"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cart"
+                        android:layout_margin="3dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeMaxTextSize="100sp"
+                        android:autoSizeStepGranularity="20sp"
+                        android:background="@drawable/button1"
+                        android:id="@+id/btnOrders"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

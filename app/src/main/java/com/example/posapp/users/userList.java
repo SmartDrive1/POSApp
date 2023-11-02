@@ -16,8 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.posapp.MainScreen;
 import com.example.posapp.R;
+import com.example.posapp.mainManageScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class userList extends AppCompatActivity implements userClickListener {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(userList.this, MainScreen.class);
+                Intent i = new Intent(userList.this, mainManageScreen.class);
                 startActivity(i);
             }
         });

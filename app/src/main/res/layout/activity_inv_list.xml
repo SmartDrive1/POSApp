@@ -20,9 +20,8 @@
         android:orientation="horizontal"
         android:weightSum="3">
 
-        <!--            Items-->
+        <!--            Table-->
         <LinearLayout
-            android:id="@+id/layout1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -54,7 +53,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btns"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
