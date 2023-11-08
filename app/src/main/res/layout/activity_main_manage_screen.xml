@@ -85,7 +85,7 @@
             android:layout_height="100sp"
             android:gravity="center"
             android:layout_gravity="center"
-            android:weightSum="2"
+            android:weightSum="3"
             android:orientation="horizontal">
 
             <Button

@@ -89,7 +89,7 @@
             android:layout_height="100sp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:weightSum="2">
+            android:weightSum="3">
 
             <Button
                 android:layout_width="0dp"

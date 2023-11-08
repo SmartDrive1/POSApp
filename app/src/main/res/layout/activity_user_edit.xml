@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#EDEAE6"
     tools:context=".users.userEdit">
 
@@ -16,202 +17,216 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:weightSum="7">
+        android:gravity="center">
 
-        <LinearLayout
+        <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:layout_gravity="center"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="30sp"
+            android:layout_margin="20sp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit User"
-                android:textSize="80px"
-                android:textColor="@color/black"/>
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:weightSum="7">
 
-        <!--  ID  -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            android:layout_weight="1">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="ID:"
-                android:textAlignment="textEnd"
-                android:autoSizeTextType="uniform"
-                android:maxLines="1"
-                android:layout_weight="1"
-                android:textColor="@color/black"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Edit User"
+                        android:textSize="80px"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
 
-            <EditText
-                android:id="@+id/txtEditID"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:editable="false"
-                android:ems="10"
-                android:textAlignment="center" />
-        </LinearLayout>
+                <!--  ID  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="4"
+                    android:layout_weight="1">
 
-        <!--  Full Name  -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:weightSum="3"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="ID:"
+                        android:textAlignment="textEnd"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Full Name:"
-                android:autoSizeTextType="uniform"
-                android:maxLines="1"
-                android:textAlignment="textEnd"
-                android:layout_weight="1"
-                android:textColor="@color/black"/>
+                    <EditText
+                        android:id="@+id/txtEditID"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:editable="false"
+                        android:ems="10"
+                        android:textAlignment="center" />
+                </LinearLayout>
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtEditName"
-                android:layout_weight="2"
-                android:ems="10"
-                android:textAlignment="center"/>
-        </LinearLayout>
+                <!--  Full Name  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:weightSum="4"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
 
-        <!--  UserName  -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:weightSum="3"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Full Name:"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="UserName:"
-                android:autoSizeTextType="uniform"
-                android:maxLines="1"
-                android:textAlignment="textEnd"
-                android:layout_weight="1"
-                android:textColor="@color/black"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtEditName"
+                        android:layout_weight="3"
+                        android:ems="10"
+                        android:textAlignment="center"/>
+                </LinearLayout>
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtEditUserName"
-                android:layout_weight="2"
-                android:ems="10"
-                android:textAlignment="center"/>
-        </LinearLayout>
+                <!--  UserName  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:weightSum="4"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
 
-        <!--  Password  -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:weightSum="3"
-            android:orientation="horizontal"
-            android:layout_weight="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="UserName:"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Password:"
-                android:autoSizeTextType="uniform"
-                android:maxLines="1"
-                android:textAlignment="textEnd"
-                android:layout_weight="1"
-                android:textColor="@color/black"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtEditUserName"
+                        android:layout_weight="3"
+                        android:ems="10"
+                        android:textAlignment="center"/>
+                </LinearLayout>
 
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/txtEditPassword"
-                android:layout_weight="2"
-                android:ems="10"
-                android:textAlignment="center"/>
-        </LinearLayout>
+                <!--  Password  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:weightSum="4"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
 
-        <!--  Access  -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_weight="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Password:"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:textAlignment="textEnd"
+                        android:layout_weight="1"
+                        android:textColor="@color/black"/>
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Access:"
-                android:autoSizeTextType="uniform"
-                android:maxLines="1"
-                android:textColor="@color/black"/>
+                    <EditText
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txtEditPassword"
+                        android:layout_weight="3"
+                        android:ems="10"
+                        android:textAlignment="center"/>
+                </LinearLayout>
 
-            <Spinner
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/accID"
-                android:autoSizeTextType="uniform"
-                android:maxLines="1"
-                android:layout_weight="2"
-                ></Spinner>
-        </LinearLayout>
+                <!--  Access  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_weight="1">
 
-        <!--  Buttons  -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_weight="1">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Access:"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:textColor="@color/black"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Edit"
-                android:layout_margin="5dp"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="20sp"
-                android:autoSizeMaxTextSize="100sp"
-                android:autoSizeStepGranularity="20sp"
-                android:background="@drawable/button1"
-                android:id="@+id/btnEdit"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:layout_margin="5dp"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="20sp"
-                android:autoSizeMaxTextSize="100sp"
-                android:autoSizeStepGranularity="20sp"
-                android:background="@drawable/button1"
-                android:id="@+id/btnDelete"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Back"
-                android:layout_margin="5dp"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="20sp"
-                android:autoSizeMaxTextSize="100sp"
-                android:autoSizeStepGranularity="20sp"
-                android:background="@drawable/button1"
-                android:id="@+id/btnCancel"/>
-        </LinearLayout>
+                    <Spinner
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/accID"
+                        android:autoSizeTextType="uniform"
+                        android:maxLines="1"
+                        android:layout_weight="2"
+                        ></Spinner>
+                </LinearLayout>
 
+                <!--  Buttons  -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Edit"
+                        android:layout_margin="5dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeMaxTextSize="100sp"
+                        android:autoSizeStepGranularity="20sp"
+                        android:background="@drawable/button1"
+                        android:id="@+id/btnEdit"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Delete"
+                        android:layout_margin="5dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeMaxTextSize="100sp"
+                        android:autoSizeStepGranularity="20sp"
+                        android:background="@drawable/button1"
+                        android:id="@+id/btnDelete"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Back"
+                        android:layout_margin="5dp"
+                        android:autoSizeTextType="uniform"
+                        android:autoSizeMinTextSize="20sp"
+                        android:autoSizeMaxTextSize="100sp"
+                        android:autoSizeStepGranularity="20sp"
+                        android:background="@drawable/button1"
+                        android:id="@+id/btnCancel"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </LinearLayout>
 </RelativeLayout>
