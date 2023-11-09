@@ -31,7 +31,7 @@ public class prodEdit extends AppCompatActivity {
                 "Drinks", "Food", "Add-Ons","Others"
         };
         Spinner s = (Spinner) findViewById(R.id.catID);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, s1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlayout, s1);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);
 
@@ -109,6 +109,8 @@ public class prodEdit extends AppCompatActivity {
                 Toast.makeText(this,"Please Input a Valid Product Name", Toast.LENGTH_LONG).show();
             }else if (editPrice1.equals("")) {
                 Toast.makeText(this,"Please Input a Valid Amount", Toast.LENGTH_LONG).show();
+            }else if (editName1.equals("None") || editPrice1.equals("none")) {
+                Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
             }else{
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 String sql = "update products set product = ?, category = ?, prodPrice = ? where id = ?";
@@ -142,8 +144,7 @@ public class prodEdit extends AppCompatActivity {
             db.close();
             Intent i = new Intent(prodEdit.this, productList.class);
             startActivity(i);
-        }catch (Exception e)
-        {
+        }catch (Exception e){
             Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
         }
     }

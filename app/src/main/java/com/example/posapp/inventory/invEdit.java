@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -66,31 +67,41 @@ public class invEdit extends AppCompatActivity {
         });
     }
 
-    public void edit(){
-        try{
+    public void edit() {
+        try {
             String upID = editID.getText().toString();
             String editItemName1 = txtEditItemName.getText().toString().trim();
             String editItemStock1 = txtEditItemStock.getText().toString().trim();
 
-            if (editItemStock1.equals("") || editItemName1.equals("")){
-                Toast.makeText(this,"Item Name or Item Stock is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
-            }else{
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-
-                String sql = "update inventory set itemName = ?, stock = ? where id = ?";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1,editItemName1);
-                statement.bindString(2,editItemStock1);
-                statement.bindString(3,upID);
-                statement.execute();
-                Toast.makeText(this,"Product Updated", Toast.LENGTH_LONG).show();
-                db.close();
-                Intent i = new Intent(invEdit.this, invList.class);
-                startActivity(i);
+            if (editItemName1.equals("")) {
+                Toast.makeText(this, "Item Name is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
+            } else if (editItemStock1.equals("")) {
+                Toast.makeText(this, "Item Stock is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
+            } else {
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+                Cursor c = db.rawQuery("SELECT * FROM inventory WHERE itemName = ?", new String[]{editItemName1});
+                if (c.getCount() >= 0) {
+                    if (c.moveToFirst()) {
+                        int existingID = c.getColumnIndex("id");
+                        if (c.getString(existingID).equals(upID)) {
+                            String sql = "update inventory set itemName = ?, stock = ? where id = ?";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1, editItemName1);
+                            statement.bindString(2, editItemStock1);
+                            statement.bindString(3, upID);
+                            statement.execute();
+                            Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+                            db.close();
+                            Intent i = new Intent(invEdit.this, invList.class);
+                            startActivity(i);
+                        }else{
+                            Toast.makeText(this, "The Item Already Exists", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
-            }catch (Exception e)
-        {
-            Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
         }
     }
 

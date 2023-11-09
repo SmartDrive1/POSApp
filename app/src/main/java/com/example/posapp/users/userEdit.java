@@ -2,7 +2,6 @@ package com.example.posapp.users;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -21,7 +20,6 @@ import com.example.posapp.R;
 public class userEdit extends AppCompatActivity {
 
     EditText editID, editName, editUserName, editPassword;
-
     Button btnEdit, btnDelete, btnCancel;
 
     @Override
@@ -128,8 +126,7 @@ public class userEdit extends AppCompatActivity {
                     }
                 }
             }
-        }catch (Exception e)
-        {
+        }catch (Exception e){
             Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
         }
     }

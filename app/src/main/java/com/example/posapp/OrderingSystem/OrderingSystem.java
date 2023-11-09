@@ -313,7 +313,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             addOns.add(addOnName);
         }
         c.close();
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, addOns);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlayout, addOns);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }

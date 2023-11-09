@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add Product"
-                    android:textSize="40sp"
+                    android:textSize="80px"
                     android:textColor="@color/black"/>
             </LinearLayout>
 
@@ -61,18 +61,20 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Add\nProduct:"
                     android:textAlignment="center"
+                    android:textSize="40px"
                     android:textColor="@color/black"
                     android:autoSizeTextType="uniform"
                     android:maxLines="2"/>
 
                 <EditText
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:id="@+id/txtProduct"
-                    android:ems="10"
+                    android:ems="8"
+                    android:textSize="40px"
                     android:textAlignment="center"
                     android:autoSizeTextType="uniform"
                     android:maxLines="1"/>
@@ -90,6 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Category:"
+                    android:textSize="40px"
                     android:textColor="@color/black"
                     android:autoSizeTextType="uniform"
                     android:maxLines="1"/>
@@ -117,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:text="Price:"
                     android:textAlignment="textEnd"
-                    android:autoSizeTextType="uniform"
+                    android:textSize="40px"
                     android:maxLines="1"
                     android:textColor="@color/black"/>
 
@@ -125,42 +128,37 @@
                     android:id="@+id/txtPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10"
+                    android:ems="8"
+                    android:textSize="50px"
                     android:inputType="number"
                     android:textAlignment="center" />
             </LinearLayout>
 
             <!--  Buttons  -->
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:layout_margin="5dp"
                 android:layout_weight="1">
 
                 <Button
+                    android:id="@+id/btnAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Add"
-                    android:layout_margin="5dp"
-                    android:id="@+id/btnCart"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="20sp"
-                    android:autoSizeMaxTextSize="100sp"
-                    android:autoSizeStepGranularity="20sp"
+                    android:layout_margin="3dp"
+                    android:textSize="40px"
                     android:background="@drawable/button1"
                     android:maxLines="1"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Back"
-                    android:layout_margin="5dp"
+                    android:layout_margin="3dp"
                     android:id="@+id/btnCancel"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="20sp"
-                    android:autoSizeMaxTextSize="100sp"
-                    android:autoSizeStepGranularity="20sp"
+                    android:textSize="40px"
                     android:background="@drawable/button1"
                     android:maxLines="1"/>
                 </LinearLayout>

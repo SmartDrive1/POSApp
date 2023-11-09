@@ -28,17 +28,17 @@ public class prodAdd extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_prod_add);
 
-        String[] s1 = new String[] {
+        String[] s1 = new String[]{
                 "Drinks", "Food", "Add-Ons", "Others"
         };
         Spinner s = (Spinner) findViewById(R.id.catID);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, s1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlayout, s1);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);
 
         txtProduct = findViewById(R.id.txtProduct);
         txtPrice = findViewById(R.id.txtPrice);
-        btnAdd =  findViewById(R.id.btnCart);
+        btnAdd = findViewById(R.id.btnAdd);
         btnCancel = findViewById(R.id.btnCancel);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +58,7 @@ public class prodAdd extends AppCompatActivity {
         });
     }
 
-    public void getMax(){
+    public void getMax() {
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
@@ -75,48 +75,47 @@ public class prodAdd extends AppCompatActivity {
         }
     }
 
-    public void insert()
-    {
+    public void insert() {
         String prodName = txtProduct.getText().toString().trim();
         String price = txtPrice.getText().toString().trim();
-        Spinner spinner = (Spinner)findViewById(R.id.catID);
+        Spinner spinner = (Spinner) findViewById(R.id.catID);
 
         getMax();
         max_id += 1;
-        if(prodName.equals("") || price.equals("")) {
-            Toast.makeText(this,"Product Name or Price is Blank", Toast.LENGTH_LONG).show();
-        }else if(prodName.equals("None") || prodName.equals("none")) {
-            Toast.makeText(this,"Please Enter Another Product Name", Toast.LENGTH_LONG).show();
-        }else if (Integer.parseInt(price) <= 0)
-            {
-                Toast.makeText(this,"Please Enter a Price Greater Than 0", Toast.LENGTH_LONG).show();
-            }else{
-                try{
-                    String product = txtProduct.getText().toString().trim();
-                    String prodPrice = txtPrice.getText().toString().trim();
-                    String spTxt = spinner.getSelectedItem().toString();
-                    if (spTxt.equals("Add-Ons")){
-                        spTxt = "AddOns";
-                    }
-                    SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-                    db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )");
-
-                    String sql = "insert into products (id, product, category, prodPrice)values(?,?,?,?)";
-                    SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1,String.valueOf(max_id));
-                    statement.bindString(2,product);
-                    statement.bindString(3,spTxt);
-                    statement.bindString(4,prodPrice);
-                    statement.execute();
-                    Toast.makeText(this,"Product Added", Toast.LENGTH_LONG).show();
-                    txtProduct.setText("");
-                    txtPrice.setText("");
-                    txtProduct.requestFocus();
-                    db.close();
-                }catch (Exception e)
-                {
-                    Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
+        if (prodName.equals("")) {
+            Toast.makeText(this, "Product Name or Price is Blank", Toast.LENGTH_LONG).show();
+        } else if (price.equals("")) {
+            Toast.makeText(this, "Product Price is Blank", Toast.LENGTH_LONG).show();
+        } else if (prodName.equals("None") || prodName.equals("none")) {
+            Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
+        } else if (Integer.parseInt(price) <= 0) {
+            Toast.makeText(this, "Please Enter a Price Greater Than 0", Toast.LENGTH_LONG).show();
+        } else {
+            try {
+                String product = txtProduct.getText().toString().trim();
+                String prodPrice = txtPrice.getText().toString().trim();
+                String spTxt = spinner.getSelectedItem().toString();
+                if (spTxt.equals("Add-Ons")) {
+                    spTxt = "AddOns";
                 }
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )");
+
+                String sql = "insert into products (id, product, category, prodPrice)values(?,?,?,?)";
+                SQLiteStatement statement = db.compileStatement(sql);
+                statement.bindString(1, String.valueOf(max_id));
+                statement.bindString(2, product);
+                statement.bindString(3, spTxt);
+                statement.bindString(4, prodPrice);
+                statement.execute();
+                Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
+                txtProduct.setText("");
+                txtPrice.setText("");
+                txtProduct.requestFocus();
+                db.close();
+            } catch (Exception e) {
+                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

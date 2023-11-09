@@ -33,6 +33,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center"
+                android:padding="5dp"
                 android:weightSum="5">
                 <!--  ID  -->
                 <LinearLayout
@@ -50,7 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Product:"
-                        android:textSize="50px"
+                        android:textSize="40px"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -58,7 +59,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtEditProduct"
                         android:layout_weight="1"
-                        android:ems="10"
+                        android:textSize="40px"
+                        android:ems="8"
                         android:editable="false"
                         android:textAlignment="center"/>
                 </LinearLayout>
@@ -79,7 +81,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Quantity:"
-                        android:textSize="50px"
+                        android:textSize="40px"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -87,7 +89,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtQuantity"
                         android:layout_weight="1"
-                        android:ems="10"
+                        android:textSize="40px"
+                        android:ems="8"
                         android:inputType="number"
                         android:textAlignment="center"/>
                 </LinearLayout>
@@ -102,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Price:"
-                        android:textSize="50px"
+                        android:textSize="40px"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -110,7 +113,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtEditPrice"
                         android:layout_weight="1"
-                        android:ems="10"
+                        android:textSize="40px"
+                        android:ems="8"
                         android:editable="false"
                         android:textAlignment="center"/>
                 </LinearLayout>
@@ -125,7 +129,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total:"
-                        android:textSize="50px"
+                        android:textSize="40px"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -133,7 +137,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTPrice"
                         android:layout_weight="1"
-                        android:ems="10"
+                        android:textSize="40px"
+                        android:ems="8"
                         android:editable="false"
                         android:textAlignment="center"/>
                 </LinearLayout>
@@ -150,10 +155,7 @@
                         android:layout_height="wrap_content"
                         android:text="Edit"
                         android:layout_margin="5dp"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="15sp"
-                        android:autoSizeMaxTextSize="100sp"
-                        android:autoSizeStepGranularity="5sp"
+                        android:textSize="50px"
                         android:background="@drawable/button1"
                         android:id="@+id/btnEdit"/>
                     <Button
@@ -161,10 +163,7 @@
                         android:layout_height="wrap_content"
                         android:text="Remove"
                         android:layout_margin="5dp"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="15sp"
-                        android:autoSizeMaxTextSize="100sp"
-                        android:autoSizeStepGranularity="5sp"
+                        android:textSize="50px"
                         android:background="@drawable/button1"
                         android:id="@+id/btnRemove"/>
                     <Button
@@ -172,10 +171,7 @@
                         android:layout_height="wrap_content"
                         android:text="Back"
                         android:layout_margin="5dp"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="15sp"
-                        android:autoSizeMaxTextSize="100sp"
-                        android:autoSizeStepGranularity="5sp"
+                        android:textSize="50px"
                         android:background="@drawable/button1"
                         android:id="@+id/btnCancel"/>
                 </LinearLayout>

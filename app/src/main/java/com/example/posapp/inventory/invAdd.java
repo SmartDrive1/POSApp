@@ -84,17 +84,22 @@ public class invAdd extends AppCompatActivity {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS inventory(id INTEGER PRIMARY KEY,itemName VARCHAR, stock INTEGER )");
 
-                String sql = "insert into inventory (id, itemName, stock)values(?,?,?)";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1,String.valueOf(max_id));
-                statement.bindString(2,itemName);
-                statement.bindString(3,Stock);
-                statement.execute();
-                Toast.makeText(this,"Item Added", Toast.LENGTH_LONG).show();
-                txtItemName.setText("");
-                txtStock.setText("");
-                txtItemName.requestFocus();
-                db.close();
+                Cursor c = db.rawQuery("SELECT * FROM inventory WHERE itemName = ?", new String[]{itemName});
+                if (c.getCount() > 0){
+                    Toast.makeText(this, "Item Already Exists", Toast.LENGTH_SHORT).show();
+                }else{
+                    String sql = "insert into inventory (id, itemName, stock)values(?,?,?)";
+                    SQLiteStatement statement = db.compileStatement(sql);
+                    statement.bindString(1,String.valueOf(max_id));
+                    statement.bindString(2,itemName);
+                    statement.bindString(3,Stock);
+                    statement.execute();
+                    Toast.makeText(this,"Item Added", Toast.LENGTH_LONG).show();
+                    txtItemName.setText("");
+                    txtStock.setText("");
+                    txtItemName.requestFocus();
+                    db.close();
+                }
             }catch (Exception e)
             {
                 Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();

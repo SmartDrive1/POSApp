@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Item\nName:"
-                        android:textAlignment="textEnd"
+                        android:textAlignment="center"
                         android:textColor="@color/black"
                         android:autoSizeTextType="uniform"
                         android:maxLines="2"/>
