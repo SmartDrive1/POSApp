@@ -32,6 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
+                android:padding="5dp"
                 android:orientation="vertical"
                 android:weightSum="20">
                 <!-- Text -->
@@ -39,13 +40,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:layout_margin="5dp"
                     android:layout_weight="1">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Add Item"
-                        android:textSize="80px"
+                        android:textSize="40sp"
                         android:textColor="@color/black"/>
                 </LinearLayout>
 
@@ -54,16 +56,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_margin="5dp"
                     android:layout_weight="1">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Item Name:"
+                        android:text="Item\nName:"
                         android:textAlignment="textEnd"
                         android:textColor="@color/black"
                         android:autoSizeTextType="uniform"
-                        android:maxLines="1"/>
+                        android:maxLines="2"/>
 
                     <EditText
                         android:layout_width="wrap_content"
@@ -80,6 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_margin="5dp"
                     android:layout_weight="1">
 
                     <TextView
@@ -106,6 +110,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:layout_margin="5dp"
                     android:layout_weight="1">
 
                     <Button

@@ -31,33 +31,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
+                android:padding="3dp"
+                android:layout_marginRight="5dp"
                 android:gravity="center">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Add User"
-                        android:textSize="80px"
+                        android:textSize="40sp"
                         android:textColor="@color/black"/>
                 </LinearLayout>
-
-                <!--  ID  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:weightSum="3"/>
 
                 <!--  Full Name  -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
+                    android:weightSum="4"
+                    android:layout_margin="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -74,7 +71,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtFullName"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:ems="10"
                         android:textAlignment="center"/>
                 </LinearLayout>
@@ -83,7 +80,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
+                    android:weightSum="4"
+                    android:layout_margin="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -100,7 +98,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtUserName"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:ems="10"
                         android:textAlignment="center"/>
                 </LinearLayout>
@@ -109,7 +107,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:weightSum="3"
+                    android:weightSum="4"
+                    android:layout_margin="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -126,7 +125,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtPassWord"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:ems="10"
                         android:textAlignment="center"/>
                 </LinearLayout>
@@ -136,6 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:layout_margin="5dp"
                     android:weightSum="2">
 
                     <TextView
@@ -163,6 +163,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
+                    android:layout_margin="5dp"
                     android:weightSum="2">
 
                     <Button
