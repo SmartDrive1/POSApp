@@ -2,6 +2,7 @@ package com.example.posapp.users;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -102,24 +103,29 @@ public class userEdit extends AppCompatActivity {
                 Toast.makeText(this,"username is Blank. Please Enter a Valid Username", Toast.LENGTH_LONG).show();
             }else if(editPassword1.equals("")){
                 Toast.makeText(this,"Password is Blank. Please Enter a Valid Password", Toast.LENGTH_LONG).show();
-            }else{
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+            }else {
+                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 Cursor c = db.rawQuery("SELECT * FROM users WHERE userName = ?", new String[]{editUserName1});
-                if(c.getCount() >= 0) {
-                    Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
-                }else {
-                    String sql = "update users set fullName = ?, userName = ?, password = ?, access = ? where id = ?";
-                    SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1, editName1);
-                    statement.bindString(2, editUserName1);
-                    statement.bindString(3, editPassword1);
-                    statement.bindString(4, spTxt);
-                    statement.bindString(5, editID1);
-                    statement.execute();
-                    Toast.makeText(this, "User Updated", Toast.LENGTH_LONG).show();
-                    db.close();
-                    Intent i = new Intent(userEdit.this, userList.class);
-                    startActivity(i);
+                if (c.getCount() >= 0) {
+                    if(c.moveToFirst()){
+                        int existingID = c.getColumnIndex("id");
+                        if (c.getString(existingID).equals(editID1)) {
+                            String sql = "update users set fullName = ?, userName = ?, password = ?, access = ? where id = ?";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1, editName1);
+                            statement.bindString(2, editUserName1);
+                            statement.bindString(3, editPassword1);
+                            statement.bindString(4, spTxt);
+                            statement.bindString(5, editID1);
+                            statement.execute();
+                            Toast.makeText(this, "User Updated", Toast.LENGTH_LONG).show();
+                            db.close();
+                            Intent i = new Intent(userEdit.this, userList.class);
+                            startActivity(i);
+                        } else {
+                            Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
             }
         }catch (Exception e)
