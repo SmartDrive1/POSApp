@@ -55,9 +55,11 @@ public class login extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, fullName VARCHAR, userName VARCHAR, password VARCHAR, access, VARCHAR)");//incase there are no tables yet
         Cursor c = db.rawQuery("select * from users WHERE userName='" + username + "'and password='" + pass + "'", null);
 
-        if (username.equals("") || pass.equals("")){
-            Toast.makeText(login.this, "Username or Password Blank", Toast.LENGTH_SHORT).show();
-        }else if(username.equals("admin") && pass.equals("admin")){
+        if (username.equals("")){
+            Toast.makeText(login.this, "Username is Blank", Toast.LENGTH_SHORT).show();
+        }else if(pass.equals("")){
+            Toast.makeText(login.this, "Password is Blank", Toast.LENGTH_SHORT).show();
+        }else if(username.equals("admin") && pass.equals("admin")){ //Edit before deployment
             accessValue.access = "Admin";
             Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(login.this, MainScreen.class);

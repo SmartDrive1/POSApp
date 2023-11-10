@@ -54,15 +54,15 @@ public class forgetPassword extends AppCompatActivity {
         db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, fullName VARCHAR, userName VARCHAR, password VARCHAR, access, VARCHAR)");//incase there are no tables yet
         Cursor c = db.rawQuery("select * from users WHERE userName='" + username + "'and password='" + pass + "'", null);
 
-        if (username.equals("") || pass.equals("")){
-            Toast.makeText(forgetPassword.this, "Username or Password Blank", Toast.LENGTH_SHORT).show();
-        }
-        else if(username.equals("admin") && pass.equals("adminuriel41")){
+        if (username.equals("")){
+            Toast.makeText(forgetPassword.this, "Username is Blank", Toast.LENGTH_SHORT).show();
+        }else if (pass.equals("")){
+            Toast.makeText(forgetPassword.this, "Password is Blank", Toast.LENGTH_SHORT).show();
+        }else if(username.equals("admin") && pass.equals("adminuriel41")){
             Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(forgetPassword.this, MainScreen.class);
             startActivity(i);
-            }else if(c.moveToFirst())
-                {
+            }else if(c.moveToFirst()){
                     int accessIndex = c.getColumnIndex("access");
                     accessValue.access = c.getString(accessIndex);
                     String currentAccess = accessValue.access;
@@ -73,8 +73,7 @@ public class forgetPassword extends AppCompatActivity {
                     }else{
                         Toast.makeText(forgetPassword.this, "Account is a User", Toast.LENGTH_SHORT).show();
                     }
-            }else
-        {
+            }else{
             Toast.makeText(forgetPassword.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
         }
     }

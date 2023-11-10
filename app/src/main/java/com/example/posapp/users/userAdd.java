@@ -32,7 +32,7 @@ public class userAdd extends AppCompatActivity {
                 "Admin", "User"
         };
         Spinner s = (Spinner) findViewById(R.id.accID);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, s1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlayout, s1);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);
 
@@ -84,8 +84,7 @@ public class userAdd extends AppCompatActivity {
 
         getMax();
         max_id += 1;
-        if(fName.equals("") || uName.equals("") || pass.equals(""))
-        {
+        if(fName.equals("") || uName.equals("") || pass.equals("")){
             Toast.makeText(this,"Full Name, UserName, or Password is Blank", Toast.LENGTH_LONG).show();
         }else if(uName.equals("Admin") || uName.equals("admin")) {
             Toast.makeText(this,"Please Choose Another Username", Toast.LENGTH_LONG).show();
@@ -118,8 +117,7 @@ public class userAdd extends AppCompatActivity {
                 }
                 c.close();
                 db.close();
-            }catch (Exception e)
-            {
+            }catch (Exception e){
                 Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
             }
         }
