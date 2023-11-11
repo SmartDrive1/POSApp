@@ -51,7 +51,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Product:"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -59,7 +60,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtEditProduct"
                         android:layout_weight="1"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:ems="8"
                         android:editable="false"
                         android:textAlignment="center"/>
@@ -81,7 +83,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Quantity:"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -89,7 +92,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtQuantity"
                         android:layout_weight="1"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:ems="8"
                         android:inputType="number"
                         android:textAlignment="center"/>
@@ -105,7 +109,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Price:"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -113,7 +118,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtEditPrice"
                         android:layout_weight="1"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:ems="8"
                         android:editable="false"
                         android:textAlignment="center"/>
@@ -129,7 +135,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total:"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:textColor="@color/black"/>
 
                     <EditText
@@ -137,7 +144,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txtTPrice"
                         android:layout_weight="1"
-                        android:textSize="40px"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:ems="8"
                         android:editable="false"
                         android:textAlignment="center"/>
@@ -155,7 +163,8 @@
                         android:layout_height="wrap_content"
                         android:text="Edit"
                         android:layout_margin="5dp"
-                        android:textSize="50px"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:id="@+id/btnEdit"/>
                     <Button
@@ -163,7 +172,8 @@
                         android:layout_height="wrap_content"
                         android:text="Remove"
                         android:layout_margin="5dp"
-                        android:textSize="50px"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:id="@+id/btnRemove"/>
                     <Button
@@ -171,7 +181,8 @@
                         android:layout_height="wrap_content"
                         android:text="Back"
                         android:layout_margin="5dp"
-                        android:textSize="50px"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:id="@+id/btnCancel"/>
                 </LinearLayout>

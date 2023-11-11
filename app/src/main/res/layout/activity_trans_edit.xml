@@ -37,7 +37,7 @@
                 android:gravity="center"
                 android:paddingLeft="3dp"
                 android:padding="3dp"
-                android:background="@drawable/bottomline">
+                android:background="@drawable/textbackground">
 
                 <TextView
                     android:id="@+id/pName"
@@ -114,13 +114,12 @@
                 android:layout_height="match_parent"
                 android:layout_margin="3dp"
                 android:id="@+id/txtTransID"
-                android:autoSizeTextType="uniform"
                 android:textColor="@color/black"
                 android:background="@drawable/back"
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="Transaction ID: "
-                android:textSize="20sp"></TextView>
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -133,7 +132,7 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="Date/Time: "
-                android:textSize="20sp"></TextView>
+                android:textSize="16sp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -146,17 +145,15 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="Total: "
-                android:textSize="20sp"></TextView>
+                android:textSize="16sp"/>
 
             <Button
                 android:id="@+id/btnDelete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button1"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="7sp"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:layout_margin="3dp"
                 android:text="Delete"></Button>
@@ -166,10 +163,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button1"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="7sp"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 android:maxLines="1"
                 android:layout_margin="3dp"
                 android:text="Back"></Button>

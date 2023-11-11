@@ -69,10 +69,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="1sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:textColor="@color/black"
                         android:gravity="left"
                         android:maxLines="2"
@@ -101,10 +99,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="1sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:textColor="@color/black"
                         android:gravity="left"
                         android:maxLines="2"
@@ -133,11 +129,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="1sp"
-                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:gravity="left"
                         android:maxLines="2"
                         android:paddingLeft="10dp"
@@ -163,7 +156,6 @@
                 app:cardElevation="5dp"
                 app:cardCornerRadius="30sp"
                 android:layout_margin="20sp"
-
                 android:layout_weight="2">
 
                 <!-- Right Side -->
@@ -188,7 +180,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Product:"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:textColor="@color/black"/>
 
                         <EditText
@@ -197,7 +190,8 @@
                             android:layout_height="wrap_content"
                             android:editable="false"
                             android:layout_weight="1"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:ems="8"
                             android:textAlignment="center" />
                     </LinearLayout>
@@ -212,7 +206,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Quantity:"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:textColor="@color/black"/>
 
                         <EditText
@@ -220,7 +215,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:ems="8"
                             android:inputType="number"
                             android:textAlignment="center" />
@@ -238,14 +234,15 @@
                             android:text="Add-ons:"
                             android:autoSizeTextType="uniform"
                             android:maxLines="1"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:textColor="@color/black"/>
 
                         <Spinner
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/spAO"
-                            android:textSize="20sp"
+                            android:textAlignment="center"
                             android:maxLines="1"/>
                     </LinearLayout>
 
@@ -260,7 +257,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Price:"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:textColor="@color/black"/>
 
                         <EditText
@@ -271,7 +269,8 @@
                             android:enabled="false"
                             android:textColor="@color/black"
                             android:ems="8"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:inputType="number"
                             android:textAlignment="center" />
                     </LinearLayout>
@@ -287,7 +286,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Total:"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:textColor="@color/black"/>
 
                         <EditText
@@ -296,7 +296,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:enabled="false"
-                            android:textSize="40px"
+                            android:textSize="16sp"
+                            android:layout_margin="3dp"
                             android:textColor="@color/black"
                             android:ems="8"
                             android:inputType="number"
@@ -316,10 +317,8 @@
                             android:layout_height="wrap_content"
                             android:text="Add"
                             android:layout_margin="3dp"
-                            android:autoSizeTextType="uniform"
-                            android:autoSizeMinTextSize="20sp"
-                            android:autoSizeMaxTextSize="100sp"
-                            android:autoSizeStepGranularity="20sp"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             android:background="@drawable/button1"
                             android:id="@+id/btnCart"/>
 
@@ -328,10 +327,8 @@
                             android:layout_height="wrap_content"
                             android:text="Cart"
                             android:layout_margin="3dp"
-                            android:autoSizeTextType="uniform"
-                            android:autoSizeMinTextSize="20sp"
-                            android:autoSizeMaxTextSize="100sp"
-                            android:autoSizeStepGranularity="20sp"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             android:background="@drawable/button1"
                             android:id="@+id/btnOrders"/>
                     </LinearLayout>

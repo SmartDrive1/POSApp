@@ -64,10 +64,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="70px"
+                android:textSize="25sp"
                 android:gravity="center"
                 android:background="@drawable/back"
                 android:text="Inventory"
+                android:textColor="@color/black"
+                android:layout_margin="3dp"
                 android:autoSizeTextType="uniform"
                 android:maxLines="2"/>
 
@@ -76,6 +78,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txtSearch"
                 android:textColor="@color/black"
+                android:textSize="16sp"
                 android:layout_weight="1"
                 android:layout_margin="3dp"
                 android:drawableStart="@drawable/search"
@@ -90,10 +93,8 @@
                 android:layout_height="wrap_content"
                 android:text="Add Item"
                 android:background="@drawable/button1"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="10sp"
+                android:textStyle="bold"
+                android:textSize="16sp"
                 android:layout_margin="3dp"
                 android:maxLines="1"></Button>
 
@@ -103,10 +104,8 @@
                 android:layout_height="wrap_content"
                 android:text="Back"
                 android:background="@drawable/button1"
-                android:autoSizeTextType="uniform"
-                android:autoSizeMinTextSize="1sp"
-                android:autoSizeMaxTextSize="30sp"
-                android:autoSizeStepGranularity="10sp"
+                android:textSize="16sp"
+                android:textStyle="bold"
                 android:layout_margin="3dp"
                 android:maxLines="1"></Button>
         </LinearLayout>

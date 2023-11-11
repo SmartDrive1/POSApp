@@ -43,54 +43,45 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Edit Item"
-                        android:textSize="100px"
+                        android:textSize="25sp"
                         android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <!--  ID  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Item ID:"
-                        android:textSize="50px"
-                        android:textColor="@color/black"/>
 
                     <EditText
                         android:id="@+id/txtEditID"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:editable="false"
+                        android:drawableStart="@drawable/iconid"
+                        android:background="@drawable/edit_text_border"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         android:ems="10"
+                        android:hint="ID"
                         android:textAlignment="center" />
-                </LinearLayout>
 
                 <!--  Item Name  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Item Name:"
-                        android:textSize="50px"
-                        android:textColor="@color/black"/>
-
                     <EditText
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtEditItemName"
+                        android:drawableStart="@drawable/iconproduct"
+                        android:background="@drawable/edit_text_border"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:hint="Item Name"
                         android:textAlignment="center"/>
-                </LinearLayout>
 
                 <!--  Category  -->
                 <LinearLayout
@@ -99,43 +90,39 @@
                     android:orientation="horizontal"/>
 
                 <!--  Stock  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Item Stock:"
-                        android:textSize="50px"
-                        android:textColor="@color/black"/>
-
                     <EditText
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtEditItemStock"
                         android:layout_weight="1"
+                        android:drawableStart="@drawable/quantityicon"
+                        android:background="@drawable/edit_text_border"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
                         android:ems="10"
                         android:inputType="number"
+                        android:hint="Stock"
                         android:textAlignment="center"/>
-                </LinearLayout>
 
                 <!--  Buttons  -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp">
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Edit"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="10sp"
+                        android:text="UPDATE"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:layout_margin="5dp"
                         android:id="@+id/btnEdit"/>
@@ -143,10 +130,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Delete"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="10sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:layout_margin="5dp"
                         android:id="@+id/btnDelete"/>
@@ -154,10 +139,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Back"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="10sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:layout_margin="5dp"
                         android:id="@+id/btnCancel"/>

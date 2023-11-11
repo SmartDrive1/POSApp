@@ -16,184 +16,173 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="100"
         android:gravity="center">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="50"
-            app:cardElevation="5dp"
             app:cardCornerRadius="30sp"
-            android:layout_margin="20sp">
+            app:cardElevation="5dp">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:padding="5dp"
-                android:gravity="center">
+                android:padding="5dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="3dp"
                     android:orientation="vertical">
+
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Edit Product"
-                        android:textSize="80px"
-                        android:textColor="@color/black"/>
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="30sp" />
                 </LinearLayout>
 
-                <!--  ID  -->
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Product ID:"
-                        android:textSize="40px"
-                        android:textColor="@color/black"/>
-
-                    <EditText
-                        android:id="@+id/txtEditID"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="40px"
-                        android:editable="false"
-                        android:ems="8"
-                        android:textAlignment="center" />
-                </LinearLayout>
-
-                <!--  Product  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Product Name:"
-                        android:textSize="40px"
-                        android:textColor="@color/black"/>
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtEditName"
-                        android:layout_weight="1"
-                        android:textSize="40px"
-                        android:ems="8"
-                        android:textAlignment="center"/>
-                </LinearLayout>
-
-                <!--  Category  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Category:"
-                        android:textSize="40px"
-                        android:textColor="@color/black"/>
-
-                    <Spinner
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/catID"
-                        ></Spinner>
-                </LinearLayout>
-
-                <!--  Price  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Product Price:"
-                        android:textSize="40px"
-                        android:textColor="@color/black"/>
-
-                    <EditText
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txtEditPrice"
-                        android:layout_weight="1"
-                        android:textSize="40px"
-                        android:ems="8"
-                        android:inputType="number"
-                        android:textAlignment="center"/>
-                </LinearLayout>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-<!--        Buttons-->
-        <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="30"
-            app:cardElevation="5dp"
-            app:cardCornerRadius="30sp"
-            android:layout_margin="5dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:layout_weight="1">
-
-                <Button
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Edit"
-                    android:textSize="50px"
-                    android:background="@drawable/button1"
-                    android:layout_margin="3dp"
-                    android:id="@+id/btnEdit"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2">
-                    <Button
+                    android:weightSum="100">
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Delete"
-                        android:textSize="50px"
-                        android:background="@drawable/button1"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:id="@+id/btnDelete"/>
-                    <Button
+                        android:layout_weight="70"
+                        android:layout_margin="5dp"
+                        android:orientation="vertical">
+                        <!--  ID  -->
+                        <EditText
+                            android:id="@+id/txtEditID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/edit_text_border"
+                            android:drawableStart="@drawable/iconid"
+                            android:editable="false"
+                            android:ems="8"
+                            android:hint="ID"
+                            android:textAlignment="center"
+                            android:textSize="16sp" />
+
+                        <!--  Product  -->
+                        <EditText
+                            android:id="@+id/txtEditName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/edit_text_border"
+                            android:drawableStart="@drawable/iconproduct"
+                            android:ems="8"
+                            android:hint="Product Name"
+                            android:textAlignment="center"
+                            android:textSize="16sp" />
+
+                        <!--  Category  -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/edit_text_border"
+                            android:orientation="horizontal"
+                            android:weightSum="3">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:drawableStart="@drawable/iconcategory"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black" />
+
+                            <Spinner
+                                android:id="@+id/catID"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2.5"></Spinner>
+                        </LinearLayout>
+
+                        <!--  Price  -->
+
+                        <EditText
+                            android:id="@+id/txtEditPrice"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="3dp"
+                            android:background="@drawable/edit_text_border"
+                            android:drawableStart="@drawable/iconprice"
+                            android:ems="8"
+                            android:hint="Price"
+                            android:inputType="number"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+
+                    <!--        Buttons-->
+                    <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="Back"
-                        android:textSize="50px"
-                        android:background="@drawable/button1"
-                        android:layout_margin="3dp"
-                        android:layout_weight="1"
-                        android:id="@+id/btnCancel"/>
+                        android:layout_gravity="center"
+                        android:layout_weight="30"
+                        app:cardCornerRadius="30sp"
+                        app:cardElevation="5dp"
+                        android:layout_margin="5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:padding="8dp">
+
+                            <Button
+                                android:id="@+id/btnEdit"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="3dp"
+                                android:background="@drawable/button1"
+                                android:text="Update"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal"
+                                android:weightSum="2">
+
+                                <Button
+                                    android:id="@+id/btnDelete"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="3dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/button1"
+                                    android:text="DEL"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+
+                                <Button
+                                    android:id="@+id/btnCancel"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="3dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/button1"
+                                    android:text="Back"
+                                    android:textSize="16sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>

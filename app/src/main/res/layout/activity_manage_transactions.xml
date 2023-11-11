@@ -37,7 +37,7 @@
                 android:gravity="center"
                 android:paddingLeft="3dp"
                 android:padding="3dp"
-                android:background="@drawable/bottomline">
+                android:background="@drawable/textbackground">
 
                 <TextView
                     android:id="@+id/nameP"

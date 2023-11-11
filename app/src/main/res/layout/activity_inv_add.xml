@@ -47,66 +47,41 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Add Item"
-                        android:textSize="40sp"
+                        android:textSize="25sp"
                         android:textColor="@color/black"/>
                 </LinearLayout>
 
                 <!--  Product  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Item\nName:"
-                        android:textAlignment="center"
-                        android:textColor="@color/black"
-                        android:autoSizeTextType="uniform"
-                        android:maxLines="2"/>
-
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txtItemName"
                         android:ems="10"
                         android:textAlignment="center"
+                        android:drawableStart="@drawable/iconproduct"
+                        android:hint="Item Name"
+                        android:background="@drawable/edit_text_border"
+                        android:layout_margin="3dp"
                         android:autoSizeTextType="uniform"
                         android:maxLines="1"/>
-                </LinearLayout>
 
                 <!--  Stock  -->
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Stock:"
-                        android:textAlignment="textEnd"
-                        android:autoSizeTextType="uniform"
-                        android:maxLines="1"
-                        android:textColor="@color/black"/>
 
                     <EditText
                         android:id="@+id/txtStock"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/quantityicon"
+                        android:background="@drawable/edit_text_border"
+                        android:hint="Stock"
+                        android:layout_margin="3dp"
                         android:ems="10"
                         android:inputType="number"
                         android:textAlignment="center" />
-                </LinearLayout>
 
                 <!--  Buttons  -->
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
@@ -119,10 +94,8 @@
                         android:text="Add"
                         android:layout_margin="5dp"
                         android:id="@+id/btnAddItem"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="10sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:maxLines="1"/>
                     <Button
@@ -131,10 +104,8 @@
                         android:text="Back"
                         android:layout_margin="5dp"
                         android:id="@+id/btnCancel"
-                        android:autoSizeTextType="uniform"
-                        android:autoSizeMinTextSize="1sp"
-                        android:autoSizeMaxTextSize="30sp"
-                        android:autoSizeStepGranularity="10sp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:background="@drawable/button1"
                         android:maxLines="1"/>
                 </LinearLayout>

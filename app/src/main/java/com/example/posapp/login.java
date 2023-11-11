@@ -48,8 +48,8 @@ public class login extends AppCompatActivity {
     }
 
     public void Login(){
-        String username = txtUser.getText().toString();
-        String pass = txtPass.getText().toString();
+        String username = txtUser.getText().toString().trim();
+        String pass = txtPass.getText().toString().trim();
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
         db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, fullName VARCHAR, userName VARCHAR, password VARCHAR, access, VARCHAR)");//incase there are no tables yet

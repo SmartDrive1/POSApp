@@ -34,7 +34,7 @@
                 android:gravity="center"
                 android:paddingLeft="3dp"
                 android:padding="3dp"
-                android:background="@drawable/bottomline">
+                android:background="@drawable/textbackground">
 
                 <TextView
                     android:id="@+id/nameP"
@@ -113,20 +113,20 @@
                     android:gravity="center"
                     android:maxLines="2"
                     android:text="Cart"
-                    android:textSize="30sp"></TextView>
+                    android:textSize="24sp"></TextView>
 
                 <TextView
                     android:id="@+id/totalPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="3dp"
                     android:autoSizeTextType="uniform"
                     android:textColor="@color/black"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="Total: 0"
                     android:background="@drawable/back"
-                    android:textSize="30sp"></TextView>
+                    android:textSize="16sp"
+                    android:layout_margin="3dp"></TextView>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -140,36 +140,34 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:autoSizeTextType="uniform"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:textColor="@color/black"
                         android:maxLines="1"
                         android:text="₱"
-                        android:textAlignment="textEnd"
-                        android:textSize="30sp"/>
+                        android:textAlignment="textEnd"/>
 
                     <EditText
                         android:id="@+id/txtPayment"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="2"
-                        android:autoSizeTextType="uniform"
+                        android:textSize="16sp"
+                        android:layout_margin="3dp"
                         android:textColor="@color/black"
                         android:maxLines="1"
                         android:ems="2"
                         android:padding="4dp"
                         android:inputType="number"
-                        android:textAlignment="textStart"
-                        android:textSize="30sp" />
+                        android:textAlignment="textStart" />
                 </LinearLayout>
                 <Button
                     android:id="@+id/btnPayment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button1"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="7sp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     android:maxLines="1"
                     android:layout_margin="3dp"
                     android:text="Proceed"></Button>
@@ -179,10 +177,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button1"
-                    android:autoSizeTextType="uniform"
-                    android:autoSizeMinTextSize="1sp"
-                    android:autoSizeMaxTextSize="30sp"
-                    android:autoSizeStepGranularity="7sp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     android:maxLines="1"
                     android:layout_margin="3dp"
                     android:text="Back"></Button>
