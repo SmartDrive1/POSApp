@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.posapp.OrderingSystem.OrderingSystem;
+import com.example.posapp.kmeans.KMeans;
 
 public class MainScreen extends AppCompatActivity {
     Button btnOrderingSystem, btnAnalysis, btnMoreInfo, btnManagement, btnLogout, btnAdmin;
@@ -18,6 +19,7 @@ public class MainScreen extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
         btnMoreInfo = findViewById(R.id.btnMoreInfo);
+        btnAnalysis = findViewById(R.id.btnAnalysis);
         btnManagement = findViewById(R.id.btnManagement);
         btnOrderingSystem = findViewById(R.id.btnOrderingSystem);
         btnAdmin = findViewById(R.id.btnAdmin); //Remove This
@@ -27,6 +29,14 @@ public class MainScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(MainScreen.this, AaUriButton.class);
+                startActivity(i);
+            }
+        });
+
+        btnAnalysis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainScreen.this, KMeans.class);
                 startActivity(i);
             }
         });

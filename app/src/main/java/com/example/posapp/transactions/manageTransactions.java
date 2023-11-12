@@ -66,17 +66,19 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             int totalAmount = cursor.getColumnIndex("totalAmount");
             int totalQuantity = cursor.getColumnIndex("totalQuantity");
 
+            if (cursor.getCount() == 0){
+                Toast.makeText(this, "No Transactions Found", Toast.LENGTH_LONG).show();
+            }else{
+                while(cursor.moveToNext()){
+                    formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
+                    items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), formattedDate));
+                    transAdapter = new transAdapter(this, items, this);
+                    recyclerView.setAdapter(transAdapter);
+                }
 
-            while(cursor.moveToNext()){
-                formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
-                items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), formattedDate));
-                transAdapter = new transAdapter(this, items, this);
-                recyclerView.setAdapter(transAdapter);
+                cursor.close();
+                db.close();
             }
-
-            cursor.close();
-            db.close();
-
             }catch (Exception e) {
             Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
         }

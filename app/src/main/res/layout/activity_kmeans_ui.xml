@@ -1,0 +1,65 @@
+<!-- activity_main.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/wave1bg"
+    android:gravity="center"
+    tools:context=".kmeans.KMeans">
+
+    <!-- Add a Button and EditText for K value -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="30dp"
+        android:layout_margin="20sp">
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/editTextK"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:background="@drawable/edit_text_border"
+                android:textSize="16sp"
+                android:hint="Enter K value"/>
+
+            <Button
+                android:id="@+id/buttonRunKMeans"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                android:text="Run K-Means"/>
+
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:text="Back"/>
+
+            <EditText
+                android:id="@+id/textViewResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="16dp"
+                android:text="Result will be displayed here"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
