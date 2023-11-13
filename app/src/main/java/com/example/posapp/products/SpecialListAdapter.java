@@ -13,13 +13,13 @@ import com.example.posapp.R;
 
 import java.util.List;
 
-public class prodOthersListAdapter extends RecyclerView.Adapter<prodViewHolder> {
+public class SpecialListAdapter extends RecyclerView.Adapter<prodViewHolder> {
 
     Context context;
     List<prodItems> items;
     prodClickListener mClickListener;
 
-    public prodOthersListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
+    public SpecialListAdapter(Context context, List<prodItems> items, prodClickListener mClickListener) {
         this.context = context;
         this.items = items;
         this.mClickListener = mClickListener;
@@ -33,7 +33,8 @@ public class prodOthersListAdapter extends RecyclerView.Adapter<prodViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull prodViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.txtName.setText("Prod Name: " + items.get(position).getProduct());
+        holder.txtName.setText(items.get(position).getProduct());
+        holder.txtQuantity.setText("Available: " +items.get(position).getQuantity());
         holder.txtPrice.setText("Price: " + items.get(position).getProdPrice());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {

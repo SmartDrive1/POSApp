@@ -83,6 +83,23 @@
                         android:hint="Item Name"
                         android:textAlignment="center"/>
 
+                <!--  Quantity  -->
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txtEditQuantity"
+                    android:drawableStart="@drawable/quantityicon"
+                    android:background="@drawable/edit_text_border"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Quantity"
+                    android:textAlignment="center"/>
+
                 <!--  Category  -->
                 <LinearLayout
                     android:layout_width="wrap_content"

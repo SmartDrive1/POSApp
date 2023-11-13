@@ -345,5 +345,3 @@ public class KMeans extends AppCompatActivity {
         return transactions;
     }
 }
-
-

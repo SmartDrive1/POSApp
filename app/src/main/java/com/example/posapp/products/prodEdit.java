@@ -18,9 +18,11 @@ import com.example.posapp.R;
 
 public class prodEdit extends AppCompatActivity {
 
-    EditText editID, editName, editPrice;
+    EditText editID, editName, editPrice, editQuantity;
 
     Button btnEdit, btnDelete, btnCancel;
+
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,23 +37,26 @@ public class prodEdit extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s.setAdapter(adapter);
 
-        editID = findViewById(R.id.txtEditID);
+//        editID = findViewById(R.id.txtEditID);
         editName = findViewById(R.id.txtEditName);
         editPrice = findViewById(R.id.txtEditPrice);
         btnEdit = findViewById(R.id.btnEdit);
         btnDelete = findViewById(R.id.btnDelete);
         btnCancel = findViewById(R.id.btnCancel);
+        editQuantity = findViewById(R.id.editQuantity);
 
         Intent i = getIntent();
-        String id = i.getStringExtra("id".toString());
+        id = i.getStringExtra("id".toString());
         String product = i.getStringExtra("product".toString());
         String prodPrice = i.getStringExtra("prodPrice".toString());
         String category = i.getStringExtra("category".toString());
+        String quantity = i.getStringExtra("quantity".toString());
         Integer category1;
 
-        editID.setText(id);
+//        editID.setText(id);
         editName.setText(product);
         editPrice.setText(prodPrice);
+        editQuantity.setText(quantity);
 
         switch (category) {
             case "Drinks":
@@ -97,9 +102,10 @@ public class prodEdit extends AppCompatActivity {
 
     public void edit(){
         try{
-            String editID1 = editID.getText().toString().trim();
+//            String editID1 = editID.getText().toString().trim();
             String editName1 = editName.getText().toString().trim();
             String editPrice1 = editPrice.getText().toString().trim();
+            String editQuantity1 = editQuantity.getText().toString().trim();
             Spinner spinner = (Spinner)findViewById(R.id.catID);
             String spTxt = spinner.getSelectedItem().toString();
             if(spTxt.equals("Add-Ons")){
@@ -109,16 +115,19 @@ public class prodEdit extends AppCompatActivity {
                 Toast.makeText(this,"Please Input a Valid Product Name", Toast.LENGTH_LONG).show();
             }else if (editPrice1.equals("")) {
                 Toast.makeText(this,"Please Input a Valid Amount", Toast.LENGTH_LONG).show();
+            }else if (editQuantity1.equals("")) {
+                Toast.makeText(this,"Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
             }else if (editName1.equals("None") || editPrice1.equals("none")) {
                 Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
             }else{
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                String sql = "update products set product = ?, category = ?, prodPrice = ? where id = ?";
+                String sql = "update products set product = ?, category = ?, prodPrice = ?, quantity = ? where id = ?";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.bindString(1, editName1);
                 statement.bindString(2, spTxt);
                 statement.bindString(3, editPrice1);
-                statement.bindString(4, editID1);
+                statement.bindString(4, editQuantity1);
+                statement.bindString(5, id);
                 statement.execute();
                 Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
                 db.close();
@@ -126,7 +135,6 @@ public class prodEdit extends AppCompatActivity {
                 startActivity(i);
             }
         }catch (Exception e) {
-
         }
     }
 

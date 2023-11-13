@@ -29,10 +29,22 @@
         android:textColor="@color/black" />
 
     <TextView
+        android:id="@+id/quantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:autoSizeTextType="uniform"
+        android:autoSizeMinTextSize="1sp"
+        android:autoSizeMaxTextSize="30sp"
+        android:autoSizeStepGranularity="1sp"
+        android:layout_below="@+id/prodName"
+        android:text="Quantity"
+        android:textColor="@color/black" />
+
+    <TextView
         android:id="@+id/prodPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/prodName"
+        android:layout_below="@id/quantity"
         android:autoSizeTextType="uniform"
         android:autoSizeMinTextSize="1sp"
         android:autoSizeMaxTextSize="30sp"

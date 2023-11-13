@@ -19,7 +19,7 @@ import com.example.posapp.R;
 
 public class prodAdd extends AppCompatActivity {
 
-    EditText txtProduct, txtPrice;
+    EditText txtProduct, txtPrice, txtQuantity;
     Button btnAdd, btnCancel;
     Integer max_id;
 
@@ -29,7 +29,7 @@ public class prodAdd extends AppCompatActivity {
         setContentView(R.layout.activity_prod_add);
 
         String[] s1 = new String[]{
-                "Drinks", "Food", "Add-Ons", "Others"
+                "Drinks", "Food", "Cake", "Special"
         };
         Spinner s = (Spinner) findViewById(R.id.catID);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlayout, s1);
@@ -40,11 +40,11 @@ public class prodAdd extends AppCompatActivity {
         txtPrice = findViewById(R.id.txtPrice);
         btnAdd = findViewById(R.id.btnAdd);
         btnCancel = findViewById(R.id.btnCancel);
+        txtQuantity = findViewById(R.id.txtQuantity);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 insert();
             }
         });
@@ -78,6 +78,7 @@ public class prodAdd extends AppCompatActivity {
     public void insert() {
         String prodName = txtProduct.getText().toString().trim();
         String price = txtPrice.getText().toString().trim();
+        String quantity = txtQuantity.getText().toString().trim();
         Spinner spinner = (Spinner) findViewById(R.id.catID);
 
         getMax();
@@ -90,27 +91,29 @@ public class prodAdd extends AppCompatActivity {
             Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(price) <= 0) {
             Toast.makeText(this, "Please Enter a Price Greater Than 0", Toast.LENGTH_LONG).show();
-        } else {
+        } else if (Integer.parseInt(quantity) <= 0){
+            Toast.makeText(this, "Please Enter a Quantity Greater Than 0", Toast.LENGTH_LONG).show();
+        }else{
             try {
-                String product = txtProduct.getText().toString().trim();
-                String prodPrice = txtPrice.getText().toString().trim();
                 String spTxt = spinner.getSelectedItem().toString();
                 if (spTxt.equals("Add-Ons")) {
                     spTxt = "AddOns";
                 }
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, prodPrice INTEGER )");
+                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER )");
 
-                String sql = "insert into products (id, product, category, prodPrice)values(?,?,?,?)";
+                String sql = "insert into products (id, product, category, quantity, prodPrice)values(?,?,?,?,?)";
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.bindString(1, String.valueOf(max_id));
-                statement.bindString(2, product);
+                statement.bindString(2, prodName);
                 statement.bindString(3, spTxt);
-                statement.bindString(4, prodPrice);
+                statement.bindString(4, quantity);
+                statement.bindString(5, price);
                 statement.execute();
                 Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
                 txtProduct.setText("");
                 txtPrice.setText("");
+                txtQuantity.setText("");
                 txtProduct.requestFocus();
                 db.close();
             } catch (Exception e) {

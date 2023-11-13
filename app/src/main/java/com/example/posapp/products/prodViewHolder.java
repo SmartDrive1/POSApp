@@ -11,7 +11,7 @@ import com.example.posapp.R;
 
 public class prodViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView txtName, txtPrice;
+    public TextView txtName, txtPrice, txtQuantity;
     public CardView cardView;
 
     public prodViewHolder(@NonNull View itemView) {
@@ -19,6 +19,7 @@ public class prodViewHolder extends RecyclerView.ViewHolder {
 
         txtName = itemView.findViewById(R.id.prodName);
         txtPrice = itemView.findViewById(R.id.prodPrice);
+        txtQuantity = itemView.findViewById(R.id.quantity);
         cardView = itemView.findViewById(R.id.main_container);
     }
 }

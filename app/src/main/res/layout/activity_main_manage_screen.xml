@@ -67,19 +67,7 @@
                 android:background="@drawable/button1"
                 android:textStyle="bold"
                 android:drawableTop="@drawable/iconproducts"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/btnTransactions"
-                android:padding="10dp"
-                android:layout_weight="1"
-                android:text="Transactions"
-                android:layout_margin="5dp"
-                android:background="@drawable/button1"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:maxLines="1"
-                android:drawableTop="@drawable/icontransactions"/>
+
         </LinearLayout>
 
         <!--        Row 2-->
@@ -94,15 +82,28 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:id="@+id/btnInventory"
-                android:layout_weight="1"
+                android:id="@+id/btnTransactions"
                 android:padding="10dp"
-                android:text="Inventory"
+                android:layout_weight="1"
+                android:text="Transactions"
                 android:layout_margin="5dp"
+                android:background="@drawable/button1"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:background="@drawable/button1"
-                android:drawableTop="@drawable/iconinventory"/>
+                android:maxLines="1"
+                android:drawableTop="@drawable/icontransactions"/>
+<!--            <Button-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:id="@+id/btnInventory"-->
+<!--                android:layout_weight="1"-->
+<!--                android:padding="10dp"-->
+<!--                android:text="Inventory"-->
+<!--                android:layout_margin="5dp"-->
+<!--                android:textSize="18sp"-->
+<!--                android:textStyle="bold"-->
+<!--                android:background="@drawable/button1"-->
+<!--                android:drawableTop="@drawable/iconinventory"/>-->
 
             <Button
                 android:layout_width="0dp"

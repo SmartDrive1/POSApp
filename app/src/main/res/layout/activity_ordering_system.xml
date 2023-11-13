@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:fillViewport="true"
     android:background="@drawable/wave1bg"
     android:layout_gravity="center_vertical"
     tools:context=".OrderingSystem.OrderingSystem">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,8 +44,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_weight="90"
             android:layout_below="@+id/layout1"
             android:weightSum="6">
@@ -51,10 +54,9 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:layout_gravity="center"
-                android:weightSum="3"
+                android:weightSum="4"
                 android:layout_margin="3dp"
                 android:background="@drawable/border"
                 android:orientation="vertical">
@@ -119,6 +121,38 @@
                         android:layout_height="fill_parent"/>
                 </LinearLayout>
 
+                <!--            foods-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:gravity="left"
+                        android:maxLines="2"
+                        android:paddingLeft="10dp"
+                        android:text="Cakes and Cup Cakes"
+                        android:background="@drawable/textbackground"
+                        android:layout_margin="3dp"></TextView>
+
+                    <!--        recyclerview-->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycleCakes"
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_height="fill_parent"/>
+                </LinearLayout>
+
+
+
                 <!--            others-->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -131,16 +165,17 @@
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:gravity="left"
                         android:maxLines="2"
                         android:paddingLeft="10dp"
-                        android:text="Others"
+                        android:text="Special Orders"
                         android:background="@drawable/textbackground"
                         android:layout_margin="3dp"></TextView>
 
                     <!--        recyclerview-->
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recycleOthers"
+                        android:id="@+id/recycleSpecial"
                         android:layout_width="match_parent"
                         android:orientation="horizontal"
                         android:layout_marginRight="5dp"
@@ -220,31 +255,6 @@
                             android:ems="8"
                             android:inputType="number"
                             android:textAlignment="center" />
-                    </LinearLayout>
-
-                    <!--  Access  -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Add-ons:"
-                            android:autoSizeTextType="uniform"
-                            android:maxLines="1"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:textColor="@color/black"/>
-
-                        <Spinner
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/spAO"
-                            android:layout_gravity="center"
-                            android:maxLines="1"/>
                     </LinearLayout>
 
                     <!--  Price  -->

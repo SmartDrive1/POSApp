@@ -25,7 +25,7 @@ public class mainManageScreen extends AppCompatActivity {
         btnUsers = findViewById(R.id.btnUsers);
         btnProducts = findViewById(R.id.btnProducts);
         btnTransactions = findViewById(R.id.btnTransactions);
-        btnInventory = findViewById(R.id.btnInventory);
+        //btnInventory = findViewById(R.id.btnInventory);
         btnBack = findViewById(R.id.btnBack);
 
         btnUsers.setOnClickListener(new View.OnClickListener() {
@@ -52,13 +52,13 @@ public class mainManageScreen extends AppCompatActivity {
             }
         });
 
-        btnInventory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(mainManageScreen.this, invList.class);
-                startActivity(i);
-            }
-        });
+//        btnInventory.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(mainManageScreen.this, invList.class);
+//                startActivity(i);
+//            }
+//        });
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
