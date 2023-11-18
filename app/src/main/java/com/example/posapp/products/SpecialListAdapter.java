@@ -35,7 +35,7 @@ public class SpecialListAdapter extends RecyclerView.Adapter<prodViewHolder> {
     public void onBindViewHolder(@NonNull prodViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.txtName.setText(items.get(position).getProduct());
         holder.txtQuantity.setText("Available: " +items.get(position).getQuantity());
-        holder.txtPrice.setText("Price: " + items.get(position).getProdPrice());
+        holder.txtPrice.setText("Price: " + items.get(position).getProdPrice() + ".00");
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -20,8 +20,8 @@
         android:gravity="center">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="@dimen/_350sdp"
-            android:layout_height="@dimen/_170sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             app:cardElevation="5dp"
             app:cardCornerRadius="30sp"
@@ -31,98 +31,98 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
+                android:weightSum="10"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:textAlignment="center"
+                    android:layout_weight="3"
                     android:text="Add User"
                     android:textSize="30sp"
                     android:textColor="@color/black"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:layout_weight="8"
                     android:weightSum="3">
 
                     <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_weight="2"
-                        android:gravity="center"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="3dp">
+                        android:layout_weight="2"
+                        android:paddingLeft="10dp"
+                        android:layout_margin="5dp">
 
                         <!--  Full Name  -->
-
                         <EditText
-                            android:id="@+id/txtFullName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="3dp"
+                            android:id="@+id/txtFullName"
                             android:background="@drawable/edit_text_border"
+                            android:textSize="16sp"
                             android:drawableStart="@drawable/userpic"
-                            android:ems="8"
                             android:hint="Name"
+                            android:layout_margin="3dp"
                             android:textAlignment="center"
-                            android:textSize="16sp" />
+                            android:ems="8"/>
 
                         <!--  UserName  -->
                         <EditText
-                            android:id="@+id/txtUserName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="3dp"
-                            android:background="@drawable/edit_text_border"
+                            android:id="@+id/txtUserName"
+                            android:hint="Username"
                             android:drawableStart="@drawable/userpic"
-                            android:ems="8"
-                            android:hint="\tUsername"
+                            android:background="@drawable/edit_text_border"
+                            android:layout_margin="3dp"
+                            android:textSize="16sp"
                             android:textAlignment="center"
-                            android:textSize="16sp" />
+                            android:ems="8"/>
 
                         <!--  Password  -->
                         <EditText
-                            android:id="@+id/txtPassWord"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="3dp"
+                            android:id="@+id/txtPassWord"
                             android:background="@drawable/edit_text_border"
                             android:drawableStart="@drawable/iconpass"
-                            android:ems="8"
-                            android:hint="\tPassword"
+                            android:hint="Password"
+                            android:layout_margin="3dp"
+                            android:textSize="16sp"
                             android:textAlignment="center"
-                            android:textSize="16sp" />
+                            android:ems="8"/>
 
                         <!--  Access  -->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="3dp"
-                            android:background="@drawable/edit_text_border"
                             android:orientation="horizontal"
-                            android:weightSum="3">
+                            android:weightSum="3"
+                            android:background="@drawable/edit_text_border"
+                            android:layout_margin="3dp">
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.4"
                                 android:drawableStart="@drawable/lockpic"
-                                android:maxLines="1"
-                                android:textAlignment="textEnd"
-                                android:textColor="@color/black"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                android:textColor="@color/black"/>
 
                             <Spinner
-                                android:id="@+id/accID"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2.6"
+                                android:id="@+id/accID"
+                                android:autoSizeTextType="uniform"
                                 android:maxLines="1"
-                                android:textAlignment="center" />
+                                android:textAlignment="center"
+                                android:layout_weight="2.6"/>
                         </LinearLayout>
                     </LinearLayout>
 

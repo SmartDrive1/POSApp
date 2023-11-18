@@ -71,7 +71,7 @@ public class osCart extends AppCompatActivity implements cartClickListener {
         });
 
         refreshList();
-        total.setText("Total: ₱" + tPrice.toString());
+        total.setText("Total: ₱" + tPrice.toString() + "0");
     }
 
     public void refreshList(){

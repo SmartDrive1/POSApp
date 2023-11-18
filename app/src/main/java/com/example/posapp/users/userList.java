@@ -71,7 +71,7 @@ public class userList extends AppCompatActivity implements userClickListener {
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
-        final Cursor c = db.rawQuery("select * from users", null);
+        final Cursor c = db.rawQuery("SELECT * FROM users ORDER BY id ASC", null);
         int count = c.getCount();
 
         if(count == 0){

@@ -30,7 +30,7 @@ public class prodEdit extends AppCompatActivity {
         setContentView(R.layout.activity_prod_edit);
 
         String[] s1 = new String[] {
-                "Drinks", "Food", "Add-Ons","Others"
+                "Drinks", "Food", "Cake","Special"
         };
         Spinner s = (Spinner) findViewById(R.id.catID);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinnerlayout, s1);
@@ -55,7 +55,7 @@ public class prodEdit extends AppCompatActivity {
 
 //        editID.setText(id);
         editName.setText(product);
-        editPrice.setText(prodPrice);
+        editPrice.setText(prodPrice + ".00");
         editQuantity.setText(quantity);
 
         switch (category) {
@@ -65,10 +65,10 @@ public class prodEdit extends AppCompatActivity {
             case "Food":
                 category1 = 1;
                 break;
-            case "AddOns":
+            case "Cake":
                 category1 = 2;
                 break;
-            case "Others":
+            case "Special":
                 category1 = 3;
                 break;
             default:
@@ -108,9 +108,6 @@ public class prodEdit extends AppCompatActivity {
             String editQuantity1 = editQuantity.getText().toString().trim();
             Spinner spinner = (Spinner)findViewById(R.id.catID);
             String spTxt = spinner.getSelectedItem().toString();
-            if(spTxt.equals("Add-Ons")){
-                spTxt = "AddOns";
-            }
             if (editName1.equals("")){
                 Toast.makeText(this,"Please Input a Valid Product Name", Toast.LENGTH_LONG).show();
             }else if (editPrice1.equals("")) {

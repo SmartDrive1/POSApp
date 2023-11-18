@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,11 +14,9 @@ import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,14 +29,13 @@ import com.example.posapp.products.prodDrinksListAdapter;
 import com.example.posapp.products.prodFoodListAdapter;
 import com.example.posapp.products.prodItems;
 import com.example.posapp.products.SpecialListAdapter;
-import com.example.posapp.products.productList;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class OrderingSystem extends AppCompatActivity implements prodClickListener {
     Button btnAdd, Orders;
-    ImageButton btnLogout;
+    Button btnLogout;
     TextView txtView;
     EditText Quantity, Price, totalPriceUp, prodName;
     prodDrinksListAdapter productListAdapter;
@@ -48,6 +47,8 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     List<prodItems> Cakes = new ArrayList<>();
     List<prodItems> Special = new ArrayList<>();
     SQLiteDatabase db;
+
+    private DialogInterface.OnClickListener dialogClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,14 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         totalPriceUp = findViewById(R.id.txtTotalPrice);
         Orders = findViewById(R.id.btnOrders);
 
+        switch (accessValue.access){
+            case "User":
+                btnLogout.setText("Logout");
+                break;
+            default:
+                btnLogout.setText("Back");
+                break;
+        }
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,9 +100,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         Orders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                db.close();
-                Intent i = new Intent(OrderingSystem.this, osCart.class);
-                startActivity(i);
+                toCart();
             }
         });
 
@@ -149,7 +156,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             int prodPriceIndex = c.getColumnIndex("prodPrice");
             int productPrice = c.getInt(prodPriceIndex);
             total = Double.valueOf(productPrice);
-            Price.setText(String.valueOf(total));
+            Price.setText(String.valueOf(total) + "0");
         } else {
             Price.setText("");
         }
@@ -166,7 +173,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             double price1 = Double.parseDouble(Price.getText().toString());
             double totalPrice = qty1 * price1;
 
-            totalPriceUp.setText(String.valueOf(Double.valueOf(totalPrice)));
+            totalPriceUp.setText(String.valueOf(Double.valueOf(totalPrice)) + "0");
         }
     }
 
@@ -194,7 +201,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
-        final Cursor c = db.rawQuery("select * from products", null);
+        final Cursor c = db.rawQuery("SELECT * FROM products ORDER BY product ASC", null);
         int count = c.getCount();
 
         if(count == 0){
@@ -208,10 +215,6 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
 
             if(c.moveToFirst()){
                 do{
-                    Log.d("ProductDebug", "Product: " + c.getString(product));  // Add this line for debugging
-                    Log.d("ProductDebug", "prodPrice: " + c.getString(prodPrice));  // Add this line for debugging
-                    Log.d("ProductDebug", "quantity: " + c.getString(quantity));  // Add this line for debugging
-
                     if (c.getString(category).equals("Drinks")) {
                         items.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity)));
                         productListAdapter = new prodDrinksListAdapter(this, items, this);
@@ -248,9 +251,11 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    if (Price.getText().equals("")) {
+                    if(prodName.getText().equals("")){
+
+                    }else if(Price.getText().equals("")) {
                         refreshList();
-                    } else if (s.length() != 0) {
+                    } else if(s.length() != 0) {
                         refreshList();
                         total();
                     } else {
@@ -258,7 +263,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                         totalPriceUp.setText("");
                     }
                 }catch (Exception e){
-                    Toast.makeText(OrderingSystem.this, "Please Input a Valid Value", Toast.LENGTH_LONG).show();
+                    //blank
                 }
             }
         });
@@ -268,5 +273,34 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     public void onItemClicked(prodItems view) {
         prodName.setText(view.getProduct());
         updatePrice();
+    }
+
+    public void toCart(){
+        if(Quantity.getText().toString().trim().equals("")){
+            db.close();
+            Intent i = new Intent(OrderingSystem.this, osCart.class);
+            startActivity(i);
+        }else {
+            dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        // on below line we are setting a click listener
+                        // for our positive button
+                        case DialogInterface.BUTTON_POSITIVE:
+                            db.close();
+                            Intent i = new Intent(OrderingSystem.this, osCart.class);
+                            startActivity(i);
+                            break;
+                        case DialogInterface.BUTTON_NEGATIVE:
+                            dialog.dismiss();
+                    }
+                }
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(OrderingSystem.this);
+            builder.setMessage("Products have not been added. Do you want to proceed in Cart menu?")
+                    .setPositiveButton("Yes", dialogClickListener)
+                    .setNegativeButton("No", dialogClickListener).show();
+        }
     }
 }

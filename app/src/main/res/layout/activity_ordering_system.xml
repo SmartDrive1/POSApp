@@ -27,18 +27,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Ordering System"
-                android:layout_weight="95"
+                android:layout_weight="85"
                 android:textSize="100px"
                 android:textColor="@color/black"/>
 
-            <ImageButton
+            <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/logout"
+                android:layout_weight="15"
+                android:drawableStart="@drawable/logout"
+                android:text="Logout"
+                android:padding="10dp"
                 android:background="@drawable/button1"/>
         </LinearLayout>
 
@@ -204,116 +204,67 @@
                     android:gravity="center">
 
                     <!--Product Name-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/prodName"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Product:"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:textColor="@color/black"/>
-
-                        <EditText
-                            android:id="@+id/prodName"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:editable="false"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:ems="8"
-                            android:textAlignment="center" />
-                    </LinearLayout>
+                        android:hint="Product"
+                        android:editable="false"
+                        android:layout_weight="1"
+                        android:textSize="16sp"
+                        android:layout_margin="5dp"
+                        android:drawableStart="@drawable/iconproduct"
+                        android:background="@drawable/edit_text_border"
+                        android:ems="8"
+                        android:textAlignment="center"/>
                     <!--Quantity-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Quantity:"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:textColor="@color/black"/>
-
                         <EditText
                             android:id="@+id/txtQty"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:hint="Quantity"
                             android:layout_weight="1"
+                            android:background="@drawable/edit_text_border"
                             android:textSize="16sp"
-                            android:layout_margin="3dp"
+                            android:layout_margin="5dp"
                             android:ems="8"
                             android:inputType="number"
+                            android:drawableStart="@drawable/quantityicon"
                             android:textAlignment="center" />
-                    </LinearLayout>
 
                     <!--  Price  -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/txtPrice"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Price:"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:textColor="@color/black"/>
-
-                        <EditText
-                            android:id="@+id/txtPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:enabled="false"
-                            android:textColor="@color/black"
-                            android:ems="8"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:inputType="number"
-                            android:textAlignment="center" />
-                    </LinearLayout>
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:textColor="@color/black"
+                        android:background="@drawable/edit_text_border"
+                        android:drawableStart="@drawable/iconprice"
+                        android:hint="Price"
+                        android:ems="8"
+                        android:textSize="16sp"
+                        android:layout_margin="5dp"
+                        android:inputType="number"
+                        android:textAlignment="center" />
 
                     <!--    Total Price-->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                    <EditText
+                        android:id="@+id/txtTotalPrice"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_weight="1">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Total:"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:textColor="@color/black"/>
-
-                        <EditText
-                            android:id="@+id/txtTotalPrice"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:enabled="false"
-                            android:textSize="16sp"
-                            android:layout_margin="3dp"
-                            android:textColor="@color/black"
-                            android:ems="8"
-                            android:inputType="number"
-                            android:textAlignment="center" />
-                    </LinearLayout>
+                        android:layout_weight="1"
+                        android:enabled="false"
+                        android:textSize="16sp"
+                        android:layout_margin="5dp"
+                        android:textColor="@color/black"
+                        android:ems="8"
+                        android:inputType="number"
+                        android:drawableStart="@drawable/iconprice"
+                        android:background="@drawable/edit_text_border"
+                        android:hint="Total Price"
+                        android:textAlignment="center" />
 
                     <!--  Buttons  -->
                     <LinearLayout
@@ -327,7 +278,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Add"
-                            android:layout_margin="3dp"
+                            android:layout_margin="5dp"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:background="@drawable/button1"
@@ -337,7 +288,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Cart"
-                            android:layout_margin="3dp"
+                            android:layout_margin="5dp"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:background="@drawable/button1"

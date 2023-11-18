@@ -86,7 +86,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
         db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
-        final Cursor c = db.rawQuery("select * from products", null);
+        final Cursor c = db.rawQuery("SELECT * FROM products ORDER BY product ASC", null);
         int count = c.getCount();
 
         if(count == 0){
