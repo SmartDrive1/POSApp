@@ -13,7 +13,7 @@ import android.widget.Button;
 
 public class AaUriButton extends AppCompatActivity {
 
-    Button btnClearUsers, btnClearProducts, btnClearTransactions, btnClearInventory, btnBack, btnClearOrders, clearTrans;
+    Button btnClearUsers, btnClearProducts, btnClearInventory, btnBack, btnClearOrders, clearTrans;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +22,6 @@ public class AaUriButton extends AppCompatActivity {
         btnClearInventory = findViewById(R.id.btnClearInventory);
         btnClearUsers = findViewById(R.id.btnClearUsers);
         btnClearProducts = findViewById(R.id.btnClearProducts);
-        btnClearTransactions = findViewById(R.id.btnCLearTransactions);
         btnBack = findViewById(R.id.btnBack);
         btnClearOrders = findViewById(R.id.ClearOrders);
         clearTrans = findViewById(R.id.clearTrans);
@@ -60,7 +59,7 @@ public class AaUriButton extends AppCompatActivity {
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.execute();
 
-                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
+                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product TEXT, category VARCHAR, quantity INTEGER, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
 
                 // Insert Espresso
                 ContentValues espressoValues = new ContentValues();
@@ -153,7 +152,7 @@ public class AaUriButton extends AppCompatActivity {
 
                 ContentValues manage = new ContentValues();
                 manage.put("id", 12);
-                manage.put("product", "Manager's Breakfast");
+                manage.put("product", "Manager Breakfast");
                 manage.put("category", "Food");
                 manage.put("quantity", 47);
                 manage.put("prodPrice", 180);
