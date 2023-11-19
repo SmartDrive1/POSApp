@@ -87,23 +87,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             }
         });
 
-        btnFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                long startIntDate = convertDateToTimestamp(String.valueOf(txtStartDate.getText()).trim());
-                long endIntDate = convertDateToTimestamp(String.valueOf(txtEndDate.getText()).trim());
-                String startDate = txtStartDate.getText().toString().trim();
-                String endDate = txtEndDate.getText().toString().trim();
-                if (startDate.equals("") || endDate.equals("")) {
-                    refreshList();
-                }else if (startIntDate > endIntDate) {
-                    Toast.makeText(getApplicationContext(), "Please Input a Later End Date", Toast.LENGTH_LONG).show();
-                }else{
-                    rangeDate();
-                    }
-                }
-        });
-
         txtStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
