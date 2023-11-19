@@ -382,7 +382,12 @@ public class manageTransactions extends AppCompatActivity implements transClickL
 
                 txtStartDate.setText(formattedDate);
                 if(!txtEndDate.getText().toString().isEmpty()){
-                    rangeDate();
+                    if(startTimeMilli > endTimeMilli){
+                        txtEndDate.setText(formattedDate);
+                        rangeDate();
+                    }else{
+                        rangeDate();
+                    }
                 }
             }
         }, mYear1, mMonth1, mDay1);
