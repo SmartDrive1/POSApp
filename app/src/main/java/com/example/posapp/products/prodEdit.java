@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
@@ -118,18 +119,29 @@ public class prodEdit extends AppCompatActivity {
                 Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
             }else{
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                String sql = "update products set product = ?, category = ?, prodPrice = ?, quantity = ? where id = ?";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1, editName1);
-                statement.bindString(2, spTxt);
-                statement.bindString(3, editPrice1);
-                statement.bindString(4, editQuantity1);
-                statement.bindString(5, id);
-                statement.execute();
-                Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
-                db.close();
-                Intent i = new Intent(prodEdit.this, productList.class);
-                startActivity(i);
+                Cursor c = db.rawQuery("SELECT * FROM products WHERE product =?", new String[]{editName1});
+
+                if(c.getCount() >= 0){
+                    if(c.moveToFirst()){
+                        int existingID = c.getColumnIndex("id");
+                        if(c.getString(existingID).equals(id)){
+                            String sql = "update products set product = ?, category = ?, prodPrice = ?, quantity = ? where id = ?";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1, editName1);
+                            statement.bindString(2, spTxt);
+                            statement.bindString(3, editPrice1);
+                            statement.bindString(4, editQuantity1);
+                            statement.bindString(5, id);
+                            statement.execute();
+                            Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+                            db.close();
+                            Intent i = new Intent(prodEdit.this, productList.class);
+                            startActivity(i);
+                        }else{
+                            Toast.makeText(this, "Product Name Already Exists", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
             }
         }catch (Exception e) {
         }

@@ -102,20 +102,25 @@ public class prodAdd extends AppCompatActivity {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER )");
 
-                String sql = "insert into products (id, product, category, quantity, prodPrice)values(?,?,?,?,?)";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1, String.valueOf(max_id));
-                statement.bindString(2, prodName);
-                statement.bindString(3, spTxt);
-                statement.bindString(4, quantity);
-                statement.bindString(5, price);
-                statement.execute();
-                Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
-                txtProduct.setText("");
-                txtPrice.setText("");
-                txtQuantity.setText("");
-                txtProduct.requestFocus();
-                db.close();
+                Cursor c = db.rawQuery("SELECT * FROM products WHERE product =?", new String[]{prodName});
+                if(c.getCount() > 0) {
+                    Toast.makeText(this, "Product Already Exists", Toast.LENGTH_SHORT).show();
+                }else{
+                    String sql = "insert into products (id, product, category, quantity, prodPrice)values(?,?,?,?,?)";
+                    SQLiteStatement statement = db.compileStatement(sql);
+                    statement.bindString(1, String.valueOf(max_id));
+                    statement.bindString(2, prodName);
+                    statement.bindString(3, spTxt);
+                    statement.bindString(4, quantity);
+                    statement.bindString(5, price);
+                    statement.execute();
+                    Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
+                    txtProduct.setText("");
+                    txtPrice.setText("");
+                    txtQuantity.setText("");
+                    txtProduct.requestFocus();
+                    db.close();
+                }
             } catch (Exception e) {
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             }

@@ -207,12 +207,10 @@ public class productList extends AppCompatActivity implements prodClickListener 
                     }
                 }
             }
-
             @Override
             public void afterTextChanged(Editable s) {}
         });
     }
-
 
     public void clearTable(){
         items.clear();
