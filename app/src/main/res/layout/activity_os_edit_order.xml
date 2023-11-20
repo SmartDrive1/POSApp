@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:weightSum="5"
-    android:background="#EDEAE6"
+    android:background="@drawable/wave1bg"
     tools:context=".OrderingSystem.OSEditOrder">
 
     <RelativeLayout

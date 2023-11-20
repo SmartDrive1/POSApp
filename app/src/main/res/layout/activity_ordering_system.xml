@@ -22,15 +22,20 @@
             android:layout_weight="10"
             android:weightSum="100">
 
-            <TextView
-                android:id="@+id/txtView"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Ordering System"
-                android:layout_weight="85"
-                android:textSize="100px"
-                android:textColor="@color/black"/>
-
+                android:layout_weight="85">
+                <TextView
+                    android:id="@+id/txtView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ordering System"
+                    android:padding="5dp"
+                    android:textSize="100px"
+                    android:textColor="@color/black"
+                    android:background="@drawable/back"/>
+            </LinearLayout>
             <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="0dp"

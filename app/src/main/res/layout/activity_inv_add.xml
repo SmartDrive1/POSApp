@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     tools:context=".inventory.invAdd"
-    android:background="#EDEAE6"
+    android:background="@drawable/wave1bg"
     android:weightSum="20">
 
     <RelativeLayout

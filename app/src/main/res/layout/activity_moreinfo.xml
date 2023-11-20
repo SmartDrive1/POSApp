@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#EDEAE6"
+    android:background="@drawable/wave1bg"
     tools:context=".moreinfo">
 
     <RelativeLayout

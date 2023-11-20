@@ -1,6 +1,7 @@
 package com.example.posapp.transactions;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -314,7 +315,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return 0; // Return a default value if parsing fails
+        return 0;
     }
 
     public void rangeDate(){

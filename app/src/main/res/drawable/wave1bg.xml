@@ -8,7 +8,14 @@
         </shape>
     </item>
 
-    <!-- Vector Shape -->
-    <item android:drawable="@drawable/wave"/> <!-- Replace "your_vector_drawable_name" with the actual name of your vector drawable -->
+    <!-- Background Image -->
+    <item>
+        <bitmap
+            android:src="@drawable/backgroundimage"
+            android:gravity="fill"/>
+    </item>
+
+<!--    &lt;!&ndash; Vector Shape &ndash;&gt;-->
+<!--    <item android:drawable="@drawable/wave2" android:gravity="fill_horizontal"/>-->
 
 </layer-list>
