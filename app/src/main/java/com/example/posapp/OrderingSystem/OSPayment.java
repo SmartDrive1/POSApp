@@ -77,20 +77,21 @@ public class OSPayment extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
+        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from cartlist", null);
         int count = c.getCount();
 
         if(count == 0){
             Toast.makeText(this,"No Products Found", Toast.LENGTH_LONG).show();
         }else{
+            int id = c.getColumnIndex("id");
             int prodName = c.getColumnIndex("prodName");
             int quantity = c.getColumnIndex("quantity");
             int price = c.getColumnIndex("price");
 
             if(c.moveToFirst()){
                 do{
-                    items.add(new OSItems(c.getString(prodName),c.getString(quantity),c.getString(price)));
+                    items.add(new OSItems(c.getString(id), c.getString(prodName),c.getString(quantity),c.getString(price)));
                     OSPaymentAdapter = new OSPaymentAdapter(this, items);
                     recyclerView.setAdapter(OSPaymentAdapter);
                 }while(c.moveToNext());

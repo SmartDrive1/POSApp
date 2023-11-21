@@ -103,12 +103,9 @@ public class prodEdit extends AppCompatActivity {
 
     public void edit(){
         try{
-//            String editID1 = editID.getText().toString().trim();
             String editName1 = editName.getText().toString().trim();
             String editPrice1 = editPrice.getText().toString().trim();
             String editQuantity1 = editQuantity.getText().toString().trim();
-            Spinner spinner = (Spinner)findViewById(R.id.catID);
-            String spTxt = spinner.getSelectedItem().toString();
             if (editName1.equals("")){
                 Toast.makeText(this,"Please Input a Valid Product Name", Toast.LENGTH_LONG).show();
             }else if (editPrice1.equals("")) {
@@ -121,30 +118,45 @@ public class prodEdit extends AppCompatActivity {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 Cursor c = db.rawQuery("SELECT * FROM products WHERE product =?", new String[]{editName1});
 
-                if(c.getCount() >= 0){
+                if(c.getCount() > 0){
                     if(c.moveToFirst()){
                         int existingID = c.getColumnIndex("id");
                         if(c.getString(existingID).equals(id)){
-                            String sql = "update products set product = ?, category = ?, prodPrice = ?, quantity = ? where id = ?";
-                            SQLiteStatement statement = db.compileStatement(sql);
-                            statement.bindString(1, editName1);
-                            statement.bindString(2, spTxt);
-                            statement.bindString(3, editPrice1);
-                            statement.bindString(4, editQuantity1);
-                            statement.bindString(5, id);
-                            statement.execute();
-                            Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
-                            db.close();
-                            Intent i = new Intent(prodEdit.this, productList.class);
-                            startActivity(i);
+                            editData();
                         }else{
                             Toast.makeText(this, "Product Name Already Exists", Toast.LENGTH_SHORT).show();
                         }
                     }
+                }else{
+                    editData();
                 }
             }
         }catch (Exception e) {
+
         }
+    }
+
+    public void editData(){
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+        String editName1 = editName.getText().toString().trim();
+        String editPrice1 = editPrice.getText().toString().trim();
+        String editQuantity1 = editQuantity.getText().toString().trim();
+        Spinner spinner = (Spinner)findViewById(R.id.catID);
+        String spTxt = spinner.getSelectedItem().toString();
+
+        String sql = "update products set product = ?, category = ?, prodPrice = ?, quantity = ? where id = ?";
+        SQLiteStatement statement = db.compileStatement(sql);
+        statement.bindString(1, editName1);
+        statement.bindString(2, spTxt);
+        statement.bindString(3, editPrice1);
+        statement.bindString(4, editQuantity1);
+        statement.bindString(5, id);
+        statement.execute();
+        Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+        db.close();
+        Intent i = new Intent(prodEdit.this, productList.class);
+        startActivity(i);
     }
 
     public void delete(){

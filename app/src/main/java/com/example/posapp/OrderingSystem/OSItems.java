@@ -1,14 +1,24 @@
 package com.example.posapp.OrderingSystem;
 
 public class OSItems {
+    String id;
     String pName;
     String pQuantity;
     String pPrice;
 
-    public OSItems(String pName, String pQuantity, String pPrice) {
+    public OSItems(String id, String pName, String pQuantity, String pPrice) {
+        this.id = id;
         this.pName = pName;
         this.pQuantity = pQuantity;
         this.pPrice = pPrice;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getpName() {

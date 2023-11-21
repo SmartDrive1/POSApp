@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,6 +48,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     List<prodItems> Cakes = new ArrayList<>();
     List<prodItems> Special = new ArrayList<>();
     SQLiteDatabase db;
+    String currentID;
 
     private DialogInterface.OnClickListener dialogClickListener;
 
@@ -108,49 +110,123 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         change();
     }
 
+    @SuppressLint("Range")
     public void add() {
-        if(prodName.getText().toString().trim().equals("")){//Check if ProdName is Blank
+        if (prodName.getText().toString().trim().equals("")) {//Check if ProdName is Blank
             Toast.makeText(this, "Please Select a Product", Toast.LENGTH_LONG).show();
-        }else if (Quantity.getText().toString().trim().equals("")) {//check quantity if blank
+        } else if (Quantity.getText().toString().trim().equals("")) {//check quantity if blank
             Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {//check if more than 0
             Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
-        }else
+        } else
             try {
-            total();
-            String tPrice1 = totalPriceUp.getText().toString().trim();
-            String qty2 = Quantity.getText().toString().trim();
-            String prodName1 = prodName.getText().toString().trim();
+                total();
+                String tPrice1 = totalPriceUp.getText().toString().trim();
+                String qty2 = Quantity.getText().toString().trim();
+                String prodName1 = prodName.getText().toString().trim();
+                boolean repeat = false;
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(prodName VARCHAR PRIMARY KEY, quantity INTEGER, price DOUBLE)");
+                    db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
+                    Cursor cursor = db.rawQuery("SELECT * FROM cartlist WHERE id=?", new String[]{currentID});//Check if it is already added in cartlist
+                    if (cursor.getCount() > 0) {
+                        repeat = true;
+                    }
 
-            // Check if an item with the same prodName already exists
-            Cursor cursor = db.rawQuery("SELECT * FROM cartlist WHERE prodName=?", new String[]{prodName1});
-            if (cursor.getCount() > 0) {
-                // Update the existing item's quantity and price
-                db.execSQL("UPDATE cartlist SET quantity=?, price=? WHERE prodName=?", new String[]{qty2, tPrice1, prodName1});
-                Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
-            } else {
-                // Insert a new item
-                String sql = "INSERT INTO cartlist (prodName, quantity, price) VALUES (?, ?, ?)";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1, prodName1);
-                statement.bindString(2, String.valueOf(Integer.parseInt(qty2)));
-                statement.bindString(3, String.valueOf(Double.parseDouble(tPrice1)));
-                statement.execute();
-                Toast.makeText(this, "Item Added to Cart", Toast.LENGTH_LONG).show();
+                    String checkQuantityQuery = "SELECT quantity FROM products WHERE id = ?";
+                    cursor = db.rawQuery(checkQuantityQuery, new String[]{currentID});
+                    if (cursor.moveToFirst()) {//Get qty from products
+                        int availableQuantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+                        int requestedQuantity = Integer.parseInt(qty2);
+
+                        if (repeat == true) {//Check if it already exists
+                            checkQuantityQuery = "SELECT quantity FROM cartlist WHERE id = ?";
+                            cursor = db.rawQuery(checkQuantityQuery, new String[]{currentID});
+
+                            if (cursor.moveToFirst()) {//If exists, add the req qty and curr qty from products
+                                availableQuantity = availableQuantity + cursor.getInt(cursor.getColumnIndex("quantity"));
+                                if (requestedQuantity <= availableQuantity) {//If less, go
+                                    updateCartItemAndReduceProductQuantity(currentID, qty2, tPrice1);
+                                } else {
+                                    Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        } else if (requestedQuantity <= availableQuantity) {
+                            // Insert a new item if not yet in cartlist
+                            String sql = "INSERT INTO cartlist (id, prodName, quantity, price) VALUES (?, ?, ?, ?)";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1, currentID);
+                            statement.bindString(2, prodName1);
+                            statement.bindString(3, String.valueOf(Integer.parseInt(qty2)));
+                            statement.bindString(4, String.valueOf(Double.parseDouble(tPrice1)));
+                            statement.execute();
+                            decreaseProductQuantity(Integer.parseInt(currentID), Integer.parseInt(qty2));
+                            Toast.makeText(this, "Item Added to Cart", Toast.LENGTH_LONG).show();
+                            refreshList();
+                            Quantity.setText("");
+                            totalPriceUp.setText("");
+                            cursor.close();
+                        }else{
+                            Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
+                        }
+                    }
+            } catch (Exception e) {
+                    Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             }
-            Quantity.setText("");
-            totalPriceUp.setText("");
-            cursor.close();
+    }
+
+    public void decreaseProductQuantity(int currentID, int quantityToSubtract) {
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+            String updateQuery = "UPDATE products SET quantity = quantity - ? WHERE id = ?";
+            Object[] bindArgs = { quantityToSubtract, currentID};
+
+            db.execSQL(updateQuery, bindArgs);
+
+            db.close();
         } catch (Exception e) {
-            Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressLint("Range")
+    public void updateCartItemAndReduceProductQuantity(String currentID, String newQuantity, String tPrice1) {
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+            // Step 1: Retrieve current quantity from the 'cartlist'
+            String getCurrentQuantityQuery = "SELECT quantity FROM cartlist WHERE id=?";
+            Cursor cursor = db.rawQuery(getCurrentQuantityQuery, new String[]{currentID});
+
+            int currentQuantity = 0;
+            if (cursor.moveToFirst()) {
+                currentQuantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            }
+            cursor.close();
+
+            int quantityDifference = Integer.parseInt(newQuantity) - currentQuantity;
+
+            String updateCartlistQuery = "UPDATE cartlist SET quantity=?, price=? WHERE id=?";
+            Object[] cartlistBindArgs = {newQuantity, tPrice1, currentID};
+            db.execSQL(updateCartlistQuery, cartlistBindArgs);
+
+            String updateProductsQuery = "UPDATE products SET quantity = quantity - ? WHERE id = ?";
+            Object[] productsBindArgs = {quantityDifference, currentID};
+            db.execSQL(updateProductsQuery, productsBindArgs);
+
+            Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
+
+            refreshList();
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
     }
 
     public void updatePrice() {
         Double total;
-        final Cursor c = db.rawQuery("SELECT * FROM products WHERE product ='" + prodName.getText() + "'", null);
+        final Cursor c = db.rawQuery("SELECT * FROM products WHERE id ='" + currentID + "'", null);
 
         if (c.moveToFirst()) {
             int prodPriceIndex = c.getColumnIndex("prodPrice");
@@ -271,6 +347,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
 
     @Override
     public void onItemClicked(prodItems view) {
+        currentID = view.getId();
         prodName.setText(view.getProduct());
         updatePrice();
     }

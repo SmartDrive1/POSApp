@@ -66,8 +66,17 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Clear Cart"
+        android:layout_margin="5dp"
+        android:autoSizeTextType="uniform"
+        android:maxLines="2"
+        android:id="@+id/btnClearCartList"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Back"
         android:id="@+id/btnBack"/>
+
 
 
 </LinearLayout>

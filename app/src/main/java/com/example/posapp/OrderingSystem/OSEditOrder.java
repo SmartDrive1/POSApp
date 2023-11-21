@@ -2,6 +2,7 @@ package com.example.posapp.OrderingSystem;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -24,6 +25,7 @@ public class OSEditOrder extends AppCompatActivity {
     String newPrice;
     SQLiteDatabase db;
     String quantity;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class OSEditOrder extends AppCompatActivity {
         db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
         Intent i = getIntent();
+        id = i.getStringExtra("id".toString());
         String prodName = i.getStringExtra("prodName".toString());
         quantity = i.getStringExtra("quantity".toString());
         String price = i.getStringExtra("price".toString());
@@ -74,11 +77,10 @@ public class OSEditOrder extends AppCompatActivity {
         setPrice();
         change();
     }
-
+    @SuppressLint("Range")
     public void edit() {
         try {
             String qty1 = qty.getText().toString().trim();
-            String prodName = editProduct.getText().toString().trim();
 
             if (qty1.equals("")) {
                 Toast.makeText(this, "Quantity is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
@@ -91,18 +93,66 @@ public class OSEditOrder extends AppCompatActivity {
             } else {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
-                String sql = "update cartlist set quantity = ?, price = ? where prodName = ?";
-                SQLiteStatement statement = db.compileStatement(sql);
-                statement.bindString(1, qty1);
-                statement.bindString(2, newPrice);
-                statement.bindString(3, prodName);
-                statement.execute();
-                Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
-                Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
-                startActivity(i);
+                String checkQuantityQuery = "SELECT quantity FROM products WHERE id = ?";
+                Cursor cursor = db.rawQuery(checkQuantityQuery, new String[]{id});
+                if (cursor.moveToFirst()) {//Get qty from products
+                    int availableQuantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+                    int requestedQuantity = Integer.parseInt(String.valueOf(qty.getText()));
+                    availableQuantity = Integer.parseInt(availableQuantity + quantity);
+
+                    if (requestedQuantity <= availableQuantity) {
+                        updateCartItemAndReduceProductQuantity(id, qty1, newPrice);
+                        String sql = "update cartlist set quantity = ?, price = ? where id = ?";
+                        SQLiteStatement statement = db.compileStatement(sql);
+                        statement.bindString(1, qty1);
+                        statement.bindString(2, newPrice);
+                        statement.bindString(3, id);
+                        statement.execute();
+                        Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
+                        startActivity(i);
+                        db.close();
+                    }else{
+                        Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         } catch (Exception e) {
             Toast.makeText(this, "Input a Valid Quantity", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @SuppressLint("Range")
+    public void updateCartItemAndReduceProductQuantity(String currentID, String newQuantity, String tPrice1) {
+        try {
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+            // Step 1: Retrieve current quantity from the 'cartlist'
+            String getCurrentQuantityQuery = "SELECT quantity FROM cartlist WHERE id=?";
+            Cursor cursor = db.rawQuery(getCurrentQuantityQuery, new String[]{currentID});
+
+            int currentQuantity = 0;
+            if (cursor.moveToFirst()) {
+                currentQuantity = cursor.getInt(cursor.getColumnIndex("quantity"));
+            }
+            cursor.close();
+
+            int quantityDifference = Integer.parseInt(newQuantity) - currentQuantity;
+
+            String updateCartlistQuery = "UPDATE cartlist SET quantity=?, price=? WHERE id=?";
+            Object[] cartlistBindArgs = {newQuantity, tPrice1, currentID};
+            db.execSQL(updateCartlistQuery, cartlistBindArgs);
+
+            String updateProductsQuery = "UPDATE products SET quantity = quantity - ? WHERE id = ?";
+            Object[] productsBindArgs = {quantityDifference, currentID};
+            db.execSQL(updateProductsQuery, productsBindArgs);
+
+            Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
+
+            db.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
     }
 
@@ -111,14 +161,19 @@ public class OSEditOrder extends AppCompatActivity {
             String product1 = editProduct.getText().toString();
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-
-            String sql = "delete from cartlist where prodName = ?";
+            //Add to products stock
+            String updateQuantity = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
+            Object[] bindArgs = {quantity, id};
+            db.execSQL(updateQuantity, bindArgs);
+            //Delete
+            String sql = "DELETE FROM cartlist WHERE id = ?";
             SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1, product1);
+            statement.bindString(1, id);
             statement.execute();
             Toast.makeText(this, "Cart Item Deleted", Toast.LENGTH_LONG).show();
             Intent i = new Intent(OSEditOrder.this, osCart.class);
             startActivity(i);
+            db.close();
         } catch (Exception e) {
             Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
         }
