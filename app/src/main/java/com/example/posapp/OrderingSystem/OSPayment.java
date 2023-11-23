@@ -66,9 +66,7 @@ public class OSPayment extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
         refreshList();
-
     }
 
     public void refreshList() {
@@ -77,7 +75,7 @@ public class OSPayment extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
+        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, category VARCHAR, price DOUBLE)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from cartlist", null);
         int count = c.getCount();
 
@@ -88,10 +86,11 @@ public class OSPayment extends AppCompatActivity {
             int prodName = c.getColumnIndex("prodName");
             int quantity = c.getColumnIndex("quantity");
             int price = c.getColumnIndex("price");
+            int category = c.getColumnIndex("category");
 
             if(c.moveToFirst()){
                 do{
-                    items.add(new OSItems(c.getString(id), c.getString(prodName),c.getString(quantity),c.getString(price)));
+                    items.add(new OSItems(c.getString(id), c.getString(prodName),c.getString(quantity),c.getString(price), c.getString(category)));
                     OSPaymentAdapter = new OSPaymentAdapter(this, items);
                     recyclerView.setAdapter(OSPaymentAdapter);
                 }while(c.moveToNext());
@@ -107,7 +106,7 @@ public class OSPayment extends AppCompatActivity {
 
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
             Cursor cursor = db.rawQuery("SELECT MAX(transID) FROM transactions", null);
 
             if (cursor.moveToNext()) {
@@ -123,15 +122,17 @@ public class OSPayment extends AppCompatActivity {
                     String prodName = cursor.getString(cursor.getColumnIndex("prodName"));
                     String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
                     String price = cursor.getString(cursor.getColumnIndex("price"));
+                    String category = cursor.getString(cursor.getColumnIndex("category"));
                     long currentTime = System.currentTimeMillis();
 
-                    String sql = "insert into transactions (transID, prodName, quantity, price, time)values(?,?,?,?,?)";
+                    String sql = "insert into transactions (transID, prodName, quantity, price, category, time)values(?,?,?,?,?,?)";
                     SQLiteStatement statement = db.compileStatement(sql);
                     statement.bindString(1, String.valueOf(max_id));
                     statement.bindString(2, prodName);
                     statement.bindString(3, quantity);
                     statement.bindString(4, price);
-                    statement.bindString(5, String.valueOf(currentTime));
+                    statement.bindString(5, category);
+                    statement.bindString(6, String.valueOf(currentTime));
                     statement.execute();
                 }while (cursor.moveToNext());
             }

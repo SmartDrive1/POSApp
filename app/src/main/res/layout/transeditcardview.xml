@@ -46,10 +46,25 @@
             android:maxLines="2"/>
 
         <TextView
-            android:id="@+id/pPrice"
+            android:id="@+id/pCategory"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/pQuantity"
+            android:autoSizeTextType="uniform"
+            android:autoSizeMinTextSize="1sp"
+            android:autoSizeMaxTextSize="30sp"
+            android:autoSizeStepGranularity="1sp"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:text="Category"
+            android:ems="5"
+            android:maxLines="2"/>
+
+        <TextView
+            android:id="@+id/pPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/pCategory"
             android:autoSizeTextType="uniform"
             android:autoSizeMinTextSize="1sp"
             android:autoSizeMaxTextSize="30sp"

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.posapp.R;
 
 public class transViewHolder extends RecyclerView.ViewHolder {
-    public TextView transIDP, tQuantityP, tPriceP, dateP;
+    public TextView transIDP, tQuantityP, tPriceP, dateP, pCategory;
     public CardView cardView;
 
     public transViewHolder(@NonNull View itemView) {
@@ -19,6 +19,7 @@ public class transViewHolder extends RecyclerView.ViewHolder {
         tQuantityP = itemView.findViewById(R.id.tQuantityP);
         tPriceP = itemView.findViewById(R.id.tPriceP);
         dateP = itemView.findViewById(R.id.dateP);
+        pCategory = itemView.findViewById(R.id.pCategory);
         cardView = itemView.findViewById(R.id.transContainer);
     }
 }

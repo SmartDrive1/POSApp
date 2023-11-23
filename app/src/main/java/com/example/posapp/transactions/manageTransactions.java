@@ -145,12 +145,13 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
-            String query = "SELECT transID, time, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions GROUP BY transID";
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
+            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions GROUP BY transID";
             Cursor cursor = db.rawQuery(query, null);
 
             int id = cursor.getColumnIndex("transID");
             int time = cursor.getColumnIndex("time");
+            int category = cursor.getColumnIndex("category");
             int totalAmount = cursor.getColumnIndex("totalAmount");
             int totalQuantity = cursor.getColumnIndex("totalQuantity");
 
@@ -159,7 +160,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             }else{
                 while(cursor.moveToNext()){
                     formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
-                    items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), formattedDate));
+                    items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), "", formattedDate));
                     transAdapter = new transAdapter(this, items, this);
                     recyclerView.setAdapter(transAdapter);
                 }
@@ -168,7 +169,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 db.close();
             }
             }catch (Exception e) {
-            Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -186,7 +187,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             writeDataFromDatabase(context, sheet);
             saveExcelFile(context, workbook);
         } else {
-            // Request permission
             ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
     }
@@ -212,11 +212,14 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             Cell headerCell3 = headerRow.createCell(2);
             headerCell3.setCellValue("Quantity");
 
-            Cell headerCell4 = headerRow.createCell(3);
-            headerCell4.setCellValue("Price");
+            Cell headerCell4 = headerRow.createCell(2);
+            headerCell4.setCellValue("Category");
 
-            Cell headerCell5 = headerRow.createCell(4);
-            headerCell5.setCellValue("Time");
+            Cell headerCell5 = headerRow.createCell(3);
+            headerCell5.setCellValue("Price");
+
+            Cell headerCell6 = headerRow.createCell(4);
+            headerCell6.setCellValue("Time");
 
             int rowNum = 1;
             while (cursor.moveToNext()) {
@@ -236,11 +239,14 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 Cell dataCell3 = dataRow.createCell(2);
                 dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
 
-                Cell dataCell4 = dataRow.createCell(3);
-                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
+                Cell dataCell4 = dataRow.createCell(2);
+                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
 
-                Cell dataCell5 = dataRow.createCell(4);
-                dataCell5.setCellValue(formattedDate);
+                Cell dataCell5 = dataRow.createCell(3);
+                dataCell5.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
+
+                Cell dataCell6 = dataRow.createCell(4);
+                dataCell6.setCellValue(formattedDate);
             }
             cursor.close();
             db.close();
@@ -258,10 +264,13 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             headerCell3.setCellValue("Quantity");
 
             Cell headerCell4 = headerRow.createCell(3);
-            headerCell4.setCellValue("Price");
+            headerCell4.setCellValue("Category");
 
-            Cell headerCell5 = headerRow.createCell(4);
-            headerCell5.setCellValue("Time");
+            Cell headerCell5 = headerRow.createCell(3);
+            headerCell5.setCellValue("Price");
+
+            Cell headerCell6 = headerRow.createCell(4);
+            headerCell6.setCellValue("Time");
 
             int rowNum = 1;
             while (cursor.moveToNext()) {
@@ -282,10 +291,13 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
 
                 Cell dataCell4 = dataRow.createCell(3);
-                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
+                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
 
                 Cell dataCell5 = dataRow.createCell(4);
-                dataCell5.setCellValue(formattedDate);
+                dataCell5.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
+
+                Cell dataCell6 = dataRow.createCell(5);
+                dataCell6.setCellValue(formattedDate);
             }
             cursor.close();
             db.close();
@@ -303,19 +315,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private long convertDateToTimestamp(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
-        try {
-            Date date = dateFormat.parse(dateString);
-            if (date != null) {
-                return (date.getTime());
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return 0;
     }
 
     public void rangeDate(){
@@ -338,13 +337,14 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             int time = cursor.getColumnIndex("time");
             int totalAmount = cursor.getColumnIndex("totalAmount");
             int totalQuantity = cursor.getColumnIndex("totalQuantity");
+            int category = cursor.getColumnIndex("category");
 
             if (cursor.getCount() == 0){
                 Toast.makeText(this, "No Transactions Found", Toast.LENGTH_LONG).show();
             }else{
                 while(cursor.moveToNext()){
                     formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
-                    items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), formattedDate));
+                    items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), "", formattedDate));
                 }
                 cursor.close();
                 db.close();

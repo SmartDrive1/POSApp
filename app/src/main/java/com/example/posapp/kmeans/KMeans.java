@@ -81,6 +81,7 @@ public class KMeans extends AppCompatActivity {
             resultText.append("Cluster ").append(i).append("\n");
             resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
             resultText.append("Average Quantity: ").append(cluster.getAverageQuantity()).append("\n");
+            resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
             resultText.append("Most Bought Product(s): ").append(cluster.getMostBoughtProducts()).append("\n");
             resultText.append("\n");
         }
@@ -124,7 +125,7 @@ public class KMeans extends AppCompatActivity {
 
     public List<Cluster> predict(final int k, final List<Transaction> transactions) {
         checkDataSetSanity(transactions);
-        int dimension = 2; // Assuming 2 dimensions: product name and quantity
+        int dimension = 4; // Assuming 2 dimensions: product name and quantity
         final List<Cluster> clusters = new ArrayList<>();
 
         for (int i = 0; i < k; i++) {
@@ -222,6 +223,8 @@ public class KMeans extends AppCompatActivity {
         // Use hash code for product name for simplicity
         dist += Math.pow(transaction.getProductName().hashCode() - centroid[0], 2);
         dist += Math.pow(transaction.getQuantity() - centroid[1], 2);
+        dist += Math.pow(transaction.getPrice() - centroid[2], 2);
+        dist += Math.pow(transaction.getTime() - centroid[3], 2);
 
         return dist;
     }
@@ -237,6 +240,19 @@ public class KMeans extends AppCompatActivity {
 
         public float[] getCentroid() {
             return centroid;
+        }
+
+        public float getAveragePrice() {
+            if (transactions.isEmpty()) {
+                return 0.0f; // Return 0 if there are no transactions in the cluster
+            }
+
+            double totalPrice = 0;
+            for (Transaction transaction : transactions) {
+                totalPrice += transaction.getPrice();
+            }
+
+            return (float) (totalPrice / transactions.size());
         }
 
         public List<Transaction> getTransactions() {
@@ -308,10 +324,15 @@ public class KMeans extends AppCompatActivity {
     public static class Transaction {
         private String productName;
         private float quantity;
+        private double price;
+        private int time;
 
-        public Transaction(String productName, float quantity) {
+
+        public Transaction(String productName, float quantity, double price, int time) {
             this.productName = productName;
             this.quantity = quantity;
+            this.price = price;
+            this.time = time;
         }
 
         public String getProductName() {
@@ -321,9 +342,20 @@ public class KMeans extends AppCompatActivity {
         public float getQuantity() {
             return quantity;
         }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public int getTime() {
+            return time;
+        }
+
         @Override
         public String toString() {
-            return "{ Product='" + productName + "', Quantity=" + round(quantity) + " }";}
+            return "{ Product='" + productName + "', Quantity=" + round(quantity) +
+                    ", Price=" + price + ", Time=" + time + " }";
+        }
     }
 
     private List<Transaction> createDummyData() {
@@ -335,9 +367,11 @@ public class KMeans extends AppCompatActivity {
 
         int prodName = cursor.getColumnIndex("prodName");
         int quantity = cursor.getColumnIndex("quantity");
+        int priceIndex = cursor.getColumnIndex("price");
+        int timeIndex = cursor.getColumnIndex("time");
 
         while(cursor.moveToNext()) {
-            transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity)));
+            transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex), cursor.getInt(timeIndex)));
         }
 
         cursor.close();

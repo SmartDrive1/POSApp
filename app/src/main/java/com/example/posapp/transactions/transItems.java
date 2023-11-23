@@ -5,6 +5,7 @@ public class transItems {
     String pQuantity;
     String pPrice;
     String tDate;
+    String pCategory;
 
 
     public String getTransID() {
@@ -39,10 +40,19 @@ public class transItems {
         this.tDate = tDate;
     }
 
-    public transItems(String transID, String pName, String pQuantity, String pPrice, String tDate) {
+    public String getpCategory() {
+        return pCategory;
+    }
+
+    public void setpCategory(String pCategory) {
+        this.pCategory = pCategory;
+    }
+
+    public transItems(String transID, String pName, String pQuantity, String pPrice, String pCategory, String tDate) {
         this.transID = transID;
         this.pQuantity = String.valueOf(pQuantity);
         this.pPrice = String.valueOf(pPrice);
+        this.pCategory = String.valueOf(pCategory);
         this.tDate = tDate;
     }
 }

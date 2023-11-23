@@ -80,7 +80,7 @@ public class osCart extends AppCompatActivity implements cartClickListener {
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, price DOUBLE)"); //Create database if non-existent, to avoid crash
+        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, category VARCHAR, price DOUBLE)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("select * from cartlist", null);
         int count = c.getCount();
 
@@ -91,10 +91,11 @@ public class osCart extends AppCompatActivity implements cartClickListener {
             int prodName = c.getColumnIndex("prodName");
             int quantity = c.getColumnIndex("quantity");
             int price = c.getColumnIndex("price");
+            int category = c.getColumnIndex("category");
 
             if(c.moveToFirst()){
                 do{
-                    items.add(new OSItems(c.getString(id),c.getString(prodName),c.getString(quantity),c.getString(price)));
+                    items.add(new OSItems(c.getString(id),c.getString(prodName),c.getString(quantity),c.getString(price),c.getString(category)));
                     OSAdapter = new OSAdapter(this, items, this);
                     recyclerView.setAdapter(OSAdapter);
                     tPrice = tPrice + Double.parseDouble(c.getString(price));

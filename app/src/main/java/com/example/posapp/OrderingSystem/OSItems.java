@@ -5,12 +5,14 @@ public class OSItems {
     String pName;
     String pQuantity;
     String pPrice;
+    String category;
 
-    public OSItems(String id, String pName, String pQuantity, String pPrice) {
+    public OSItems(String id, String pName, String pQuantity, String pPrice, String category) {
         this.id = id;
         this.pName = pName;
         this.pQuantity = pQuantity;
         this.pPrice = pPrice;
+        this.category = category;
     }
 
     public String getId() {
@@ -43,5 +45,13 @@ public class OSItems {
 
     public void setpPrice(String pPrice) {
         this.pPrice = pPrice;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }

@@ -4,11 +4,13 @@ public class transEditItems {
     String pName;
     String pQuantity;
     String pPrice;
+    String pCategory;
 
-    public transEditItems(String pName, String pQuantity, String pPrice) {
+    public transEditItems(String pName, String pQuantity, String pCategory, String pPrice) {
         this.pName = pName;
         this.pQuantity = pQuantity;
         this.pPrice = pPrice;
+        this.pCategory = pCategory;
     }
 
     public String getpName() {
@@ -33,5 +35,13 @@ public class transEditItems {
 
     public void setpPrice(String pPrice) {
         this.pPrice = pPrice;
+    }
+
+    public String getpCategory() {
+        return pCategory;
+    }
+
+    public void setpCategory(String pCategory) {
+        this.pCategory = pCategory;
     }
 }

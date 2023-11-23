@@ -48,7 +48,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     List<prodItems> Cakes = new ArrayList<>();
     List<prodItems> Special = new ArrayList<>();
     SQLiteDatabase db;
-    String currentID;
+    String currentID, itemCategory;
 
     private DialogInterface.OnClickListener dialogClickListener;
 
@@ -126,7 +126,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 String prodName1 = prodName.getText().toString().trim();
                 boolean repeat = false;
 
-                    db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR, quantity INTEGER, price DOUBLE)");
+                    db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR, quantity INTEGER, category VARCHAR, price DOUBLE)");
                     Cursor cursor = db.rawQuery("SELECT * FROM cartlist WHERE id=?", new String[]{currentID});//Check if it is already added in cartlist
                     if (cursor.getCount() > 0) {
                         repeat = true;
@@ -152,12 +152,13 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                             }
                         } else if (requestedQuantity <= availableQuantity) {
                             // Insert a new item if not yet in cartlist
-                            String sql = "INSERT INTO cartlist (id, prodName, quantity, price) VALUES (?, ?, ?, ?)";
+                            String sql = "INSERT INTO cartlist (id, prodName, quantity, category, price) VALUES (?, ?, ?, ?, ?)";
                             SQLiteStatement statement = db.compileStatement(sql);
                             statement.bindString(1, currentID);
                             statement.bindString(2, prodName1);
                             statement.bindString(3, String.valueOf(Integer.parseInt(qty2)));
-                            statement.bindString(4, String.valueOf(Double.parseDouble(tPrice1)));
+                            statement.bindString(4, itemCategory);
+                            statement.bindString(5, String.valueOf(Double.parseDouble(tPrice1)));
                             statement.execute();
                             decreaseProductQuantity(Integer.parseInt(currentID), Integer.parseInt(qty2));
                             Toast.makeText(this, "Item Added to Cart", Toast.LENGTH_LONG).show();
@@ -349,6 +350,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     public void onItemClicked(prodItems view) {
         currentID = view.getId();
         prodName.setText(view.getProduct());
+        itemCategory = view.getCategory();
         updatePrice();
     }
 

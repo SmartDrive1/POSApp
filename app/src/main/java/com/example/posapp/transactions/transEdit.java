@@ -55,7 +55,7 @@ public class transEdit extends AppCompatActivity {
         txtTransID.setText("Transaction ID: " + String.valueOf(transID));
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
 
         String[] columns = {"SUM(price) AS totalAmount, time"};
         String selection = "transID=?";
@@ -104,9 +104,10 @@ public class transEdit extends AppCompatActivity {
         int prodName = cursor.getColumnIndex("prodName");
         int quantity = cursor.getColumnIndex("quantity");
         int price = cursor.getColumnIndex("price");
+        int category = cursor.getColumnIndex("category");
 
         while(cursor.moveToNext()) {
-            items.add(new transEditItems(cursor.getString(prodName), cursor.getString(quantity), cursor.getString(price)));
+            items.add(new transEditItems(cursor.getString(prodName), cursor.getString(quantity), cursor.getString(category), cursor.getString(price)));
             transEditAdapter = new transEditAdapter(this, items);
             recyclerView.setAdapter(transEditAdapter);
         }
