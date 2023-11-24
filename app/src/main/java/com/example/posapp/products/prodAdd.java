@@ -1,27 +1,43 @@
 package com.example.posapp.products;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.posapp.R;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class prodAdd extends AppCompatActivity {
 
     EditText txtProduct, txtPrice, txtQuantity;
     Button btnAdd, btnCancel;
+    ImageView prodImg;
     Integer max_id;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    Uri selectedImageUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +57,7 @@ public class prodAdd extends AppCompatActivity {
         btnAdd = findViewById(R.id.btnAdd);
         btnCancel = findViewById(R.id.btnCancel);
         txtQuantity = findViewById(R.id.txtQuantity);
+        prodImg = findViewById(R.id.prodImg);
 
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +71,12 @@ public class prodAdd extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(prodAdd.this, productList.class);
                 startActivity(i);
+            }
+        });
+        prodImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startImageSelection();
             }
         });
     }
@@ -91,28 +114,37 @@ public class prodAdd extends AppCompatActivity {
             Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(price) <= 0) {
             Toast.makeText(this, "Please Enter a Price Greater Than 0", Toast.LENGTH_LONG).show();
-        } else if (Integer.parseInt(quantity) <= 0){
+        } else if (Integer.parseInt(quantity) <= 0) {
             Toast.makeText(this, "Please Enter a Quantity Greater Than 0", Toast.LENGTH_LONG).show();
-        }else{
+        } else {
             try {
                 String spTxt = spinner.getSelectedItem().toString();
                 if (spTxt.equals("Add-Ons")) {
                     spTxt = "AddOns";
                 }
+
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER )");
+                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER, prodImage BLOB)");
 
                 Cursor c = db.rawQuery("SELECT * FROM products WHERE product =?", new String[]{prodName});
-                if(c.getCount() > 0) {
+                if (c.getCount() > 0) {
                     Toast.makeText(this, "Product Already Exists", Toast.LENGTH_SHORT).show();
-                }else{
-                    String sql = "insert into products (id, product, category, quantity, prodPrice)values(?,?,?,?,?)";
+                } else {
+                    String sql = "insert into products (id, product, category, quantity, prodPrice, prodImage)values(?,?,?,?,?,?)";
                     SQLiteStatement statement = db.compileStatement(sql);
                     statement.bindString(1, String.valueOf(max_id));
                     statement.bindString(2, prodName);
                     statement.bindString(3, spTxt);
                     statement.bindString(4, quantity);
                     statement.bindString(5, price);
+                    try {
+                        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                        byte[] imageBytes = getBytes(inputStream);
+                        statement.bindBlob(6, imageBytes); // Bind the image bytes
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this,"Broken", Toast.LENGTH_SHORT).show();
+                    }
                     statement.execute();
                     Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
                     txtProduct.setText("");
@@ -125,5 +157,34 @@ public class prodAdd extends AppCompatActivity {
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private void startImageSelection() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            // Handle the selected image URI here
+            selectedImageUri = data.getData();
+            Toast.makeText(this, "Image selected: " + selectedImageUri.toString(), Toast.LENGTH_SHORT).show();
+            prodImg.setImageURI(selectedImageUri);
+        }
+    }
+
+    private byte[] getBytes(InputStream inputStream) throws IOException {
+        ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+        int bufferSize = 1024;
+        byte[] buffer = new byte[bufferSize];
+
+        int len;
+        while ((len = inputStream.read(buffer)) != -1) {
+            byteBuffer.write(buffer, 0, len);
+        }
+        return byteBuffer.toByteArray();
     }
 }

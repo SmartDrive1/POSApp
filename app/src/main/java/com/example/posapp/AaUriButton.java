@@ -72,7 +72,7 @@ public class AaUriButton extends AppCompatActivity {
                 SQLiteStatement statement = db.compileStatement(sql);
                 statement.execute();
 
-                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product TEXT, category VARCHAR, quantity INTEGER, prodPrice INTEGER )"); //Create database if non-existent, to avoid crash
+                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product TEXT, category VARCHAR, quantity INTEGER, prodPrice INTEGER, prodImage BLOB)"); //Create database if non-existent, to avoid crash
 
                 // Insert Espresso
                 ContentValues espressoValues = new ContentValues();

@@ -33,16 +33,7 @@ public class prodDrinksListAdapter extends RecyclerView.Adapter<prodViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull prodViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        holder.txtName.setText(items.get(position).getProduct());
-        holder.txtQuantity.setText("Stock: " + items.get(position).getQuantity());
-        holder.txtPrice.setText("Price: " + items.get(position).getProdPrice() + ".00");
-
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mClickListener.onItemClicked(items.get(position));
-            }
-        });
+        holder.bind(items.get(position), mClickListener);
     }
 
     @Override

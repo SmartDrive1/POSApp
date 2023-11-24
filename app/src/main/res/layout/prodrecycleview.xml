@@ -17,6 +17,12 @@
     android:gravity="center"
     android:padding="3dp">
 
+    <ImageView
+        android:id="@+id/prodImg"
+        android:layout_width="79dp"
+        android:layout_height="69dp"
+        android:src="@drawable/noimage" />
+
     <TextView
         android:id="@+id/prodName"
         android:layout_width="wrap_content"
@@ -26,6 +32,7 @@
         android:autoSizeMaxTextSize="30sp"
         android:autoSizeStepGranularity="1sp"
         android:text="Name"
+        android:layout_toRightOf="@id/prodImg"
         android:textColor="@color/black" />
 
     <TextView
@@ -37,6 +44,7 @@
         android:autoSizeMaxTextSize="30sp"
         android:autoSizeStepGranularity="1sp"
         android:layout_below="@+id/prodName"
+        android:layout_toRightOf="@id/prodImg"
         android:text="Quantity"
         android:textColor="@color/black" />
 
@@ -49,6 +57,7 @@
         android:autoSizeMinTextSize="1sp"
         android:autoSizeMaxTextSize="30sp"
         android:autoSizeStepGranularity="1sp"
+        android:layout_toRightOf="@id/prodImg"
         android:text="Price"
         android:textColor="@color/black"/>
 </RelativeLayout>

@@ -1,7 +1,6 @@
 package com.example.posapp.transactions;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,28 +24,23 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.example.posapp.R;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import com.example.posapp.login;
 import com.example.posapp.mainManageScreen;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class manageTransactions extends AppCompatActivity implements transClickListener {
-    Button btnExcel, back, btnFilter, btnReset;
+    Button btnExcel, back, btnReset;
     EditText txtStartDate, txtEndDate;
     transAdapter transAdapter;
     List<transItems> items = new ArrayList<>();
@@ -164,7 +158,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                     transAdapter = new transAdapter(this, items, this);
                     recyclerView.setAdapter(transAdapter);
                 }
-
                 cursor.close();
                 db.close();
             }
@@ -304,7 +297,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
         }
     }
 
-    private static void saveExcelFile(Context context, XSSFWorkbook workbook) {
+    private void saveExcelFile(Context context, XSSFWorkbook workbook) {
         try {
             String exportDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
             File file = new File(exportDir, "transactions.xlsx");
@@ -312,6 +305,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             workbook.write(outputStream);
             outputStream.close();
             Log.d("ExcelExporter", "Excel file saved to: " + file.getAbsolutePath());
+            Toast.makeText(this, "Excel file saved to: " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -330,7 +324,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
             db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
-            String query = "SELECT transID, time, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + " GROUP BY transID";
+            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + " GROUP BY transID";
             Cursor cursor = db.rawQuery(query, null);
 
             int id = cursor.getColumnIndex("transID");
@@ -392,7 +386,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 }
             }
         }, mYear1, mMonth1, mDay1);
-
         datePickerDialog.show();
         enableEndDateEditText(true);
     }

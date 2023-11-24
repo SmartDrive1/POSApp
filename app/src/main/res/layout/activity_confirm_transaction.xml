@@ -20,14 +20,26 @@
         android:orientation="vertical"
         android:gravity="center"
         android:weightSum="10">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="30sp"
+            android:layout_margin="20sp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:autoSizeTextType="uniform"
+            android:textSize="20sp"
             android:maxLines="2"
             android:layout_weight="2"
-            android:text="Transaction Successful"/>
+            android:padding="16sp"
+            android:layout_margin="10sp"
+            android:layout_gravity="center"
+            android:text="Transaction\nSuccessful"/>
+        </androidx.cardview.widget.CardView>
 
         <Button
             android:id="@+id/btnBack"

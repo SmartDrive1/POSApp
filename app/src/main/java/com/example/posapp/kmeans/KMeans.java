@@ -18,10 +18,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.posapp.MainScreen;
 import com.example.posapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -45,7 +49,13 @@ public class KMeans extends AppCompatActivity {
         buttonRunKMeans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                runKMeans();
+                if(editTextK.getText().toString().trim().equals("")){
+                    Toast.makeText(KMeans.this, "K-Means Value Cannot be Blank", Toast.LENGTH_SHORT).show();
+                }else if(editTextK.getText().toString().equals("0")){
+                    Toast.makeText(KMeans.this, "K-Value Cannot be 0", Toast.LENGTH_SHORT).show();
+                }else{
+                    runKMeans();
+                }
             }
         });
 
@@ -56,6 +66,15 @@ public class KMeans extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+
+
+        //This is for getting the daily date, convert to int then minus 6 days from current return
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
+        String formattedDate = df.format(c);
+
+        Toast.makeText(this, String.valueOf(formattedDate), Toast.LENGTH_SHORT).show();
     }
 
     private void runKMeans() {
@@ -377,5 +396,12 @@ public class KMeans extends AppCompatActivity {
         cursor.close();
         db.close();
         return transactions;
+    }
+    public void getDaily(){
+        try{
+            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+        }catch (Exception e){
+//            for
+        }
     }
 }

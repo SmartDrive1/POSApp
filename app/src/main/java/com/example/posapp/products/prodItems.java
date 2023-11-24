@@ -1,18 +1,31 @@
 package com.example.posapp.products;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 public class prodItems {
     String id;
     String product;
     String category;
     String prodPrice;
     String quantity;
+    byte[] prodImage;
 
-    public prodItems(String id, String product, String category, String prodPrice, String quantity) {
+    public Bitmap getProdImageBitmap() {
+        if (prodImage != null) {
+            return BitmapFactory.decodeByteArray(prodImage, 0, prodImage.length);
+        } else {
+            return null; // Handle the case when prodImage is null or empty
+        }
+    }
+
+    public prodItems(String id, String product, String category, String prodPrice, String quantity, byte[] prodImage) {
         this.id = id;
         this.product = product;
         this.category = category;
         this.prodPrice = prodPrice;
         this.quantity = quantity;
+        this.prodImage = prodImage;
     }
 
     public String getId() {
@@ -53,5 +66,13 @@ public class prodItems {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public byte[] getProdImage() {
+        return prodImage;
+    }
+
+    public void setProdImage(byte[] prodImage) {
+        this.prodImage = prodImage;
     }
 }
