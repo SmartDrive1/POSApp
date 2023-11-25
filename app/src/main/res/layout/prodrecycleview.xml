@@ -21,6 +21,7 @@
         android:id="@+id/prodImg"
         android:layout_width="79dp"
         android:layout_height="69dp"
+        android:padding="3dp"
         android:src="@drawable/noimage" />
 
     <TextView

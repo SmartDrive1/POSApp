@@ -77,7 +77,6 @@ public class prodEdit extends AppCompatActivity {
         if(prodImage1 != null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(prodImage1, 0, prodImage1.length);
             prodImg.setImageBitmap(bitmap);
-
         }
 
         switch (category) {
@@ -235,7 +234,6 @@ public class prodEdit extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Handle the selected image URI here
             selectedImageUri = data.getData();
-            Toast.makeText(this, "Image selected: " + selectedImageUri.toString(), Toast.LENGTH_SHORT).show();
             prodImg.setImageURI(selectedImageUri);
         }
     }

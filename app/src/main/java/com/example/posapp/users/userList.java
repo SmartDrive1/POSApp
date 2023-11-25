@@ -70,7 +70,7 @@ public class userList extends AppCompatActivity implements userClickListener {
         userRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
+        db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR, userImg BLOB)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("SELECT * FROM users ORDER BY id ASC", null);
         int count = c.getCount();
 
@@ -83,15 +83,16 @@ public class userList extends AppCompatActivity implements userClickListener {
             int userName = c.getColumnIndex("userName");
             int password = c.getColumnIndex("password");
             int access = c.getColumnIndex("access");
+            int userImg = c.getColumnIndex("userImg");
 
             if(c.moveToFirst()) {
                 do {
                     if (c.getString(access).equals("Admin")) {
-                        admins.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access)));
+                        admins.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access), c.getBlob(userImg)));
                         adminAdapter = new adminAdapter(this, admins, this);
                         adminRecyclerView.setAdapter(adminAdapter);
                     } else {
-                        users.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access)));
+                        users.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access), c.getBlob(userImg)));
                         userAdapter = new userAdapter(this, users, this);
                         userRecyclerView.setAdapter(userAdapter);
                     }
@@ -110,6 +111,11 @@ public class userList extends AppCompatActivity implements userClickListener {
         i.putExtra("userName", view.getUserName());
         i.putExtra("password", view.getPassword());
         i.putExtra("access", view.getAccess());
+        if(view.getUserImg() != null){
+            i.putExtra("userImg", view.getUserImg());
+        }else{
+            //None
+        }
         startActivity(i);
     }
 
@@ -137,7 +143,7 @@ public class userList extends AppCompatActivity implements userClickListener {
                     userRecyclerView.setLayoutManager(new LinearLayoutManager(userList.this,LinearLayoutManager.HORIZONTAL, false));
 
                     SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-                    db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR)"); //Create database if non-existent, to avoid crash
+                    db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY, fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR, userImg BLOB)"); //Create database if non-existent, to avoid crash
                     String query = "SELECT * FROM users WHERE id = ? OR fullname LIKE ? OR username LIKE ?";
                     String[] selectionArgs = {searchUser, "%" + searchUser + "%", "%" + searchUser + "%"};
 
@@ -152,15 +158,16 @@ public class userList extends AppCompatActivity implements userClickListener {
                         int userName = c.getColumnIndex("userName");
                         int password = c.getColumnIndex("password");
                         int access = c.getColumnIndex("access");
+                        int userImg = c.getColumnIndex("userImg");
 
                         if(c.moveToFirst()) {
                             do {
                                 if (c.getString(access).equals("Admin")) {
-                                    admins.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access)));
+                                    admins.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access), c.getBlob(userImg)));
                                     adminAdapter = new adminAdapter(userList.this, admins, adminAdapter.mClickListener);
                                     adminRecyclerView.setAdapter(adminAdapter);
                                 } else {
-                                    users.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access)));
+                                    users.add(new userItems(c.getString(id), c.getString(fullName), c.getString(userName), c.getString(password), c.getString(access), c.getBlob(userImg)));
                                     userAdapter = new userAdapter(userList.this, users, userAdapter.mClickListener);
                                     userRecyclerView.setAdapter(userAdapter);
                                 }

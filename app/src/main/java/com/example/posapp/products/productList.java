@@ -135,7 +135,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
         if(view.getProdImage() != null){
             i.putExtra("prodImage", view.getProdImage());
         }else{
-
+            //None
         }
         startActivity(i);
     }

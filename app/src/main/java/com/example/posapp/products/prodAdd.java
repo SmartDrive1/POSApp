@@ -1,15 +1,11 @@
 package com.example.posapp.products;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,8 +20,6 @@ import android.widget.Toast;
 import com.example.posapp.R;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -122,7 +116,6 @@ public class prodAdd extends AppCompatActivity {
                 if (spTxt.equals("Add-Ons")) {
                     spTxt = "AddOns";
                 }
-
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER, prodImage BLOB)");
 
@@ -137,7 +130,8 @@ public class prodAdd extends AppCompatActivity {
                     statement.bindString(3, spTxt);
                     statement.bindString(4, quantity);
                     statement.bindString(5, price);
-                    try {
+
+                    try {//Add image
                         InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
                         byte[] imageBytes = getBytes(inputStream);
                         statement.bindBlob(6, imageBytes); // Bind the image bytes
@@ -145,12 +139,14 @@ public class prodAdd extends AppCompatActivity {
                         e.printStackTrace();
                         Toast.makeText(this,"Broken", Toast.LENGTH_SHORT).show();
                     }
+
                     statement.execute();
                     Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
                     txtProduct.setText("");
                     txtPrice.setText("");
                     txtQuantity.setText("");
                     txtProduct.requestFocus();
+                    prodImg.setImageResource(R.drawable.noimage);
                     db.close();
                 }
             } catch (Exception e) {
@@ -169,9 +165,7 @@ public class prodAdd extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            // Handle the selected image URI here
             selectedImageUri = data.getData();
-            Toast.makeText(this, "Image selected: " + selectedImageUri.toString(), Toast.LENGTH_SHORT).show();
             prodImg.setImageURI(selectedImageUri);
         }
     }

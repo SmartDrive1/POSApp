@@ -31,14 +31,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
-                android:weightSum="10"
+                android:weightSum="100"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:textAlignment="center"
-                    android:layout_weight="3"
+                    android:layout_weight="15"
                     android:text="Add User"
                     android:textSize="30sp"
                     android:textColor="@color/black"/>
@@ -48,14 +48,28 @@
                     android:layout_height="0dp"
                     android:orientation="horizontal"
                     android:paddingBottom="10dp"
-                    android:layout_weight="8"
-                    android:weightSum="3">
+                    android:layout_weight="65"
+                    android:gravity="center"
+                    android:weightSum="100">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="40"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:id="@+id/userImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/noimage"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_weight="2"
+                        android:layout_weight="60"
                         android:paddingLeft="10dp"
                         android:layout_margin="5dp">
 
@@ -125,52 +139,37 @@
                                 android:layout_weight="2.6"/>
                         </LinearLayout>
                     </LinearLayout>
+                </LinearLayout>
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="0dp"
+                <!--  Buttons  -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="20"
+                    android:layout_margin="3dp">
+
+                    <Button
+                        android:id="@+id/btnAddUser"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        app:cardElevation="2dp"
-                        app:cardCornerRadius="20sp"
-                        android:padding="3dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginLeft="5dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:weightSum="2">
-
-                            <!--  Buttons  -->
-                            <Button
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="Add"
-                                android:layout_margin="5dp"
-                                android:layout_weight="1"
-                                android:textSize="16sp"
-                                android:background="@drawable/button1"
-                                android:maxLines="1"
-                                android:textStyle="bold"
-                                android:id="@+id/btnAddUser"/>
-
-                            <Button
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="Back"
-                                android:layout_margin="5dp"
-                                android:layout_weight="1"
-                                android:textSize="16sp"
-                                android:textStyle="bold"
-                                android:background="@drawable/button1"
-                                android:maxLines="1"
-                                android:id="@+id/btnCancel"/>
-                        </LinearLayout>
-                    </androidx.cardview.widget.CardView>
+                        android:text="Add"
+                        android:layout_margin="3dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/button1"
+                        android:maxLines="1"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Back"
+                        android:layout_margin="3dp"
+                        android:id="@+id/btnCancel"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/button1"
+                        android:maxLines="1"/>
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
