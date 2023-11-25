@@ -34,6 +34,7 @@ public class userEdit extends AppCompatActivity {
     ImageView userImg;
     private static final int PICK_IMAGE_REQUEST = 1;
     Uri selectedImageUri;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class userEdit extends AppCompatActivity {
         userImg = findViewById(R.id.userImg);
 
         Intent i = getIntent();
-        String id = i.getStringExtra("id".toString());
+        id = i.getStringExtra("id".toString());
         String name = i.getStringExtra("fullName".toString());
         String userName = i.getStringExtra("userName".toString());
         String password = i.getStringExtra("password".toString());
@@ -148,13 +149,11 @@ public class userEdit extends AppCompatActivity {
 
     public void delete(){
         try{
-            String editID1 = editID.getText().toString();
-
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
 
             String sql = "delete from users where id = ?";
             SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1,editID1);
+            statement.bindString(1,id);
             statement.execute();
             Toast.makeText(this,"User Deleted", Toast.LENGTH_LONG).show();
             db.close();

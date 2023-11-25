@@ -85,7 +85,7 @@ public class osCart extends AppCompatActivity implements cartClickListener {
         int count = c.getCount();
 
         if(count == 0){
-            Toast.makeText(this,"No Products Found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"The Cart is Empty", Toast.LENGTH_LONG).show();
         }else{
             int id = c.getColumnIndex("id");
             int prodName = c.getColumnIndex("prodName");

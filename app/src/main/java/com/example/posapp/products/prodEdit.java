@@ -205,13 +205,11 @@ public class prodEdit extends AppCompatActivity {
 
     public void delete(){
         try{
-            String editID1 = editID.getText().toString().trim();
-
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
 
             String sql = "delete from products where id = ?";
             SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1,editID1);
+            statement.bindString(1,id);
             statement.execute();
             Toast.makeText(this,"Product Deleted", Toast.LENGTH_LONG).show();
             db.close();

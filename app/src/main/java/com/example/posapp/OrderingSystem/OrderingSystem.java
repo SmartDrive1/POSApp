@@ -161,13 +161,19 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                             statement.bindString(5, String.valueOf(Double.parseDouble(tPrice1)));
                             statement.execute();
                             decreaseProductQuantity(Integer.parseInt(currentID), Integer.parseInt(qty2));
-                            Toast.makeText(this, "Item Added to Cart", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, prodName.getText().toString() + " Added to Cart", Toast.LENGTH_LONG).show();
                             refreshList();
+                            prodName.setText("");
                             Quantity.setText("");
                             totalPriceUp.setText("");
+                            Price.setText("");
                             cursor.close();
                         }else{
-                            Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, "Insufficient Stock for " + prodName.getText().toString(), Toast.LENGTH_LONG).show();
+                            prodName.setText("");
+                            Quantity.setText("");
+                            totalPriceUp.setText("");
+                            Price.setText("");
                         }
                     }
             } catch (Exception e) {

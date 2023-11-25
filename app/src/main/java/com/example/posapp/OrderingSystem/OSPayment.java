@@ -62,7 +62,8 @@ public class OSPayment extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 confirmTrans();
-                Intent i = new Intent(OSPayment.this, confirmTransaction.class);
+                Toast.makeText(OSPayment.this, "Transaction Successful", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(OSPayment.this, OrderingSystem.class);
                 startActivity(i);
             }
         });
