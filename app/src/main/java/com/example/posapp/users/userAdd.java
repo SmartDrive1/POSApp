@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -127,13 +129,20 @@ public class userAdd extends AppCompatActivity {
                     statement.bindString(4,pass1);
                     statement.bindString(5,spTxt);
 
-                    try {//Add image
-                        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-                        byte[] imageBytes = getBytes(inputStream);
-                        statement.bindBlob(6, imageBytes); // Bind the image bytes
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Toast.makeText(this,"Broken", Toast.LENGTH_SHORT).show();
+                    if (selectedImageUri != null) {
+                        try {
+                            InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                            byte[] imageBytes = getBytes(inputStream);
+                            statement.bindBlob(6, imageBytes); // Bind the image bytes
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Bitmap defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.noimage);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] defaultImageBytes = stream.toByteArray();
+                        statement.bindBlob(6, defaultImageBytes);
                     }
 
                     statement.execute();
@@ -147,6 +156,7 @@ public class userAdd extends AppCompatActivity {
                 c.close();
                 db.close();
             }catch (Exception e){
+                e.printStackTrace();
                 Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
             }
         }

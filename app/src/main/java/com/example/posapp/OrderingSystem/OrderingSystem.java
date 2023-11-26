@@ -12,12 +12,15 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ import com.example.posapp.products.prodFoodListAdapter;
 import com.example.posapp.products.prodItems;
 import com.example.posapp.products.SpecialListAdapter;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +42,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     Button btnAdd, Orders;
     Button btnLogout;
     TextView txtView;
+    ImageView prodImg;
     EditText Quantity, Price, totalPriceUp, prodName;
     prodDrinksListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
@@ -66,6 +71,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         txtView = findViewById(R.id.txtView);
         totalPriceUp = findViewById(R.id.txtTotalPrice);
         Orders = findViewById(R.id.btnOrders);
+        prodImg = findViewById(R.id.prodImg);
 
         switch (accessValue.access){
             case "User":
@@ -146,6 +152,11 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                                 availableQuantity = availableQuantity + cursor.getInt(cursor.getColumnIndex("quantity"));
                                 if (requestedQuantity <= availableQuantity) {//If less, go
                                     updateCartItemAndReduceProductQuantity(currentID, qty2, tPrice1);
+                                    prodName.setText("");
+                                    Quantity.setText("");
+                                    totalPriceUp.setText("");
+                                    Price.setText("");
+                                    prodImg.setImageResource(R.drawable.noimage);
                                 } else {
                                     Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
                                 }
@@ -167,6 +178,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                             Quantity.setText("");
                             totalPriceUp.setText("");
                             Price.setText("");
+                            prodImg.setImageResource(R.drawable.noimage);
                             cursor.close();
                         }else{
                             Toast.makeText(this, "Insufficient Stock for " + prodName.getText().toString(), Toast.LENGTH_LONG).show();
@@ -174,6 +186,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                             Quantity.setText("");
                             totalPriceUp.setText("");
                             Price.setText("");
+                            prodImg.setImageResource(R.drawable.noimage);
                         }
                     }
             } catch (Exception e) {
@@ -358,6 +371,15 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         currentID = view.getId();
         prodName.setText(view.getProduct());
         itemCategory = view.getCategory();
+        if(view.getProdImage() != null) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(view.getProdImage(), 0, view.getProdImage().length);
+            prodImg.setImageBitmap(bitmap);
+        }else{
+            Bitmap defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.noimage);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            prodImg.setImageBitmap(defaultBitmap);
+        }
         updatePrice();
     }
 

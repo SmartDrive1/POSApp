@@ -208,6 +208,15 @@
                     android:padding="5dp"
                     android:gravity="center">
 
+                    <ImageView
+                        android:id="@+id/prodImg"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/noimage"/>
                     <!--Product Name-->
                     <EditText
                         android:id="@+id/prodName"
