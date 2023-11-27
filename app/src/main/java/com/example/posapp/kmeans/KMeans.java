@@ -33,6 +33,8 @@ public class KMeans extends AppCompatActivity {
 
     private EditText editTextK, textViewResult;
     private Button buttonRunKMeans, btnBack;
+    long currentDay, currentDayE;
+    ArrayList<Long> days = new ArrayList<Long>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class KMeans extends AppCompatActivity {
         String formattedDate = df.format(c);
 
         Toast.makeText(this, String.valueOf(formattedDate), Toast.LENGTH_SHORT).show();
+        getDates();
     }
 
     private void runKMeans() {
@@ -84,7 +87,7 @@ public class KMeans extends AppCompatActivity {
             Toast.makeText(this, "Please enter a valid K value", Toast.LENGTH_SHORT).show();
             return;
         }
-        int k = Integer.parseInt(kText);
+        int k = 7;
         // Call your k-means clustering method with the provided K value
         List<Cluster> clusters = performKMeans(k);
         // Display the result in the TextView
@@ -243,7 +246,6 @@ public class KMeans extends AppCompatActivity {
         dist += Math.pow(transaction.getProductName().hashCode() - centroid[0], 2);
         dist += Math.pow(transaction.getQuantity() - centroid[1], 2);
         dist += Math.pow(transaction.getPrice() - centroid[2], 2);
-        dist += Math.pow(transaction.getTime() - centroid[3], 2);
 
         return dist;
     }
@@ -335,7 +337,6 @@ public class KMeans extends AppCompatActivity {
                     mostBoughtProducts.add(entry.getKey());
                 }
             }
-
             return mostBoughtProducts;
         }
     }
@@ -344,14 +345,12 @@ public class KMeans extends AppCompatActivity {
         private String productName;
         private float quantity;
         private double price;
-        private int time;
 
 
-        public Transaction(String productName, float quantity, double price, int time) {
+        public Transaction(String productName, float quantity, double price) {
             this.productName = productName;
             this.quantity = quantity;
             this.price = price;
-            this.time = time;
         }
 
         public String getProductName() {
@@ -366,14 +365,11 @@ public class KMeans extends AppCompatActivity {
             return price;
         }
 
-        public int getTime() {
-            return time;
-        }
 
         @Override
         public String toString() {
             return "{ Product='" + productName + "', Quantity=" + round(quantity) +
-                    ", Price=" + price + ", Time=" + time + " }";
+                    ", Price=" + price + " }";
         }
     }
 
@@ -387,21 +383,55 @@ public class KMeans extends AppCompatActivity {
         int prodName = cursor.getColumnIndex("prodName");
         int quantity = cursor.getColumnIndex("quantity");
         int priceIndex = cursor.getColumnIndex("price");
-        int timeIndex = cursor.getColumnIndex("time");
 
         while(cursor.moveToNext()) {
-            transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex), cursor.getInt(timeIndex)));
+            transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex)));
         }
 
         cursor.close();
         db.close();
         return transactions;
     }
-    public void getDaily(){
-        try{
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        }catch (Exception e){
-//            for
+
+    public void getDates(){
+        getCurrentDate();
+
+    }
+    public void getCurrentDate(){
+        // Get the current date
+        Date currentDate = new Date();
+
+        // Convert the current date to Calendar
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        currentDay = calendar.getTimeInMillis();
+        System.out.println("Current date and time as int (set to 00:00:00): " + currentDay);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        currentDayE = calendar.getTimeInMillis();
+        System.out.println("Current date and time as int (set to 23:59:59): " + currentDayE);
+
+        currentDay = currentDay - 518400000;
+        currentDayE = currentDayE - 518400000;//-6 days from current
+        for(int i = 0; i < 7; i++){
+            long newTimeE = currentDayE + (86400000 * i);
+            long newTime = currentDay + (86400000 * i);
+
+            days.add(newTime);
+            days.add(newTimeE);
+        }
+
+        for (int i = 0; i < days.size(); i += 2) {
+            System.out.println("Day " + (i / 2 + 1) + " Start: " + new Date(days.get(i)));
+            System.out.println("Day " + (i / 2 + 1) + " End: " + new Date(days.get(i + 1)));
         }
     }
 }

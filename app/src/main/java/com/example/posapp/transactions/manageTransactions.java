@@ -331,7 +331,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             int time = cursor.getColumnIndex("time");
             int totalAmount = cursor.getColumnIndex("totalAmount");
             int totalQuantity = cursor.getColumnIndex("totalQuantity");
-            int category = cursor.getColumnIndex("category");
 
             if (cursor.getCount() == 0){
                 Toast.makeText(this, "No Transactions Found", Toast.LENGTH_LONG).show();
