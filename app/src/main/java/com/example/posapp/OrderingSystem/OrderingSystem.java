@@ -21,6 +21,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,8 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     TextView txtView;
     ImageView prodImg;
     EditText Quantity, Price, totalPriceUp, prodName;
+    RadioGroup radioGroup;
+    RadioButton medium, large;
     prodDrinksListAdapter productListAdapter;
     prodFoodListAdapter foodListAdapter;
     SpecialListAdapter specialListAdapter;
@@ -53,7 +57,9 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     List<prodItems> Cakes = new ArrayList<>();
     List<prodItems> Special = new ArrayList<>();
     SQLiteDatabase db;
-    String currentID, itemCategory;
+    String currentID, itemCategory, currentProduct;
+    View v;
+    Double addOn = 0.00;
 
     private DialogInterface.OnClickListener dialogClickListener;
 
@@ -63,6 +69,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         setContentView(R.layout.activity_ordering_system);
         db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
+        v = findViewById(R.id.sizeLayout);
         btnAdd = findViewById(R.id.btnCart);
         btnLogout = findViewById(R.id.btnLogout);
         Quantity = findViewById(R.id.txtQty);
@@ -72,6 +79,11 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         totalPriceUp = findViewById(R.id.txtTotalPrice);
         Orders = findViewById(R.id.btnOrders);
         prodImg = findViewById(R.id.prodImg);
+        radioGroup = findViewById(R.id.radioGroup);
+        medium = findViewById(R.id.medium);
+        large = findViewById(R.id.large);
+        v.setVisibility(View.GONE);
+        Quantity.setEnabled(false);
 
         switch (accessValue.access){
             case "User":
@@ -112,6 +124,24 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             }
         });
 
+        medium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prodName.setText(currentProduct + "(M)");
+                addOn = 0.00;
+                updatePrice();
+            }
+        });
+
+        large.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                prodName.setText(currentProduct + "(L)");
+                addOn = 20.00;
+                updatePrice();
+            }
+        });
+
         refreshList();
         change();
     }
@@ -132,10 +162,19 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 String prodName1 = prodName.getText().toString().trim();
                 boolean repeat = false;
 
-                    db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR, quantity INTEGER, category VARCHAR, price DOUBLE)");
+                    db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER, prodName VARCHAR, quantity INTEGER, category VARCHAR, price DOUBLE)");
                     Cursor cursor = db.rawQuery("SELECT * FROM cartlist WHERE id=?", new String[]{currentID});//Check if it is already added in cartlist
                     if (cursor.getCount() > 0) {
-                        repeat = true;
+                        cursor = db.rawQuery("SELECT * FROM cartlist WHERE prodName = ?", new String[]{prodName1});
+                        if (cursor.moveToFirst()) {
+                            int prodNameDB = cursor.getColumnIndex("prodName");
+                            String storedProdName = cursor.getString(prodNameDB);
+                            if (prodName1.equals(storedProdName)) {
+                                repeat = true;
+                            } else {
+                                repeat = true;
+                            }
+                        }
                     }
 
                     String checkQuantityQuery = "SELECT quantity FROM products WHERE id = ?";
@@ -144,7 +183,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                         int availableQuantity = cursor.getInt(cursor.getColumnIndex("quantity"));
                         int requestedQuantity = Integer.parseInt(qty2);
 
-                        if (repeat == true) {//Check if it already exists
+                        if (repeat == true) {//Check if id already exists
                             checkQuantityQuery = "SELECT quantity FROM cartlist WHERE id = ?";
                             cursor = db.rawQuery(checkQuantityQuery, new String[]{currentID});
 
@@ -156,29 +195,15 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                                     Quantity.setText("");
                                     totalPriceUp.setText("");
                                     Price.setText("");
+                                    v.setVisibility(View.GONE);
                                     prodImg.setImageResource(R.drawable.noimage);
+                                    Quantity.setEnabled(false);
                                 } else {
                                     Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
                                 }
                             }
-                        } else if (requestedQuantity <= availableQuantity) {
-                            // Insert a new item if not yet in cartlist
-                            String sql = "INSERT INTO cartlist (id, prodName, quantity, category, price) VALUES (?, ?, ?, ?, ?)";
-                            SQLiteStatement statement = db.compileStatement(sql);
-                            statement.bindString(1, currentID);
-                            statement.bindString(2, prodName1);
-                            statement.bindString(3, String.valueOf(Integer.parseInt(qty2)));
-                            statement.bindString(4, itemCategory);
-                            statement.bindString(5, String.valueOf(Double.parseDouble(tPrice1)));
-                            statement.execute();
-                            decreaseProductQuantity(Integer.parseInt(currentID), Integer.parseInt(qty2));
-                            Toast.makeText(this, prodName.getText().toString() + " Added to Cart", Toast.LENGTH_LONG).show();
-                            refreshList();
-                            prodName.setText("");
-                            Quantity.setText("");
-                            totalPriceUp.setText("");
-                            Price.setText("");
-                            prodImg.setImageResource(R.drawable.noimage);
+                        } else if (requestedQuantity <= availableQuantity) {//If not exists add
+                            insert();
                             cursor.close();
                         }else{
                             Toast.makeText(this, "Insufficient Stock for " + prodName.getText().toString(), Toast.LENGTH_LONG).show();
@@ -187,11 +212,38 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                             totalPriceUp.setText("");
                             Price.setText("");
                             prodImg.setImageResource(R.drawable.noimage);
+                            Quantity.setEnabled(false);
                         }
                     }
             } catch (Exception e) {
                     Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
             }
+    }
+
+    public void insert(){
+        String tPrice1 = totalPriceUp.getText().toString().trim();
+        String qty2 = Quantity.getText().toString().trim();
+        String prodName1 = prodName.getText().toString().trim();
+
+        // Insert a new item if not yet in cartlist
+        String sql = "INSERT INTO cartlist (id, prodName, quantity, category, price) VALUES (?, ?, ?, ?, ?)";
+        SQLiteStatement statement = db.compileStatement(sql);
+        statement.bindString(1, currentID);
+        statement.bindString(2, prodName1);
+        statement.bindString(3, String.valueOf(Integer.parseInt(qty2)));
+        statement.bindString(4, itemCategory);
+        statement.bindString(5, String.valueOf(Double.parseDouble(tPrice1)));
+        statement.execute();
+        decreaseProductQuantity(Integer.parseInt(currentID), Integer.parseInt(qty2));
+        Toast.makeText(this, prodName.getText().toString() + " Added to Cart", Toast.LENGTH_LONG).show();
+        refreshList();
+        prodName.setText("");
+        Quantity.setText("");
+        totalPriceUp.setText("");
+        Price.setText("");
+        v.setVisibility(View.GONE);
+        prodImg.setImageResource(R.drawable.noimage);
     }
 
     public void decreaseProductQuantity(int currentID, int quantityToSubtract) {
@@ -251,7 +303,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         if (c.moveToFirst()) {
             int prodPriceIndex = c.getColumnIndex("prodPrice");
             int productPrice = c.getInt(prodPriceIndex);
-            total = Double.valueOf(productPrice);
+            total = Double.valueOf(productPrice) + addOn;
             Price.setText(String.valueOf(total) + "0");
         } else {
             Price.setText("");
@@ -371,6 +423,17 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         currentID = view.getId();
         prodName.setText(view.getProduct());
         itemCategory = view.getCategory();
+        currentProduct = view.getProduct();
+        medium.toggle();
+        Quantity.setEnabled(true);
+
+        if(view.getCategory().equals("Drinks")){
+            v.setVisibility(View.VISIBLE);
+            addOn = 0.00;
+            prodName.setText(view.getProduct() + "(M)");
+        }else{
+            v.setVisibility(View.GONE);
+        }
         if(view.getProdImage() != null) {
             Bitmap bitmap = BitmapFactory.decodeByteArray(view.getProdImage(), 0, view.getProdImage().length);
             prodImg.setImageBitmap(bitmap);

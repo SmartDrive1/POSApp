@@ -50,142 +50,141 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_weight="90"
             android:layout_below="@+id/layout1"
+            android:layout_weight="90"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:weightSum="6">
             <!--Left Side-->
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:weightSum="4"
                 android:layout_margin="3dp"
+                android:layout_weight="4"
                 android:background="@drawable/border"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:weightSum="4">
 
                 <!--            drinks-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/textbackground"
                         android:gravity="left"
                         android:maxLines="2"
                         android:paddingLeft="10dp"
                         android:text="Drinks"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"></TextView>
 
                     <!--        recyclerview-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleProds"
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="5dp"
+                        android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
-                        android:layout_height="fill_parent"/>
+                        android:layout_marginRight="5dp"
+                        android:orientation="horizontal" />
                 </LinearLayout>
 
                 <!--            foods-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/textbackground"
                         android:gravity="left"
                         android:maxLines="2"
                         android:paddingLeft="10dp"
                         android:text="Foods"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"></TextView>
 
                     <!--        recyclerview-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleFoods"
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="5dp"
+                        android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
-                        android:layout_height="fill_parent"/>
+                        android:layout_marginRight="5dp"
+                        android:orientation="horizontal" />
                 </LinearLayout>
 
                 <!--            foods-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/textbackground"
                         android:gravity="left"
                         android:maxLines="2"
                         android:paddingLeft="10dp"
                         android:text="Cakes and Cup Cakes"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"></TextView>
 
                     <!--        recyclerview-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleCakes"
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="5dp"
+                        android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
-                        android:layout_height="fill_parent"/>
+                        android:layout_marginRight="5dp"
+                        android:orientation="horizontal" />
                 </LinearLayout>
-
 
 
                 <!--            others-->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/black"
+                        android:layout_margin="3dp"
+                        android:background="@drawable/textbackground"
                         android:gravity="left"
                         android:maxLines="2"
                         android:paddingLeft="10dp"
                         android:text="Special Orders"
-                        android:background="@drawable/textbackground"
-                        android:layout_margin="3dp"></TextView>
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"></TextView>
 
                     <!--        recyclerview-->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recycleSpecial"
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_marginRight="5dp"
+                        android:layout_height="fill_parent"
                         android:layout_marginLeft="5dp"
-                        android:layout_height="fill_parent"/>
+                        android:layout_marginRight="5dp"
+                        android:orientation="horizontal" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -193,120 +192,159 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:cardElevation="5dp"
-                app:cardCornerRadius="30sp"
                 android:layout_margin="20sp"
-                android:layout_weight="2">
+                android:layout_weight="2"
+                app:cardCornerRadius="30sp"
+                app:cardElevation="5dp">
 
                 <!-- Right Side -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="20"
-                    android:orientation="vertical"
                     android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:orientation="vertical"
                     android:padding="5dp"
-                    android:gravity="center">
+                    android:weightSum="20">
 
                     <ImageView
                         android:id="@+id/prodImg"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:paddingLeft="3dp"
                         android:paddingRight="3dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:src="@drawable/noimage"/>
+                        android:src="@drawable/noimage" />
                     <!--Product Name-->
                     <EditText
                         android:id="@+id/prodName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Product"
-                        android:editable="false"
-                        android:layout_weight="1"
-                        android:textSize="16sp"
                         android:layout_margin="5dp"
-                        android:drawableStart="@drawable/iconproduct"
+                        android:layout_weight="1"
                         android:background="@drawable/edit_text_border"
+                        android:drawableStart="@drawable/iconproduct"
+                        android:editable="false"
                         android:ems="8"
-                        android:textAlignment="center"/>
-                    <!--Quantity-->
-                        <EditText
-                            android:id="@+id/txtQty"
+                        android:hint="Product"
+                        android:textAlignment="center"
+                        android:textSize="16sp" />
+
+<!--                    size-->
+                    <LinearLayout
+                        android:id="@+id/sizeLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/edit_text_border">
+
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textColor="@color/black"-->
+<!--                            android:layout_marginLeft="5dp"-->
+<!--                            android:layout_gravity="center"-->
+<!--                            android:drawableLeft="@drawable/iconproduct"/>-->
+
+                        <RadioGroup
+                            android:id="@+id/radioGroup"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Quantity"
-                            android:layout_weight="1"
-                            android:background="@drawable/edit_text_border"
-                            android:textSize="16sp"
-                            android:layout_margin="5dp"
-                            android:ems="8"
-                            android:inputType="number"
-                            android:drawableStart="@drawable/quantityicon"
-                            android:textAlignment="center" />
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/medium"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="3dp"
+                                android:text="Medium" />
+
+                            <RadioButton
+                                android:id="@+id/large"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:text="Large" />
+                        </RadioGroup>
+                    </LinearLayout>
+                    <!--Quantity-->
+                    <EditText
+                        android:id="@+id/txtQty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/edit_text_border"
+                        android:drawableStart="@drawable/quantityicon"
+                        android:ems="8"
+                        android:hint="Quantity"
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        android:textSize="16sp" />
 
                     <!--  Price  -->
                     <EditText
                         android:id="@+id/txtPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
                         android:layout_weight="1"
-                        android:enabled="false"
-                        android:textColor="@color/black"
                         android:background="@drawable/edit_text_border"
                         android:drawableStart="@drawable/iconprice"
-                        android:hint="Price"
                         android:ems="8"
-                        android:textSize="16sp"
-                        android:layout_margin="5dp"
+                        android:enabled="false"
+                        android:hint="Price"
                         android:inputType="number"
-                        android:textAlignment="center" />
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <!--    Total Price-->
                     <EditText
                         android:id="@+id/txtTotalPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:enabled="false"
-                        android:textSize="16sp"
                         android:layout_margin="5dp"
-                        android:textColor="@color/black"
-                        android:ems="8"
-                        android:inputType="number"
-                        android:drawableStart="@drawable/iconprice"
+                        android:layout_weight="1"
                         android:background="@drawable/edit_text_border"
+                        android:drawableStart="@drawable/iconprice"
+                        android:ems="8"
+                        android:enabled="false"
                         android:hint="Total Price"
-                        android:textAlignment="center" />
+                        android:inputType="number"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
 
                     <!--  Buttons  -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
+                        android:layout_weight="1"
                         android:gravity="center"
-                        android:layout_weight="1">
+                        android:orientation="horizontal">
 
                         <Button
+                            android:id="@+id/btnCart"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:background="@drawable/button1"
                             android:text="Add"
-                            android:layout_margin="5dp"
                             android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:background="@drawable/button1"
-                            android:id="@+id/btnCart"/>
+                            android:textStyle="bold" />
 
                         <Button
+                            android:id="@+id/btnOrders"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Cart"
                             android:layout_margin="5dp"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
                             android:background="@drawable/button1"
-                            android:id="@+id/btnOrders"/>
+                            android:text="Cart"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

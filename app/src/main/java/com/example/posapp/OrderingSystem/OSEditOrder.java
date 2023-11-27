@@ -166,9 +166,9 @@ public class OSEditOrder extends AppCompatActivity {
             Object[] bindArgs = {quantity, id};
             db.execSQL(updateQuantity, bindArgs);
             //Delete
-            String sql = "DELETE FROM cartlist WHERE id = ?";
+            String sql = "DELETE FROM cartlist WHERE prodName = ?";
             SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1, id);
+            statement.bindString(1, product1);
             statement.execute();
             Toast.makeText(this, "Cart Item Deleted", Toast.LENGTH_LONG).show();
             Intent i = new Intent(OSEditOrder.this, osCart.class);
