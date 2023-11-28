@@ -1,5 +1,5 @@
 <!-- activity_main.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -25,23 +25,110 @@
             android:padding="16dp">
 
             <EditText
-                android:id="@+id/editTextK"
+                android:id="@+id/textViewResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:background="@drawable/edit_text_border"
-                android:textSize="16sp"
-                android:hint="Enter K value"/>
+                android:paddingTop="16dp"
+                android:text="Result will be displayed here"/>
 
-            <Button
-                android:id="@+id/buttonRunKMeans"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button1"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_margin="5dp"
-                android:text="Run K-Means"/>
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnDay0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:text="Day 0"/>
+
+                <Button
+                    android:id="@+id/btnDay1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:text="Day 1"/>
+
+                <Button
+                    android:id="@+id/btnDay2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:text="Day 2"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnDay3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:text="Day 3"/>
+
+                <Button
+                    android:id="@+id/btnDay4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:text="Day 4"/>
+
+                <Button
+                    android:id="@+id/btnDay5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button1"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp"
+                    android:text="Day 5"/>
+            </LinearLayout>
+
+             <LinearLayout
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal">
+
+                 <Button
+                     android:id="@+id/btnDay6"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/button1"
+                     android:textSize="16sp"
+                     android:textStyle="bold"
+                     android:layout_margin="5dp"
+                     android:padding="5dp"
+                     android:text="Current Day"/>
+
+                 <Button
+                     android:id="@+id/btnPast"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/button1"
+                     android:textSize="16sp"
+                     android:textStyle="bold"
+                     android:layout_margin="5dp"
+                     android:padding="5dp"
+                     android:text="Past 7 Days"/>
+
+             </LinearLayout>
 
             <Button
                 android:id="@+id/btnBack"
@@ -52,14 +139,7 @@
                 android:textStyle="bold"
                 android:text="Back"/>
 
-            <EditText
-                android:id="@+id/textViewResult"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                android:text="Result will be displayed here"/>
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-</RelativeLayout>
+</ScrollView>

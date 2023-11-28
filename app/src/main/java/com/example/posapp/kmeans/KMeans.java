@@ -31,10 +31,13 @@ import java.util.Random;
 
 public class KMeans extends AppCompatActivity {
 
-    private EditText editTextK, textViewResult;
-    private Button buttonRunKMeans, btnBack;
+    private EditText textViewResult;
+    private Button btnBack, btnDay0, btnDay1, btnDay2, btnDay3, btnDay4, btnDay5, btnDay6, btnPast;
     long currentDay, currentDayE;
-    ArrayList<Long> days = new ArrayList<Long>();
+    ArrayList<Long> days = new ArrayList<Long>();//0 day to 7th day
+    long startDate, endDate;
+    int ctr = 0;
+    boolean past7Days = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,24 +45,16 @@ public class KMeans extends AppCompatActivity {
         setContentView(R.layout.activity_kmeans_ui);
 
         // Initialize UI components
-        editTextK = findViewById(R.id.editTextK);
-        buttonRunKMeans = findViewById(R.id.buttonRunKMeans);
         textViewResult = findViewById(R.id.textViewResult);
         btnBack = findViewById(R.id.btnBack);
-
-        // Set click listener for the button
-        buttonRunKMeans.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(editTextK.getText().toString().trim().equals("")){
-                    Toast.makeText(KMeans.this, "K-Means Value Cannot be Blank", Toast.LENGTH_SHORT).show();
-                }else if(editTextK.getText().toString().equals("0")){
-                    Toast.makeText(KMeans.this, "K-Value Cannot be 0", Toast.LENGTH_SHORT).show();
-                }else{
-                    runKMeans();
-                }
-            }
-        });
+        btnDay0 = findViewById(R.id.btnDay0);
+        btnDay1 = findViewById(R.id.btnDay1);
+        btnDay2 = findViewById(R.id.btnDay2);
+        btnDay3 = findViewById(R.id.btnDay3);
+        btnDay4 = findViewById(R.id.btnDay4);
+        btnDay5 = findViewById(R.id.btnDay5);
+        btnDay6 = findViewById(R.id.btnDay6);
+        btnPast = findViewById(R.id.btnPast);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,46 +63,131 @@ public class KMeans extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        Date c = Calendar.getInstance().getTime();
-        System.out.println("Current time => " + c);
 
+        btnDay0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctr = 0;
+                runKMeans();
+            }
+        });
 
-        //This is for getting the daily date, convert to int then minus 6 days from current return
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
-        String formattedDate = df.format(c);
+        btnDay1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctr = 2;
+                runKMeans();
+            }
+        });
 
-        Toast.makeText(this, String.valueOf(formattedDate), Toast.LENGTH_SHORT).show();
+        btnDay2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctr = 4;
+                runKMeans();
+            }
+        });
+
+        btnDay3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctr = 6;
+                runKMeans();
+            }
+        });
+
+        btnDay4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctr = 8;
+                runKMeans();
+            }
+        });
+
+        btnDay5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctr = 10;
+                runKMeans();
+            }
+        });
+
+        btnDay6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ctr = 12;
+                runKMeans();
+            }
+        });
+
+        btnPast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                past7Days = true;
+                runKMeans();
+            }
+        });
+
         getDates();
+
+        //Autostart kmeans
+        ctr = 12;
+        runKMeans();
     }
 
     private void runKMeans() {
-        // Get the K value from the EditText
-        String kText = editTextK.getText().toString().trim();
-        if (TextUtils.isEmpty(kText)) {
-            Toast.makeText(this, "Please enter a valid K value", Toast.LENGTH_SHORT).show();
+        int k = 1;
+        if(past7Days == true){
+            k = 7;
+        }
+        // Call your k-means clustering method with the provided K value
+        List<Transaction> transactions = createDummyData();
+
+        // Check if transactions are available
+        if (transactions == null || transactions.isEmpty()) {
+            // Handle the case where transactions are null or empty
+            textViewResult.setText("Error: No transactions available for clustering.");
             return;
         }
-        int k = 7;
-        // Call your k-means clustering method with the provided K value
+
         List<Cluster> clusters = performKMeans(k);
-        // Display the result in the TextView
-
-        //textViewResult.setText("K-Means Result:" + clusters.toString());
-        // Display the result in the TextView
         StringBuilder resultText = new StringBuilder("K-Means Result:\n");
+        if(past7Days == false){
+            for (int i = 0; i < k; i++) {
+                Cluster cluster = clusters.get(i);
 
-        for (int i = 0; i < k; i++) {
-            Cluster cluster = clusters.get(i);
+                SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy", Locale.getDefault());
+                String formattedDate = df.format(days.get(ctr));
 
-            // Append information about the cluster to the resultText
-            resultText.append("Cluster ").append(i).append("\n");
-            resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
-            resultText.append("Average Quantity: ").append(cluster.getAverageQuantity()).append("\n");
-            resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
-            resultText.append("Most Bought Product(s): ").append(cluster.getMostBoughtProducts()).append("\n");
-            resultText.append("\n");
+                // Append information about the cluster to the resultText
+//                resultText.append("Cluster ").append(i + 1).append("\n");
+                resultText.append("Date: ").append(formattedDate).append("\n");
+                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
+                resultText.append("Average Quantity: ").append(cluster.getAverageQuantity()).append("\n");
+                resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
+                resultText.append("Most Bought Product(s): ").append(cluster.getMostBoughtProducts()).append("\n");
+                resultText.append("\n");
+            }
+        }else{
+            for (int i = 0; i < k; i++) {
+                Cluster cluster = clusters.get(i);
+
+                SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy", Locale.getDefault());
+                String formattedDate = df.format(days.get(i*2));
+
+                // Append information about the cluster to the resultText
+                resultText.append("Cluster ").append(i + 1).append("\n");
+                resultText.append("Date: ").append(formattedDate).append("\n");
+                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
+                resultText.append("Average Quantity: ").append(cluster.getAverageQuantity()).append("\n");
+                resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
+                resultText.append("Most Bought Product(s): ").append(cluster.getMostBoughtProducts()).append("\n");
+                resultText.append("\n");
+            }
         }
+
         textViewResult.setText(resultText.toString());
+        past7Days = false;
     }
 
     private List<Cluster> performKMeans(int k) {
@@ -375,20 +455,34 @@ public class KMeans extends AppCompatActivity {
 
     private List<Transaction> createDummyData() {
         List<Transaction> transactions = new ArrayList<>();
-
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        String query = "SELECT * FROM transactions";
-        Cursor cursor = db.rawQuery(query, null);
 
-        int prodName = cursor.getColumnIndex("prodName");
-        int quantity = cursor.getColumnIndex("quantity");
-        int priceIndex = cursor.getColumnIndex("price");
+        if(past7Days == false){
+            startDate = days.get(ctr);
+            endDate = days.get(ctr+1);
+            String query = "SELECT * FROM transactions WHERE time BETWEEN " + startDate + " AND " + endDate;
+            Cursor cursor = db.rawQuery(query, null);
 
-        while(cursor.moveToNext()) {
-            transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex)));
+            int prodName = cursor.getColumnIndex("prodName");
+            int quantity = cursor.getColumnIndex("quantity");
+            int priceIndex = cursor.getColumnIndex("price");
+
+            while(cursor.moveToNext()) {
+                transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex)));
+            }
+        }else{
+            String query = "SELECT * FROM transactions WHERE time BETWEEN " + days.get(0) + " AND " + days.get(13);
+            Cursor cursor = db.rawQuery(query, null);
+
+            int prodName = cursor.getColumnIndex("prodName");
+            int quantity = cursor.getColumnIndex("quantity");
+            int priceIndex = cursor.getColumnIndex("price");
+
+            while(cursor.moveToNext()) {
+                transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex)));
+            }
         }
 
-        cursor.close();
         db.close();
         return transactions;
     }
