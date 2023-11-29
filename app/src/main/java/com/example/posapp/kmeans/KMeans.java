@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.posapp.MainScreen;
 import com.example.posapp.R;
@@ -67,6 +69,9 @@ public class KMeans extends AppCompatActivity {
         btnDay0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnDay0.setBackgroundResource(R.drawable.button1dark);
+                btnDay0.setEnabled(false);
                 ctr = 0;
                 runKMeans();
             }
@@ -75,6 +80,9 @@ public class KMeans extends AppCompatActivity {
         btnDay1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnDay1.setBackgroundResource(R.drawable.button1dark);
+                btnDay1.setEnabled(false);
                 ctr = 2;
                 runKMeans();
             }
@@ -83,6 +91,9 @@ public class KMeans extends AppCompatActivity {
         btnDay2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnDay2.setBackgroundResource(R.drawable.button1dark);
+                btnDay2.setEnabled(false);
                 ctr = 4;
                 runKMeans();
             }
@@ -91,6 +102,9 @@ public class KMeans extends AppCompatActivity {
         btnDay3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnDay3.setBackgroundResource(R.drawable.button1dark);
+                btnDay3.setEnabled(false);
                 ctr = 6;
                 runKMeans();
             }
@@ -99,6 +113,9 @@ public class KMeans extends AppCompatActivity {
         btnDay4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnDay4.setBackgroundResource(R.drawable.button1dark);
+                btnDay4.setEnabled(false);
                 ctr = 8;
                 runKMeans();
             }
@@ -107,6 +124,9 @@ public class KMeans extends AppCompatActivity {
         btnDay5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnDay5.setBackgroundResource(R.drawable.button1dark);
+                btnDay5.setEnabled(false);
                 ctr = 10;
                 runKMeans();
             }
@@ -115,6 +135,9 @@ public class KMeans extends AppCompatActivity {
         btnDay6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnDay6.setBackgroundResource(R.drawable.button1dark);
+                btnDay6.setEnabled(false);
                 ctr = 12;
                 runKMeans();
             }
@@ -123,6 +146,9 @@ public class KMeans extends AppCompatActivity {
         btnPast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                refreshButtons();
+                btnPast.setBackgroundResource(R.drawable.button1dark);
+                btnPast.setEnabled(false);
                 past7Days = true;
                 runKMeans();
             }
@@ -527,5 +553,24 @@ public class KMeans extends AppCompatActivity {
             System.out.println("Day " + (i / 2 + 1) + " Start: " + new Date(days.get(i)));
             System.out.println("Day " + (i / 2 + 1) + " End: " + new Date(days.get(i + 1)));
         }
+    }
+
+    public void refreshButtons(){
+        btnDay0.setBackgroundResource(R.drawable.button1);
+        btnDay0.setEnabled(true);
+        btnDay1.setBackgroundResource(R.drawable.button1);
+        btnDay1.setEnabled(true);
+        btnDay2.setBackgroundResource(R.drawable.button1);
+        btnDay2.setEnabled(true);
+        btnDay3.setBackgroundResource(R.drawable.button1);
+        btnDay3.setEnabled(true);
+        btnDay4.setBackgroundResource(R.drawable.button1);
+        btnDay4.setEnabled(true);
+        btnDay5.setBackgroundResource(R.drawable.button1);
+        btnDay5.setEnabled(true);
+        btnDay6.setBackgroundResource(R.drawable.button1);
+        btnDay6.setEnabled(true);
+        btnPast.setBackgroundResource(R.drawable.button1);
+        btnPast.setEnabled(true);
     }
 }
