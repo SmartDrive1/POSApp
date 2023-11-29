@@ -161,8 +161,8 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 cursor.close();
                 db.close();
             }
-            }catch (Exception e) {
-                Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
+        }catch (Exception e) {
+                Toast.makeText(this, "No Transactions", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -323,8 +323,8 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)");
-            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + " GROUP BY transID";
+            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
+            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + " GROUP BY transID ORDER BY time ASC";
             Cursor cursor = db.rawQuery(query, null);
 
             int id = cursor.getColumnIndex("transID");
@@ -346,7 +346,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 recyclerView.setAdapter(transAdapter);
             }
         }catch (Exception e) {
-            Toast.makeText(this, "Database Error", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No Transactions", Toast.LENGTH_LONG).show();
         }
     }
 

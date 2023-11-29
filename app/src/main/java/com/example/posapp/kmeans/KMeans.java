@@ -188,10 +188,10 @@ public class KMeans extends AppCompatActivity {
                 // Append information about the cluster to the resultText
 //                resultText.append("Cluster ").append(i + 1).append("\n");
                 resultText.append("Date: ").append(formattedDate).append("\n");
-                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
-                resultText.append("Average Quantity: ").append(cluster.getAverageQuantity()).append("\n");
+//                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
+                resultText.append("Average Items Bought: ").append(cluster.getAverageQuantity()).append("\n");
                 resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
-                resultText.append("Most Bought Product(s): ").append(cluster.getMostBoughtProducts()).append("\n");
+                resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts()).append("\n");
                 resultText.append("\n");
             }
         }else{
@@ -202,12 +202,12 @@ public class KMeans extends AppCompatActivity {
                 String formattedDate = df.format(days.get(i*2));
 
                 // Append information about the cluster to the resultText
-                resultText.append("Cluster ").append(i + 1).append("\n");
+//                resultText.append("Cluster ").append(i + 1).append("\n");
                 resultText.append("Date: ").append(formattedDate).append("\n");
-                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
-                resultText.append("Average Quantity: ").append(cluster.getAverageQuantity()).append("\n");
+//                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
+                resultText.append("Average Items Bought: ").append(cluster.getAverageQuantity()).append("\n");
                 resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
-                resultText.append("Most Bought Product(s): ").append(cluster.getMostBoughtProducts()).append("\n");
+                resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts()).append("\n");
                 resultText.append("\n");
             }
         }
@@ -229,8 +229,8 @@ public class KMeans extends AppCompatActivity {
 
             System.out.println("Cluster " + i);
             System.out.println("Centroid: " + Arrays.toString(cluster.getCentroid()));
-            System.out.println("Average Quantity: " + averageQuantity);
-            System.out.println("Most Bought Product: " + mostBoughtProduct);
+            System.out.println("Average Items Bought: " + averageQuantity);
+            System.out.println("Compatible Products: " + mostBoughtProduct);
             System.out.println("Assigned Transactions: " + cluster.getTransactions());
             System.out.println();
         }
@@ -371,7 +371,7 @@ public class KMeans extends AppCompatActivity {
 
         public float getAveragePrice() {
             if (transactions.isEmpty()) {
-                return 0.0f; // Return 0 if there are no transactions in the cluster
+                return 0.00f; // Return 0.00 if there are no transactions in the cluster
             }
 
             double totalPrice = 0;
@@ -379,7 +379,13 @@ public class KMeans extends AppCompatActivity {
                 totalPrice += transaction.getPrice();
             }
 
-            return (float) (totalPrice / transactions.size());
+            // Format the result to have two decimal places, adding a trailing zero if needed
+            String formattedResult = String.format("%.2f", totalPrice / transactions.size());
+            if (formattedResult.endsWith(".0")) {
+                formattedResult += "0";
+            }
+
+            return Float.parseFloat(formattedResult);
         }
 
         public List<Transaction> getTransactions() {
@@ -406,15 +412,15 @@ public class KMeans extends AppCompatActivity {
             return builder.toString();
         }
 
-        public float getAverageQuantity() {
+        public int getAverageQuantity() {
             if (transactions.isEmpty()) {
-                return 0.0f; // Return 0 if there are no transactions in the cluster
+                return 0; // Return 0 if there are no transactions in the cluster
             }
             float totalQuantity = 0;
             for (Transaction transaction : transactions) {
                 totalQuantity += transaction.getQuantity();
             }
-            return totalQuantity / transactions.size();
+            return Math.round(totalQuantity / transactions.size());
         }
         @SuppressLint("NewApi")
         public List<String> getMostBoughtProducts() {
@@ -438,9 +444,13 @@ public class KMeans extends AppCompatActivity {
             // Find all products with the maximum count
             List<String> mostBoughtProducts = new ArrayList<>();
 
+            int i = 0;
             for (Map.Entry<String, Integer> entry : productCounts.entrySet()) {
                 if (entry.getValue() == maxCount) {
-                    mostBoughtProducts.add(entry.getKey());
+                    if(i != 2){
+                        mostBoughtProducts.add(entry.getKey());
+                        i++;
+                    }
                 }
             }
             return mostBoughtProducts;

@@ -103,7 +103,7 @@ public class prodAdd extends AppCompatActivity {
         getMax();
         max_id += 1;
         if (prodName.equals("")) {
-            Toast.makeText(this, "Product Name or Price is Blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Product Name", Toast.LENGTH_LONG).show();
         } else if (price.equals("")) {
             Toast.makeText(this, "Product Price is Blank", Toast.LENGTH_LONG).show();
         } else if (prodName.equals("None") || prodName.equals("none")) {

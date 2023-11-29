@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -146,6 +147,7 @@ public class OSPayment extends AppCompatActivity {
             db.close();
 
         } catch (Exception e) {
+            e.printStackTrace();
             Toast.makeText(this, "Failed to transfer data", Toast.LENGTH_LONG).show();
         }
     }

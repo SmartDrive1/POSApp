@@ -116,8 +116,8 @@ public class userAdd extends AppCompatActivity {
                 String spTxt = spinner.getSelectedItem().toString();
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
                 db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR, userImg BLOB)"); //Create database if non-existent, to avoid crash
-
                 Cursor c = db.rawQuery("SELECT * FROM users WHERE userName =?", new String[]{uName1});
+
                 if(c.getCount() > 0){
                     Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
                 }else{
