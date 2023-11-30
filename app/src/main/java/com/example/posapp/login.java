@@ -93,7 +93,7 @@ public class login extends AppCompatActivity {
                 transactionValues.put("transID", transID);
                 transactionValues.put("prodName", randomProdName);
                 transactionValues.put("quantity", randomQuantity);
-                transactionValues.put("price", randomPrice);
+                transactionValues.put("price", randomPrice*randomQuantity);
                 transactionValues.put("category", getCategoryByProduct(db, randomProdName));
                 transactionValues.put("time", x);
 

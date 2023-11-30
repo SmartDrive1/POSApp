@@ -42,7 +42,7 @@ public class KMeans extends AppCompatActivity {
 
     private TextView textViewResult;
     private Button btnBack, btnDay0, btnDay1, btnDay2, btnDay3, btnDay4, btnDay5, btnDay6;
-//  private Button btnPast;
+    //  private Button btnPast;
     BarChart barChart;
     long currentDay, currentDayE;
     ArrayList<Long> days = new ArrayList<Long>();//0 day to 7th day
@@ -193,7 +193,7 @@ public class KMeans extends AppCompatActivity {
         // Check if transactions are available
         if (transactions == null || transactions.isEmpty()) {
             // Handle the case where transactions are null or empty
-            textViewResult.setText("Error: No transactions available for clustering.");
+            textViewResult.setText("No transactions today for clustering");
             return;
         }
 
@@ -210,8 +210,8 @@ public class KMeans extends AppCompatActivity {
 //                resultText.append("Cluster ").append(i + 1).append("\n");
                 resultText.append("Date: ").append(formattedDate).append("\n");
 //                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
-                resultText.append("Average Items Bought: ").append(cluster.getAverageQuantity()).append("\n");
-                resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
+                resultText.append("Average Items Bought: ").append(cluster.getTotalQuantity()).append("\n");
+                resultText.append("Total Sales: ").append(cluster.getTotalPrice()).append("\n");
                 resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts()).append("\n");
                 resultText.append("\n");
             }
@@ -223,8 +223,8 @@ public class KMeans extends AppCompatActivity {
                 String formattedDate = df.format(days.get(i*2));
 
                 resultText.append("Date: ").append(formattedDate).append("\n");
-                resultText.append("Average Items Bought: ").append(cluster.getAverageQuantity()).append("\n");
-                resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
+                resultText.append("Average Items Bought: ").append(cluster.getTotalQuantity()).append("\n");
+                resultText.append("Total Sales: ").append(cluster.getTotalPrice()).append("\n");
                 resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts()).append("\n");
                 resultText.append("\n");
             }
@@ -242,13 +242,13 @@ public class KMeans extends AppCompatActivity {
         // Print the results
         for (int i = 0; i < k; i++) {
             Cluster cluster = clusters.get(i);
-            float averageQuantity = cluster.getAverageQuantity();
+            float averageQuantity = cluster.getTotalQuantity();
             String mostBoughtProduct = String.valueOf(cluster.getMostBoughtProducts());
 
             System.out.println("Cluster " + i);
             System.out.println("Centroid: " + Arrays.toString(cluster.getCentroid()));
             System.out.println("Average Items Bought: " + averageQuantity);
-            System.out.println("Average Price for Day " + i + " " + cluster.getAveragePrice());
+            System.out.println("Total Sale for Day " + i + " " + cluster.getTotalPrice());
             System.out.println("Compatible Products: " + mostBoughtProduct);
             System.out.println("Assigned Transactions: " + cluster.getTransactions());
             System.out.println("\n");
@@ -388,7 +388,7 @@ public class KMeans extends AppCompatActivity {
             return centroid;
         }
 
-        public float getAveragePrice() {
+        public float getTotalPrice() {
             if (transactions.isEmpty()) {
                 return 0.00f; // Return 0.00 if there are no transactions in the cluster
             }
@@ -398,13 +398,7 @@ public class KMeans extends AppCompatActivity {
                 totalPrice += transaction.getPrice();
             }
 
-            // Format the result to have two decimal places, adding a trailing zero if needed
-            String formattedResult = String.format("%.2f", totalPrice / transactions.size());
-            if (formattedResult.endsWith(".0")) {
-                formattedResult += "0";
-            }
-
-            return Float.parseFloat(formattedResult);
+            return (float) totalPrice;
         }
 
         public List<Transaction> getTransactions() {
@@ -431,15 +425,17 @@ public class KMeans extends AppCompatActivity {
             return builder.toString();
         }
 
-        public int getAverageQuantity() {
+        public int getTotalQuantity() {
             if (transactions.isEmpty()) {
                 return 0; // Return 0 if there are no transactions in the cluster
             }
+
             float totalQuantity = 0;
             for (Transaction transaction : transactions) {
                 totalQuantity += transaction.getQuantity();
             }
-            return Math.round(totalQuantity / transactions.size());
+
+            return Math.round(totalQuantity);
         }
 
         @SuppressLint("NewApi")
@@ -649,10 +645,13 @@ public class KMeans extends AppCompatActivity {
             barEntriesArrayList.add(new BarEntry(j+1, (float) totalPrice));
             System.out.println("Day " + j + ": " + totalPrice);
         }
-        barDataSet = new BarDataSet(barEntriesArrayList, "Data Analysis");
+        barDataSet = new BarDataSet(barEntriesArrayList, "Daily Income");
         barData = new BarData(barDataSet);
         barChart.setData(barData);
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         barDataSet.setValueTextColor(Color.BLACK);
+        barChart.getDescription().setEnabled(false);
+        barChart.setClickable(false);
+        barChart.setEnabled(false);
     }
 }
