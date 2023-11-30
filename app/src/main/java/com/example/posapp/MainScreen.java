@@ -22,16 +22,16 @@ public class MainScreen extends AppCompatActivity {
         btnAnalysis = findViewById(R.id.btnAnalysis);
         btnManagement = findViewById(R.id.btnManagement);
         btnOrderingSystem = findViewById(R.id.btnOrderingSystem);
-        btnAdmin = findViewById(R.id.btnAdmin); //Remove This
+//        btnAdmin = findViewById(R.id.btnAdmin); //Remove This
 
 
-        btnAdmin.setOnClickListener(new View.OnClickListener() { //Remove This
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainScreen.this, AaUriButton.class);
-                startActivity(i);
-            }
-        });
+//        btnAdmin.setOnClickListener(new View.OnClickListener() { //Remove This
+//            @Override
+//            public void onClick(View view) {
+//                Intent i = new Intent(MainScreen.this, AaUriButton.class);
+//                startActivity(i);
+//            }
+//        });
 
         btnAnalysis.setOnClickListener(new View.OnClickListener() {
             @Override

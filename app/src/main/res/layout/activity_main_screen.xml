@@ -132,15 +132,19 @@
                 android:maxLines="1"/>
         </LinearLayout>
     </LinearLayout>
-    <Button
-        android:layout_width="120dp"
-        android:layout_height="60dp"
-        android:background="@drawable/button1"
-        android:autoSizeTextType="uniform"
-        android:autoSizeMinTextSize="1sp"
-        android:autoSizeMaxTextSize="30sp"
-        android:autoSizeStepGranularity="1sp"
-        android:text="(Si Uri lang pwede pumindot)"
-        android:id="@+id/btnAdmin"
-        android:layout_margin="5dp"/>
+
+<!--    <Button-->
+<!--        android:id="@+id/btnAdmin"-->
+<!--        android:layout_width="120dp"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_marginStart="5dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginEnd="5dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        android:autoSizeMaxTextSize="30sp"-->
+<!--        android:autoSizeMinTextSize="1sp"-->
+<!--        android:autoSizeStepGranularity="1sp"-->
+<!--        android:autoSizeTextType="uniform"-->
+<!--        android:background="@drawable/button1"-->
+<!--        android:text="(Si Uri lang pwede pumindot)" />-->
 </RelativeLayout>

@@ -51,7 +51,7 @@ public class KMeans extends AppCompatActivity {
     boolean past7Days = false;
     BarData barData;
 
-    // variable for our bar data set.
+    // variable for bar data set.
     BarDataSet barDataSet;
 
     // array list for storing entries.
@@ -651,7 +651,5 @@ public class KMeans extends AppCompatActivity {
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         barDataSet.setValueTextColor(Color.BLACK);
         barChart.getDescription().setEnabled(false);
-        barChart.setClickable(false);
-        barChart.setEnabled(false);
     }
 }
