@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/wave1bg"
-    android:fillViewport="true"
     tools:context=".kmeans.KMeans">
 
         <androidx.cardview.widget.CardView
@@ -13,8 +12,7 @@
             android:layout_height="wrap_content"
             app:cardElevation="5dp"
             app:cardCornerRadius="30dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="20sp">
+            android:layout_margin="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -22,7 +20,8 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:weightSum="100"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
