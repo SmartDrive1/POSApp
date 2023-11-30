@@ -10,15 +10,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.posapp.MainScreen;
 import com.example.posapp.R;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,13 +40,21 @@ import java.util.Random;
 
 public class KMeans extends AppCompatActivity {
 
-    private EditText textViewResult;
+    private TextView textViewResult;
     private Button btnBack, btnDay0, btnDay1, btnDay2, btnDay3, btnDay4, btnDay5, btnDay6, btnPast;
+    BarChart barChart;
     long currentDay, currentDayE;
     ArrayList<Long> days = new ArrayList<Long>();//0 day to 7th day
     long startDate, endDate;
     int ctr = 0;
     boolean past7Days = false;
+    BarData barData;
+
+    // variable for our bar data set.
+    BarDataSet barDataSet;
+
+    // array list for storing entries.
+    ArrayList barEntriesArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +72,9 @@ public class KMeans extends AppCompatActivity {
         btnDay5 = findViewById(R.id.btnDay5);
         btnDay6 = findViewById(R.id.btnDay6);
         btnPast = findViewById(R.id.btnPast);
+        barChart = findViewById(R.id.barChart);
+        barChart.setEnabled(false);
+        barChart.setClickable(false);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,12 +177,14 @@ public class KMeans extends AppCompatActivity {
         //Autostart kmeans
         ctr = 12;
         runKMeans();
+        getDailyTotal();
     }
 
     private void runKMeans() {
         int k = 1;
+        barEntriesArrayList = new ArrayList<>();
         if(past7Days == true){
-            k = 7;
+            k = 1;
         }
         // Call your k-means clustering method with the provided K value
         List<Transaction> transactions = createDummyData();
@@ -201,10 +221,7 @@ public class KMeans extends AppCompatActivity {
                 SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy", Locale.getDefault());
                 String formattedDate = df.format(days.get(i*2));
 
-                // Append information about the cluster to the resultText
-//                resultText.append("Cluster ").append(i + 1).append("\n");
                 resultText.append("Date: ").append(formattedDate).append("\n");
-//                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
                 resultText.append("Average Items Bought: ").append(cluster.getAverageQuantity()).append("\n");
                 resultText.append("Average Price: ").append(cluster.getAveragePrice()).append("\n");
                 resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts()).append("\n");
@@ -230,9 +247,10 @@ public class KMeans extends AppCompatActivity {
             System.out.println("Cluster " + i);
             System.out.println("Centroid: " + Arrays.toString(cluster.getCentroid()));
             System.out.println("Average Items Bought: " + averageQuantity);
+            System.out.println("Average Price for Day " + i + " " + cluster.getAveragePrice());
             System.out.println("Compatible Products: " + mostBoughtProduct);
             System.out.println("Assigned Transactions: " + cluster.getTransactions());
-            System.out.println();
+            System.out.println("\n");
         }
         textViewResult.setText("K-Means Result:" + clusters.toString());
         return clusters;
@@ -253,7 +271,7 @@ public class KMeans extends AppCompatActivity {
 
     public List<Cluster> predict(final int k, final List<Transaction> transactions) {
         checkDataSetSanity(transactions);
-        int dimension = 4; // Assuming 2 dimensions: product name and quantity
+        int dimension = 3; // Assuming 2 dimensions: product name and quantity
         final List<Cluster> clusters = new ArrayList<>();
 
         for (int i = 0; i < k; i++) {
@@ -422,6 +440,7 @@ public class KMeans extends AppCompatActivity {
             }
             return Math.round(totalQuantity / transactions.size());
         }
+
         @SuppressLint("NewApi")
         public List<String> getMostBoughtProducts() {
             Map<String, Integer> productCounts = new HashMap<>();
@@ -582,5 +601,57 @@ public class KMeans extends AppCompatActivity {
         btnDay6.setEnabled(true);
         btnPast.setBackgroundResource(R.drawable.button1);
         btnPast.setEnabled(true);
+    }
+
+    public void getDailyTotal(){
+        Date currentDate = new Date();
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        currentDay = calendar.getTimeInMillis();
+        System.out.println("Current date and time as int (set to 00:00:00): " + currentDay);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        currentDayE = calendar.getTimeInMillis();
+        System.out.println("Current date and time as int (set to 23:59:59): " + currentDayE);
+
+        currentDay = currentDay - 518400000;
+        currentDayE = currentDayE - 518400000;//-6 days from current
+        for (int j = 0; j < 7; j++) {
+            double totalPrice = 0;
+
+            // iterate through the date range for each day
+            long startDate = days.get(j * 2);
+            long endDate = days.get(j * 2 + 1);
+
+            String query = "SELECT * FROM transactions WHERE time BETWEEN " + startDate + " AND " + endDate;
+            Cursor cursor = db.rawQuery(query, null);
+            int priceIndex = cursor.getColumnIndex("price");
+
+            if (cursor.moveToFirst()) {
+                do {
+                    totalPrice += cursor.getDouble(priceIndex);
+                } while (cursor.moveToNext());
+            }
+
+            cursor.close(); // Close the cursor after retrieving data
+
+            barEntriesArrayList.add(new BarEntry(j, (float) totalPrice));
+            System.out.println("Day " + j + ": " + totalPrice);
+        }
+        barDataSet = new BarDataSet(barEntriesArrayList, "Geeks for Geeks");
+        barData = new BarData(barDataSet);
+        barChart.setData(barData);
+        barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        barDataSet.setValueTextColor(Color.BLACK);
     }
 }

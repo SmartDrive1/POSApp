@@ -30,25 +30,36 @@
                     android:layout_height="match_parent"
                     android:layout_weight="85"
                     android:orientation="vertical"
+                    android:weightSum="100"
                     android:gravity="center"
                     android:padding="16dp">
 
-                    <EditText
+                    <com.github.mikephil.charting.charts.BarChart
+                        android:id="@+id/barChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="43.5"/>
+
+                    <TextView
                         android:id="@+id/textViewResult"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_weight="43.5"
                         android:maxLines="8"
                         android:scrollbars="vertical"
                         android:paddingTop="16dp"
                         android:text="Result will be displayed here"/>
 
+
+
                     <Button
                         android:id="@+id/btnBack"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="0dp"
                         android:background="@drawable/button1"
                         android:textSize="16sp"
                         android:textStyle="bold"
+                        android:layout_weight="13"
                         android:text="Back"/>
                 </LinearLayout>
 
