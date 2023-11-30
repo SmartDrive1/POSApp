@@ -41,7 +41,8 @@ import java.util.Random;
 public class KMeans extends AppCompatActivity {
 
     private TextView textViewResult;
-    private Button btnBack, btnDay0, btnDay1, btnDay2, btnDay3, btnDay4, btnDay5, btnDay6, btnPast;
+    private Button btnBack, btnDay0, btnDay1, btnDay2, btnDay3, btnDay4, btnDay5, btnDay6;
+//  private Button btnPast;
     BarChart barChart;
     long currentDay, currentDayE;
     ArrayList<Long> days = new ArrayList<Long>();//0 day to 7th day
@@ -71,7 +72,7 @@ public class KMeans extends AppCompatActivity {
         btnDay4 = findViewById(R.id.btnDay4);
         btnDay5 = findViewById(R.id.btnDay5);
         btnDay6 = findViewById(R.id.btnDay6);
-        btnPast = findViewById(R.id.btnPast);
+//        btnPast = findViewById(R.id.btnPast);
         barChart = findViewById(R.id.barChart);
         barChart.setEnabled(false);
         barChart.setClickable(false);
@@ -161,7 +162,7 @@ public class KMeans extends AppCompatActivity {
             }
         });
 
-        btnPast.setOnClickListener(new View.OnClickListener() {
+        /*btnPast.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 refreshButtons();
@@ -170,7 +171,7 @@ public class KMeans extends AppCompatActivity {
                 past7Days = true;
                 runKMeans();
             }
-        });
+        });*/
 
         getDates();
 
@@ -599,8 +600,8 @@ public class KMeans extends AppCompatActivity {
         btnDay5.setEnabled(true);
         btnDay6.setBackgroundResource(R.drawable.button1);
         btnDay6.setEnabled(true);
-        btnPast.setBackgroundResource(R.drawable.button1);
-        btnPast.setEnabled(true);
+//        btnPast.setBackgroundResource(R.drawable.button1);
+//        btnPast.setEnabled(true);
     }
 
     public void getDailyTotal(){
@@ -645,10 +646,10 @@ public class KMeans extends AppCompatActivity {
 
             cursor.close(); // Close the cursor after retrieving data
 
-            barEntriesArrayList.add(new BarEntry(j, (float) totalPrice));
+            barEntriesArrayList.add(new BarEntry(j+1, (float) totalPrice));
             System.out.println("Day " + j + ": " + totalPrice);
         }
-        barDataSet = new BarDataSet(barEntriesArrayList, "Geeks for Geeks");
+        barDataSet = new BarDataSet(barEntriesArrayList, "Data Analysis");
         barData = new BarData(barDataSet);
         barChart.setData(barData);
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);

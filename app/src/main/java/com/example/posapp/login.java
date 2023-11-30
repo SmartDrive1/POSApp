@@ -81,7 +81,7 @@ public class login extends AppCompatActivity {
             editor.apply();
 
             Random random = new Random();
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 100; i++) {
                 int transID = i;
                 int randomProductIndex = random.nextInt(18) + 1; // Random product ID between 1 and 18
                 String randomProdName = getProductById(db, randomProductIndex);
@@ -333,15 +333,6 @@ public class login extends AppCompatActivity {
         trans2.put("price", 150.0); // Use the correct column name for price
         trans2.put("time", System.currentTimeMillis()); // Use the current time as an example
         db.insert("transactions", null, trans2);
-    }
-
-    private void insertProduct(SQLiteDatabase db, String product, String category, int quantity, int prodPrice) {
-        ContentValues productValues = new ContentValues();
-        productValues.put("product", product);
-        productValues.put("category", category);
-        productValues.put("quantity", quantity);
-        productValues.put("prodPrice", prodPrice);
-        db.insert("products", null, productValues);
     }
 
     // Helper method to get product name by ID

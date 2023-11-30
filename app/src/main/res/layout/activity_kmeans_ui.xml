@@ -48,6 +48,8 @@
                         android:maxLines="8"
                         android:scrollbars="vertical"
                         android:paddingTop="16dp"
+                        android:textSize="16sp"
+                        android:textColor="@color/black"
                         android:text="Result will be displayed here"/>
 
 
@@ -139,7 +141,7 @@
                         android:textStyle="bold"
                         android:layout_margin="3dp"
                         android:text="Today"/>
-                    <Button
+                    <!--<Button
                         android:id="@+id/btnPast"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -147,7 +149,7 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_margin="3dp"
-                        android:text="7 Days"/>
+                        android:text="7 Days"/>-->
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
