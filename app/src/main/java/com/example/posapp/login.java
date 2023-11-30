@@ -81,7 +81,7 @@ public class login extends AppCompatActivity {
             editor.apply();
 
             Random random = new Random();
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 50; i++) {
                 int transID = i;
                 int randomProductIndex = random.nextInt(18) + 1; // Random product ID between 1 and 18
                 String randomProdName = getProductById(db, randomProductIndex);
