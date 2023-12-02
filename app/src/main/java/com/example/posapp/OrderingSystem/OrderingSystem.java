@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.example.posapp.MainScreen;
 import com.example.posapp.R;
 import com.example.posapp.login;
+import com.example.posapp.pendingTrans.pendingTransaction;
 import com.example.posapp.products.CakeListAdapter;
 import com.example.posapp.products.prodClickListener;
 import com.example.posapp.products.prodDrinksListAdapter;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderingSystem extends AppCompatActivity implements prodClickListener {
-    Button btnAdd, Orders;
+    Button btnAdd, Orders, btnPending;
     Button btnLogout;
     TextView txtView;
     ImageView prodImg;
@@ -72,6 +73,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         v = findViewById(R.id.sizeLayout);
         btnAdd = findViewById(R.id.btnCart);
         btnLogout = findViewById(R.id.btnLogout);
+        btnPending = findViewById(R.id.btnPending);
         Quantity = findViewById(R.id.txtQty);
         Price = findViewById(R.id.txtPrice);
         prodName = findViewById(R.id.prodName);
@@ -105,6 +107,14 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                     Intent i = new Intent(OrderingSystem.this, MainScreen.class);
                     startActivity(i);
                 }
+            }
+        });
+
+        btnPending.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(OrderingSystem.this, pendingTransaction.class);
+                startActivity(i);
             }
         });
 

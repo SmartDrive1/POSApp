@@ -145,7 +145,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
 
             int id = cursor.getColumnIndex("transID");
             int time = cursor.getColumnIndex("time");
-            int category = cursor.getColumnIndex("category");
             int totalAmount = cursor.getColumnIndex("totalAmount");
             int totalQuantity = cursor.getColumnIndex("totalQuantity");
 

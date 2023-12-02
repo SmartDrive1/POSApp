@@ -118,8 +118,6 @@ public class transEdit extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
-                    // on below line we are setting a click listener
-                    // for our positive button
                     case DialogInterface.BUTTON_POSITIVE:
                         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                         db.delete("transactions", "transid=?", new String[] { String.valueOf(transID) });

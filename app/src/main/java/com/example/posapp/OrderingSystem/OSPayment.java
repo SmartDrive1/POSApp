@@ -47,9 +47,9 @@ public class OSPayment extends AppCompatActivity {
 
         eChange = Double.parseDouble(tPayment) - Double.parseDouble(tPrice);
 
-        price.setText("Total: " + tPrice);
-        pay.setText("Pay: " + tPayment);
-        change.setText("Change: " + eChange.toString());
+        price.setText("Total: " + tPrice + "0");
+        pay.setText("Pay: " + tPayment + "0");
+        change.setText("Change: " + eChange.toString() + "0");
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,20 +104,32 @@ public class OSPayment extends AppCompatActivity {
 
     @SuppressLint("Range")
     public void confirmTrans() {
-        int max_id = 0;
+        int max_id = 0, max_id2 = 0, highestID = 0;
 
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
             Cursor cursor = db.rawQuery("SELECT MAX(transID) FROM transactions", null);
 
             if (cursor.moveToNext()) {
                 max_id = cursor.getInt(0);
             }
 
+            cursor = db.rawQuery("SELECT MAX(transID) FROM orders", null);
+            if(cursor.moveToNext()){
+                max_id2 = cursor.getInt(0);
+            }
+
+
             cursor = db.rawQuery("SELECT * FROM cartlist", null);
 
             max_id += 1;
+            max_id2 += 1;
+
+            if(max_id > max_id2){
+                highestID = max_id;
+            }else{
+                highestID = max_id2;
+            }
 
             if(cursor.moveToFirst()){
                 do{
@@ -127,14 +139,15 @@ public class OSPayment extends AppCompatActivity {
                     String category = cursor.getString(cursor.getColumnIndex("category"));
                     long currentTime = System.currentTimeMillis();
 
-                    String sql = "insert into transactions (transID, prodName, quantity, price, category, time)values(?,?,?,?,?,?)";
+                    String sql = "INSERT INTO orders(transID, prodName, quantity, price, category, time, status)values(?,?,?,?,?,?,?)";
                     SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1, String.valueOf(max_id));
+                    statement.bindString(1, String.valueOf(highestID));
                     statement.bindString(2, prodName);
                     statement.bindString(3, quantity);
                     statement.bindString(4, price);
                     statement.bindString(5, category);
                     statement.bindString(6, String.valueOf(currentTime));
+                    statement.bindString(7, "Pending");
                     statement.execute();
                 }while (cursor.moveToNext());
             }

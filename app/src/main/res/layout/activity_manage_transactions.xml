@@ -222,7 +222,7 @@
                         android:background="@drawable/button1"
                         android:maxLines="1"
                         android:layout_weight="1"
-                        android:text="Reset"/>
+                        android:text="Reset Time"/>
 
                     <Button
                         android:id="@+id/btnBack"
