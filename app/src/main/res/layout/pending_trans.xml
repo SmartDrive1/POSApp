@@ -28,7 +28,8 @@
             android:textColor="@color/black"
             android:text="ID"
             android:ems="5"
-            android:maxLines="2"/>
+            android:maxLines="2"
+            android:layout_centerVertical="true"/>
 
         <TextView
             android:id="@+id/orderTime"
@@ -43,7 +44,8 @@
             android:textColor="@color/black"
             android:text="Order Time"
             android:ems="5"
-            android:maxLines="2"/>
+            android:maxLines="2"
+            android:layout_centerVertical="true"/>
 
         <TextView
             android:id="@+id/status"
@@ -59,7 +61,22 @@
             android:background="#7C0A02"
             android:text="Status"
             android:ems="5"
-            android:maxLines="2"/>
+            android:maxLines="2"
+            android:layout_centerVertical="true"/>
+
+        <ImageButton
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@id/status"
+            android:layout_centerVertical="true"
+            android:src="@drawable/iconedit"
+            android:background="@drawable/button1"
+            android:layout_marginLeft="5dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:layout_marginRight="5dp"
+            android:ems="5"/>
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

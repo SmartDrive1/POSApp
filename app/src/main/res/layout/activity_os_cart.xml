@@ -48,6 +48,7 @@
                     android:autoSizeStepGranularity="1sp"
                     android:textColor="@color/black"
                     android:text="Name"
+                    android:textAlignment="center"
                     android:ems="5"
                     android:maxLines="2"/>
 
@@ -77,8 +78,19 @@
                     android:autoSizeStepGranularity="1sp"
                     android:textColor="@color/black"
                     android:text="Price"
-                    android:textAlignment="textEnd"
+                    android:textAlignment="center"
                     android:ems="5"
+                    android:maxLines="2"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/priceP"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="1sp"
+                    android:autoSizeMaxTextSize="30sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:textColor="@color/black"
+                    android:ems="3"
                     android:maxLines="2"/>
             </RelativeLayout>
             <androidx.recyclerview.widget.RecyclerView

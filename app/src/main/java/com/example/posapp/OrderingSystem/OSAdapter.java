@@ -43,6 +43,13 @@ public class OSAdapter extends RecyclerView.Adapter<OSViewHolder> {
                 mClickListener.onItemClicked(items.get(position));
             }
         });
+
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mClickListener.onItemClicked(items.get(position));
+            }
+        });
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.example.posapp.pendingTrans;
 
+import android.content.Intent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +15,7 @@ import com.example.posapp.R;
 public class pendingViewHolder extends RecyclerView.ViewHolder {
     public TextView transID, status, orderTime;
     public CardView cardView;
+    ImageButton btnEdit;
 
     public pendingViewHolder(@NonNull View itemView){
         super(itemView);
@@ -19,5 +23,6 @@ public class pendingViewHolder extends RecyclerView.ViewHolder {
         status = itemView.findViewById(R.id.status);
         orderTime = itemView.findViewById(R.id.orderTime);
         cardView = itemView.findViewById(R.id.pending);
+        btnEdit = itemView.findViewById(R.id.btnEdit);
     }
 }

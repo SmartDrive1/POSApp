@@ -35,7 +35,7 @@ public class pendingAdapter extends RecyclerView.Adapter<pendingViewHolder> {
         holder.status.setText(items.get(position).getStatus());
         holder.orderTime.setText(items.get(position).getOrderTime());
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mClickListener.onItemClicked(items.get(position));
