@@ -72,7 +72,7 @@ public class login extends AppCompatActivity {
             db.execSQL("CREATE TABLE users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR, userImg BLOB)"); //Create database if non-existent, to avoid crash
             db.execSQL("CREATE TABLE cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, category VARCHAR, price DOUBLE)"); //Create database if non-existent, to avoid crash
             db.execSQL("CREATE TABLE transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
-            db.execSQL("CREATE TABLE orders(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER, status VARCHAR)");
+            db.execSQL("CREATE TABLE orders(transID INTEGER, id INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER, status VARCHAR)");
 
             addProducts();
             addUsers();

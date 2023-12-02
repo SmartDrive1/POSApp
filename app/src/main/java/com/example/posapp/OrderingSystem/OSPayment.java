@@ -133,21 +133,23 @@ public class OSPayment extends AppCompatActivity {
 
             if(cursor.moveToFirst()){
                 do{
+                    String prodID = cursor.getString(cursor.getColumnIndex("id"));
                     String prodName = cursor.getString(cursor.getColumnIndex("prodName"));
                     String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
                     String price = cursor.getString(cursor.getColumnIndex("price"));
                     String category = cursor.getString(cursor.getColumnIndex("category"));
                     long currentTime = System.currentTimeMillis();
 
-                    String sql = "INSERT INTO orders(transID, prodName, quantity, price, category, time, status)values(?,?,?,?,?,?,?)";
+                    String sql = "INSERT INTO orders(transID, id, prodName, quantity, price, category, time, status)values(?,?,?,?,?,?,?,?)";
                     SQLiteStatement statement = db.compileStatement(sql);
                     statement.bindString(1, String.valueOf(highestID));
-                    statement.bindString(2, prodName);
-                    statement.bindString(3, quantity);
-                    statement.bindString(4, price);
-                    statement.bindString(5, category);
-                    statement.bindString(6, String.valueOf(currentTime));
-                    statement.bindString(7, "Pending");
+                    statement.bindString(2, prodID);
+                    statement.bindString(3, prodName);
+                    statement.bindString(4, quantity);
+                    statement.bindString(5, price);
+                    statement.bindString(6, category);
+                    statement.bindString(7, String.valueOf(currentTime));
+                    statement.bindString(8, "Pending");
                     statement.execute();
                 }while (cursor.moveToNext());
             }

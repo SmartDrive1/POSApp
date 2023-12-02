@@ -176,6 +176,7 @@ public class orderEdit extends AppCompatActivity {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
                         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+                        cancelOrderFunction();
                         db.delete("orders", "transID=?", new String[] { String.valueOf(transID) });
                         db.close();
                         Toast.makeText(orderEdit.this, "Order ID: " + transID + " Cancelled Successfully", Toast.LENGTH_SHORT).show();
@@ -191,5 +192,23 @@ public class orderEdit extends AppCompatActivity {
         builder.setMessage("Do You Want To Cancel Order " + transID + "?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    @SuppressLint("Range")
+    public void cancelOrderFunction(){
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+
+        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE transID = " + transID, null);
+
+        if(cursor.moveToNext()){
+            do{
+                String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
+                int id = cursor.getInt(cursor.getColumnIndex("id"));
+                String updateQuantity = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
+                Object[] bindArgs = {quantity, id};
+                db.execSQL(updateQuantity, bindArgs);
+            }while(cursor.moveToNext());
+        }
     }
 }

@@ -440,6 +440,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         itemCategory = view.getCategory();
         currentProduct = view.getProduct();
         medium.toggle();
+        Quantity.setText("");
         Quantity.setEnabled(true);
 
         if(view.getCategory().equals("Drinks")){
