@@ -178,7 +178,7 @@ public class orderEdit extends AppCompatActivity {
                         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                         db.delete("orders", "transID=?", new String[] { String.valueOf(transID) });
                         db.close();
-                        Toast.makeText(orderEdit.this, "Order ID: " + transID + " Successfully Deleted", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(orderEdit.this, "Order ID: " + transID + " Cancelled Successfully", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(orderEdit.this, pendingTransaction.class);
                         startActivity(i);
                         break;
@@ -188,7 +188,7 @@ public class orderEdit extends AppCompatActivity {
             }
         };
         AlertDialog.Builder builder = new AlertDialog.Builder(orderEdit.this);
-        builder.setMessage("Do You Want To Delete Order " + transID + "?")
+        builder.setMessage("Do You Want To Cancel Order " + transID + "?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
