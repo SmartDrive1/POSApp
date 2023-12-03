@@ -483,7 +483,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 }
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(OrderingSystem.this);
-            builder.setMessage("Products have not been added. Do you want to proceed in Cart menu?")
+            builder.setMessage("Products have not been added. Do you want to proceed in Cart Menu?")
                     .setPositiveButton("Yes", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
         }
