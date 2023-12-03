@@ -235,13 +235,13 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
 
                 Cell dataCell4 = dataRow.createCell(3);
-                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
+                dataCell4.setCellValue(cursor.getInt(cursor.getColumnIndex("quantity")));
 
                 Cell dataCell5 = dataRow.createCell(4);
-                dataCell5.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
+                dataCell5.setCellValue(cursor.getDouble(cursor.getColumnIndex("price")));
 
                 Cell dataCell6 = dataRow.createCell(5);
-                dataCell6.setCellValue(cursor.getString(cursor.getColumnIndex("total_price")));
+                dataCell6.setCellValue(cursor.getDouble(cursor.getColumnIndex("total_price")));
 
                 Cell dataCell7 = dataRow.createCell(6);
                 dataCell7.setCellValue(formattedDate);
@@ -292,13 +292,13 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
 
                 Cell dataCell4 = dataRow.createCell(3);
-                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
+                dataCell4.setCellValue(cursor.getInt(cursor.getColumnIndex("quantity")));
 
                 Cell dataCell5 = dataRow.createCell(4);
-                dataCell5.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
+                dataCell5.setCellValue(cursor.getDouble(cursor.getColumnIndex("price")));
 
                 Cell dataCell6 = dataRow.createCell(5);
-                dataCell6.setCellValue(cursor.getString(cursor.getColumnIndex("total_price")));
+                dataCell6.setCellValue(cursor.getDouble(cursor.getColumnIndex("total_price")));
 
                 Cell dataCell7 = dataRow.createCell(6);
                 dataCell7.setCellValue(formattedDate);
