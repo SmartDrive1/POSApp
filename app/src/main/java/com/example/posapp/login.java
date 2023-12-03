@@ -379,4 +379,8 @@ public class login extends AppCompatActivity {
         Random random = new Random();
         return min + (long) (random.nextDouble() * (max - min));
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

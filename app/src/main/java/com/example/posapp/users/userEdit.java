@@ -232,4 +232,8 @@ public class userEdit extends AppCompatActivity {
         Intent i = new Intent(userEdit.this, userList.class);
         startActivity(i);
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

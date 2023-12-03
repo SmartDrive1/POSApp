@@ -403,4 +403,8 @@ public class manageTransactions extends AppCompatActivity implements transClickL
     private void enableEndDateEditText(boolean enable) {
         txtEndDate.setEnabled(enable);
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

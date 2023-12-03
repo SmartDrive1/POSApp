@@ -668,4 +668,8 @@ public class KMeans extends AppCompatActivity {
         formattedDate = df.format(days.get(10));
         btnDay5.setText(formattedDate);
     }
+    @Override
+    public void onBackPressed() {
+    }
+
 }

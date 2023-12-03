@@ -25,4 +25,8 @@ public class moreinfo extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

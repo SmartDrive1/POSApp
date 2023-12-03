@@ -256,4 +256,7 @@ public class AaUriButton extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+    }
 }

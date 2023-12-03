@@ -68,4 +68,8 @@ public class mainManageScreen extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

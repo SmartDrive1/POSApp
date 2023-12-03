@@ -225,4 +225,8 @@ public class productList extends AppCompatActivity implements prodClickListener 
         addOns.clear();
         others.clear();
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

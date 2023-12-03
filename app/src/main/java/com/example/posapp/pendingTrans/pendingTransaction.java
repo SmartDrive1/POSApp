@@ -90,4 +90,8 @@ public class pendingTransaction extends AppCompatActivity implements pendingClic
         i.putExtra("id", view.getTransID());
         startActivity(i);
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

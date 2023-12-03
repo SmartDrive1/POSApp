@@ -247,4 +247,8 @@ public class prodEdit extends AppCompatActivity {
         }
         return byteBuffer.toByteArray();
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

@@ -115,4 +115,8 @@ public class osCart extends AppCompatActivity implements cartClickListener {
         i.putExtra("price",view.getpPrice());
         startActivity(i);
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

@@ -152,4 +152,8 @@ public class invList extends AppCompatActivity implements invClickListener {
             public void afterTextChanged(Editable s) {}
         });
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

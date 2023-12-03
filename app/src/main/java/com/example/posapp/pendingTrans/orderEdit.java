@@ -211,4 +211,8 @@ public class orderEdit extends AppCompatActivity {
             }while(cursor.moveToNext());
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

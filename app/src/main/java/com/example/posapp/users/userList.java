@@ -188,4 +188,8 @@ public class userList extends AppCompatActivity implements userClickListener {
         admins.clear();
         users.clear();
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

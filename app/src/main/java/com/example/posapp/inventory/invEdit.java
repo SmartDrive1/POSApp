@@ -124,4 +124,8 @@ public class invEdit extends AppCompatActivity {
             Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

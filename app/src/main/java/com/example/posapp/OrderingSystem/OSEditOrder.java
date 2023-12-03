@@ -219,4 +219,8 @@ public class OSEditOrder extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

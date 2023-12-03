@@ -113,7 +113,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         btnPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(prodName.getText().toString().equals("")) {
+                if(Quantity.getText().toString().equals("")) {
                     db.close();
                     Intent i = new Intent(OrderingSystem.this, pendingTransaction.class);
                     startActivity(i);
@@ -472,8 +472,6 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     switch (which) {
-                        // on below line we are setting a click listener
-                        // for our positive button
                         case DialogInterface.BUTTON_POSITIVE:
                             db.close();
                             Intent i = new Intent(OrderingSystem.this, osCart.class);
@@ -496,8 +494,6 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
-                    // on below line we are setting a click listener
-                    // for our positive button
                     case DialogInterface.BUTTON_POSITIVE:
                         db.close();
                         Intent i = new Intent(OrderingSystem.this, pendingTransaction.class);
@@ -512,5 +508,9 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         builder.setMessage("Products have not been added. Do you want to proceed in Orders?")
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
+    }
+
+    @Override
+    public void onBackPressed() {
     }
 }

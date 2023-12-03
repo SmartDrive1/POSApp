@@ -136,4 +136,8 @@ public class transEdit extends AppCompatActivity {
                 .setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

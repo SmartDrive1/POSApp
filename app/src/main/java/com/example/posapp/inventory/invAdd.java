@@ -106,4 +106,8 @@ public class invAdd extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }

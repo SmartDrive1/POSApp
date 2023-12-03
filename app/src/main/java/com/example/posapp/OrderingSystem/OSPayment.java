@@ -166,4 +166,8 @@ public class OSPayment extends AppCompatActivity {
             Toast.makeText(this, "Failed to transfer data", Toast.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+    }
 }
