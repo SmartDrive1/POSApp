@@ -2,6 +2,7 @@ package com.example.posapp.OrderingSystem;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class OSPaymentAdapter extends RecyclerView.Adapter<OSViewHolder> {
         holder.nameP.setText(items.get(position).getpName());
         holder.quantityP.setText(items.get(position).getpQuantity());
         holder.priceP.setText(items.get(position).getpPrice() + ".00");
+        holder.btnEdit.setVisibility(View.GONE);
     }
 
     @Override

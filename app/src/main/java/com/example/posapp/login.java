@@ -60,7 +60,6 @@ public class login extends AppCompatActivity {
         boolean firstRun = preferences.getBoolean("firstRun", true);
 
         if (firstRun) {
-            // Drop and recreate the table
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
             db.execSQL("DROP TABLE IF EXISTS products");
             db.execSQL("DROP TABLE IF EXISTS users");
@@ -356,29 +355,19 @@ public class login extends AppCompatActivity {
     }
 
     public long randomTime(){
-        long x, startTime, startTime0, currentTime24;
+        long x, startTime, currentTime;
 
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
 
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
+        currentTime = calendar.getTimeInMillis();
 
-        startTime0 = calendar.getTimeInMillis();
-        System.out.println("Current date and time as int (set to 00:00:00): " + startTime0);
+        long duration = 518400000;
 
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
+        startTime = currentTime - duration;
 
-        currentTime24 = calendar.getTimeInMillis();
-        System.out.println("Current date and time as int (set to 23:59:59): " + currentTime24);
-
-        startTime = startTime0 - 518400000;
-
-        x = generateRandomLong(startTime, currentTime24);
+        x = generateRandomLong(startTime, currentTime);
         return x;
     }
 

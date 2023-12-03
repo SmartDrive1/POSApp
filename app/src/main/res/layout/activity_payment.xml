@@ -49,7 +49,7 @@
                         android:autoSizeStepGranularity="1sp"
                         android:textColor="@color/black"
                         android:text="Name"
-                        android:ems="5"
+                        android:ems="4"
                         android:maxLines="2"/>
 
                     <TextView
@@ -64,7 +64,7 @@
                         android:textColor="@color/black"
                         android:text="Quantity"
                         android:textAlignment="center"
-                        android:ems="5"
+                        android:ems="4"
                         android:maxLines="2"/>
 
                     <TextView
@@ -79,7 +79,7 @@
                         android:textColor="@color/black"
                         android:text="Price"
                         android:textAlignment="textEnd"
-                        android:ems="5"
+                        android:ems="4"
                         android:maxLines="2"/>
                 </RelativeLayout>
 

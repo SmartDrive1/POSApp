@@ -37,13 +37,6 @@ public class OSAdapter extends RecyclerView.Adapter<OSViewHolder> {
         holder.quantityP.setText(items.get(position).getpQuantity());
         holder.priceP.setText(items.get(position).getpPrice() + ".00");
 
-        holder.cardview.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mClickListener.onItemClicked(items.get(position));
-            }
-        });
-
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
