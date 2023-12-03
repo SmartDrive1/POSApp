@@ -83,7 +83,7 @@ public class login extends AppCompatActivity {
             editor.apply();
 
             Random random = new Random();
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 100; i++) {
                 int transID = i;
                 int randomProductIndex = random.nextInt(18) + 1; // Random product ID between 1 and 18
                 String randomProdName = getProductById(db, randomProductIndex);
@@ -413,5 +413,4 @@ public class login extends AppCompatActivity {
         Random random = new Random();
         return min + (long) (random.nextDouble() * (max - min));
     }
-
 }

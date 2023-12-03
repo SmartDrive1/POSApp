@@ -174,6 +174,7 @@ public class KMeans extends AppCompatActivity {
         });*/
 
         getDates();
+        setButtons();
 
         //Autostart kmeans
         ctr = 12;
@@ -203,7 +204,7 @@ public class KMeans extends AppCompatActivity {
             for (int i = 0; i < k; i++) {
                 Cluster cluster = clusters.get(i);
 
-                SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy", Locale.getDefault());
+                SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy, E", Locale.getDefault());
                 String formattedDate = df.format(days.get(ctr));
 
                 // Append information about the cluster to the resultText
@@ -651,5 +652,24 @@ public class KMeans extends AppCompatActivity {
         barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
         barDataSet.setValueTextColor(Color.BLACK);
         barChart.getDescription().setEnabled(false);
+    }
+
+    public void setButtons(){
+
+        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy", Locale.getDefault());
+        String formattedDate = df.format(days.get(0));
+        btnDay0.setText(formattedDate);
+        formattedDate = df.format(days.get(2));
+        btnDay1.setText(formattedDate);
+        formattedDate = df.format(days.get(4));
+        btnDay2.setText(formattedDate);
+        formattedDate = df.format(days.get(6));
+        btnDay3.setText(formattedDate);
+        formattedDate = df.format(days.get(8));
+        btnDay4.setText(formattedDate);
+        formattedDate = df.format(days.get(10));
+        btnDay5.setText(formattedDate);
+        formattedDate = df.format(days.get(12));
+        btnDay6.setText(formattedDate);
     }
 }
