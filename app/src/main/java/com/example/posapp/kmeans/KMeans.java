@@ -665,7 +665,5 @@ public class KMeans extends AppCompatActivity {
         btnDay4.setText(formattedDate);
         formattedDate = df.format(days.get(10));
         btnDay5.setText(formattedDate);
-        formattedDate = df.format(days.get(12));
-        btnDay6.setText(formattedDate);
     }
 }
