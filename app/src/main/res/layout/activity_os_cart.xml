@@ -174,6 +174,7 @@
                         android:ems="2"
                         android:padding="4dp"
                         android:inputType="number"
+                        android:hint="Payment"
                         android:textAlignment="center"/>
                 </LinearLayout>
                 <Button
