@@ -2,7 +2,9 @@ package com.example.posapp.users;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -21,7 +23,9 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.posapp.OrderingSystem.OrderingSystem;
 import com.example.posapp.R;
+import com.example.posapp.pendingTrans.pendingTransaction;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,6 +39,8 @@ public class userEdit extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
     Uri selectedImageUri;
     String id;
+    String userName;
+    private DialogInterface.OnClickListener dialogClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +68,7 @@ public class userEdit extends AppCompatActivity {
         Intent i = getIntent();
         id = i.getStringExtra("id".toString());
         String name = i.getStringExtra("fullName".toString());
-        String userName = i.getStringExtra("userName".toString());
+        userName = i.getStringExtra("userName".toString());
         String password = i.getStringExtra("password".toString());
         String access = i.getStringExtra("access".toString());
         byte[] userImg1 = i.getByteArrayExtra("userImg");
@@ -94,7 +100,7 @@ public class userEdit extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                delete();
+                toDelete();
             }
         });
 
@@ -121,11 +127,11 @@ public class userEdit extends AppCompatActivity {
             String editUserName1 = editUserName.getText().toString().trim();
             String editPassword1 = editPassword.getText().toString().trim();
             if(editName1.equals("")){
-                Toast.makeText(this,"Full Name is Blank. Please Enter a Valid Name", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Name is Blank. Please Enter a Name", Toast.LENGTH_LONG).show();
             }else if(editUserName1.equals("")){
-                Toast.makeText(this,"username is Blank. Please Enter a Valid Username", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Username is Blank. Please Enter a Username", Toast.LENGTH_LONG).show();
             }else if(editPassword1.equals("")){
-                Toast.makeText(this,"Password is Blank. Please Enter a Valid Password", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Password is Blank. Please Enter a Password", Toast.LENGTH_LONG).show();
             }else {
                 SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                 Cursor c = db.rawQuery("SELECT * FROM users WHERE userName = ?", new String[]{editUserName1});
@@ -147,23 +153,6 @@ public class userEdit extends AppCompatActivity {
         }
     }
 
-    public void delete(){
-        try{
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-
-            String sql = "delete from users where id = ?";
-            SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1,id);
-            statement.execute();
-            Toast.makeText(this,"User Deleted", Toast.LENGTH_LONG).show();
-            db.close();
-            Intent i = new Intent(userEdit.this, userList.class);
-            startActivity(i);
-        }catch (Exception e)
-        {
-            Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
-        }
-    }
     private void startImageSelection() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
@@ -227,10 +216,46 @@ public class userEdit extends AppCompatActivity {
 
         statement.bindString(6, editID1);
         statement.execute();
-        Toast.makeText(this, "User Updated", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Account Updated", Toast.LENGTH_LONG).show();
         db.close();
         Intent i = new Intent(userEdit.this, userList.class);
         startActivity(i);
+    }
+
+    public void toDelete(){
+        dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        try{
+                            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+
+                            String sql = "delete from users where id = ?";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1,id);
+                            statement.execute();
+                            Toast.makeText(userEdit.this,"Account: " + userName + " Deleted", Toast.LENGTH_LONG).show();
+                            db.close();
+                            Intent i = new Intent(userEdit.this, userList.class);
+                            startActivity(i);
+                        }catch (Exception e)
+                        {
+                            Toast.makeText(userEdit.this,"Failed", Toast.LENGTH_LONG).show();
+                        }
+
+                        Intent i = new Intent(userEdit.this, userList.class);
+                        startActivity(i);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(userEdit.this);
+        builder.setMessage("Do You Want to Delete the Account: " + userName + "?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 
     @Override

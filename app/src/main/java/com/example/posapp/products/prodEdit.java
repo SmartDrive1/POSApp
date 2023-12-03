@@ -2,7 +2,9 @@ package com.example.posapp.products;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,12 +34,14 @@ import java.sql.Blob;
 
 public class prodEdit extends AppCompatActivity {
 
-    EditText editID, editName, editPrice, editQuantity;
+    EditText editName, editPrice, editQuantity;
     Button btnEdit, btnDelete, btnCancel;
     ImageView prodImg;
-    String id;
+    String id, product;
     private static final int PICK_IMAGE_REQUEST = 1;
     Uri selectedImageUri;
+
+    private DialogInterface.OnClickListener dialogClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +67,7 @@ public class prodEdit extends AppCompatActivity {
 
         Intent i = getIntent();
         id = i.getStringExtra("id".toString());
-        String product = i.getStringExtra("product".toString());
+        product = i.getStringExtra("product".toString());
         String prodPrice = i.getStringExtra("prodPrice".toString());
         String category = i.getStringExtra("category".toString());
         String quantity = i.getStringExtra("quantity".toString());
@@ -108,7 +112,7 @@ public class prodEdit extends AppCompatActivity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                delete();
+                toDelete();
             }
         });
 
@@ -134,11 +138,11 @@ public class prodEdit extends AppCompatActivity {
             String editPrice1 = editPrice.getText().toString().trim();
             String editQuantity1 = editQuantity.getText().toString().trim();
             if (editName1.equals("")){
-                Toast.makeText(this,"Please Input a Valid Product Name", Toast.LENGTH_LONG).show();
-            }else if (editPrice1.equals("")) {
-                Toast.makeText(this,"Please Input a Valid Amount", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Product Name is Blank. Please Input a Product Name", Toast.LENGTH_LONG).show();
             }else if (editQuantity1.equals("")) {
-                Toast.makeText(this,"Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
+                Toast.makeText(this,"Quantity is Blank. Please Input a Quantity", Toast.LENGTH_LONG).show();
+            }else if (editPrice1.equals("")) {
+                Toast.makeText(this,"Price is Blank. Please Input a Price", Toast.LENGTH_LONG).show();
             }else if (editName1.equals("None") || editPrice1.equals("none")) {
                 Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
             }else{
@@ -203,23 +207,6 @@ public class prodEdit extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void delete(){
-        try{
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-
-            String sql = "delete from products where id = ?";
-            SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1,id);
-            statement.execute();
-            Toast.makeText(this,"Product Deleted", Toast.LENGTH_LONG).show();
-            db.close();
-            Intent i = new Intent(prodEdit.this, productList.class);
-            startActivity(i);
-        }catch (Exception e){
-            Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
-        }
-    }
-
     private void startImageSelection() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
@@ -248,6 +235,40 @@ public class prodEdit extends AppCompatActivity {
         return byteBuffer.toByteArray();
     }
 
+    public void toDelete(){
+        dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        try{
+                            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+
+                            String sql = "delete from products where id = ?";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1,id);
+                            statement.execute();
+                            Toast.makeText(prodEdit.this,"Product: " + product + " Deleted", Toast.LENGTH_LONG).show();
+                            db.close();
+                            Intent i = new Intent(prodEdit.this, productList.class);
+                            startActivity(i);
+                        }catch (Exception e){
+                            Toast.makeText(prodEdit.this,"Failed", Toast.LENGTH_LONG).show();
+                        }
+
+                        Intent i = new Intent(prodEdit.this, productList.class);
+                        startActivity(i);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(prodEdit.this);
+        builder.setMessage("Do You Want to Delete the Product: " + product + "?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+    }
     @Override
     public void onBackPressed() {
     }

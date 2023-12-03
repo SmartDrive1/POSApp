@@ -189,25 +189,26 @@ public class productList extends AppCompatActivity implements prodClickListener 
                         int quantity = c.getColumnIndex("quantity");
                         int prodImage = c.getColumnIndex("prodImage");
 
-                        if(c.moveToFirst()){
-                            do{
-                                if(c.getString(category).equals("Drinks")){
-                                    items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
+                        if (c.moveToFirst()) {
+                            do {
+                                if (c.getString(category).equals("Drinks")) {
+                                    items.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
                                     productListAdapter = new prodDrinksListAdapter(productList.this, items, productListAdapter.mClickListener);
-                                    recyclerView.setAdapter(productListAdapter);}
-                                if(c.getString(category).equals("Food")){
-                                    foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
+                                    recyclerView.setAdapter(productListAdapter);
+                                } else if (c.getString(category).equals("Food")) {
+                                    foods.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
                                     foodListAdapter = new prodFoodListAdapter(productList.this, foods, foodListAdapter.mClickListener);
-                                    foodRecyclerView.setAdapter(foodListAdapter);}
-                                if (c.getString(category).equals("AddOns")){
-                                    addOns.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
+                                    foodRecyclerView.setAdapter(foodListAdapter);
+                                } else if (c.getString(category).equals("Cake")) {
+                                    addOns.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
                                     CakeListAdapter = new CakeListAdapter(productList.this, addOns, CakeListAdapter.mClickListener);
-                                    addOnsRecycle.setAdapter(CakeListAdapter);}
-                                if (c.getString(category).equals("Others")){
-                                    others.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
+                                    addOnsRecycle.setAdapter(CakeListAdapter);
+                                } else if (c.getString(category).equals("Special")) {
+                                    others.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
                                     specialListAdapter = new SpecialListAdapter(productList.this, others, specialListAdapter.mClickListener);
-                                    othersRecyclerView.setAdapter(specialListAdapter);}
-                            }while(c.moveToNext());
+                                    othersRecyclerView.setAdapter(specialListAdapter);
+                                }
+                            } while (c.moveToNext());
                         }
                         c.close();
                         db.close();

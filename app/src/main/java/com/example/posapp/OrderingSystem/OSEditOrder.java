@@ -3,7 +3,9 @@ package com.example.posapp.OrderingSystem;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.example.posapp.pendingTrans.pendingTransaction;
 
 public class OSEditOrder extends AppCompatActivity {
 
@@ -26,6 +29,8 @@ public class OSEditOrder extends AppCompatActivity {
     SQLiteDatabase db;
     String quantity;
     String id;
+    String prodName;
+    private DialogInterface.OnClickListener dialogClickListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +40,7 @@ public class OSEditOrder extends AppCompatActivity {
 
         Intent i = getIntent();
         id = i.getStringExtra("id".toString());
-        String prodName = i.getStringExtra("prodName".toString());
+        prodName = i.getStringExtra("prodName".toString());
         quantity = i.getStringExtra("quantity".toString());
         String price = i.getStringExtra("price".toString());
 
@@ -85,7 +90,7 @@ public class OSEditOrder extends AppCompatActivity {
             if (qty1.equals("")) {
                 Toast.makeText(this, "Quantity is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
             } else if(quantity.equals(qty1)){
-                Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Order Updated", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
                 startActivity(i);
             }else if (Integer.parseInt(qty1) <= 0) {
@@ -157,26 +162,7 @@ public class OSEditOrder extends AppCompatActivity {
     }
 
     public void delete() {
-        try {
-            String product1 = editProduct.getText().toString();
-
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            //Add to products stock
-            String updateQuantity = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
-            Object[] bindArgs = {quantity, id};
-            db.execSQL(updateQuantity, bindArgs);
-            //Delete
-            String sql = "DELETE FROM cartlist WHERE prodName = ?";
-            SQLiteStatement statement = db.compileStatement(sql);
-            statement.bindString(1, product1);
-            statement.execute();
-            Toast.makeText(this, "Cart Item Deleted", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(OSEditOrder.this, osCart.class);
-            startActivity(i);
-            db.close();
-        } catch (Exception e) {
-            Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
-        }
+        removeitem();
     }
 
     public void newTotal() {
@@ -222,5 +208,45 @@ public class OSEditOrder extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+    }
+
+    public void removeitem(){
+        dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        try {
+                            String product1 = editProduct.getText().toString();
+
+                            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+                            //Add to products stock
+                            String updateQuantity = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
+                            Object[] bindArgs = {quantity, id};
+                            db.execSQL(updateQuantity, bindArgs);
+                            //Delete
+                            String sql = "DELETE FROM cartlist WHERE prodName = ?";
+                            SQLiteStatement statement = db.compileStatement(sql);
+                            statement.bindString(1, product1);
+                            statement.execute();
+                            Toast.makeText(OSEditOrder.this, prodName + " Removed from Cart", Toast.LENGTH_LONG).show();
+                            Intent i = new Intent(OSEditOrder.this, osCart.class);
+                            startActivity(i);
+                            db.close();
+                        } catch (Exception e) {
+                            Toast.makeText(OSEditOrder.this, "Failed", Toast.LENGTH_LONG).show();
+                        }
+                        Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
+                        startActivity(i);
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        dialog.dismiss();
+                }
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(OSEditOrder.this);
+        builder.setMessage("Are you sure do you want to remove " + prodName + "?")
+                .setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
     }
 }

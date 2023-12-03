@@ -368,7 +368,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         int count = c.getCount();
 
         if(count == 0){
-            Toast.makeText(this,"No Products Found", Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"No Products Available", Toast.LENGTH_LONG).show();
         }else{
             int id = c.getColumnIndex("id");
             int product = c.getColumnIndex("product");

@@ -96,6 +96,7 @@
                         android:layout_margin="3dp"
                         android:ems="8"
                         android:inputType="number"
+                        android:hint="Quantity"
                         android:textAlignment="center"/>
                 </LinearLayout>
 

@@ -104,8 +104,12 @@ public class userAdd extends AppCompatActivity {
 
         getMax();
         max_id += 1;
-        if(fName.equals("") || uName.equals("") || pass.equals("")){
-            Toast.makeText(this,"Full Name, UserName, or Password is Blank", Toast.LENGTH_LONG).show();
+        if(fName.equals("")){
+            Toast.makeText(this,"Name is Blank. Please Input a Name", Toast.LENGTH_LONG).show();
+        }else if(uName.equals("")) {
+            Toast.makeText(this,"Username is Blank. Please Input a Username", Toast.LENGTH_LONG).show();
+        }else if(pass.equals("")) {
+            Toast.makeText(this, "Password is Blank. Please Input a Password", Toast.LENGTH_LONG).show();
         }else if(uName.equals("Admin") || uName.equals("admin")) {
             Toast.makeText(this,"Please Choose Another Username", Toast.LENGTH_LONG).show();
         }else{

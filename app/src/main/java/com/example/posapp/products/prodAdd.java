@@ -103,16 +103,14 @@ public class prodAdd extends AppCompatActivity {
         getMax();
         max_id += 1;
         if (prodName.equals("")) {
-            Toast.makeText(this, "Product Name", Toast.LENGTH_LONG).show();
-        } else if (price.equals("")) {
-            Toast.makeText(this, "Product Price is Blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Product Name is Blank. Please Input a Product Name", Toast.LENGTH_LONG).show();
+        } else if(quantity.equals("")){
+            Toast.makeText(this, "Quantity is Blank. Please Input a Quantity", Toast.LENGTH_LONG).show();
+        }else if (price.equals("")) {
+            Toast.makeText(this, "Product Price is Blank. Please Input a Product Price", Toast.LENGTH_LONG).show();
         } else if (prodName.equals("None") || prodName.equals("none")) {
             Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
-        } else if (Integer.parseInt(price) <= 0) {
-            Toast.makeText(this, "Please Enter a Price Greater Than 0", Toast.LENGTH_LONG).show();
-        } else if (Integer.parseInt(quantity) <= 0) {
-            Toast.makeText(this, "Please Enter a Quantity Greater Than 0", Toast.LENGTH_LONG).show();
-        } else {
+        }else {
             try {
                 String spTxt = spinner.getSelectedItem().toString();
                 if (spTxt.equals("Add-Ons")) {
