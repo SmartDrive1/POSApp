@@ -42,19 +42,15 @@ public class KMeans extends AppCompatActivity {
 
     private TextView textViewResult;
     private Button btnBack, btnDay0, btnDay1, btnDay2, btnDay3, btnDay4, btnDay5, btnDay6;
-    //  private Button btnPast;
     BarChart barChart;
     long currentDay, currentDayE;
-    ArrayList<Long> days = new ArrayList<Long>();//0 day to 7th day
+    ArrayList<Long> days = new ArrayList<Long>();//0 day to Current Day
     long startDate, endDate;
     int ctr = 0;
-    boolean past7Days = false;
     BarData barData;
 
-    // variable for bar data set.
     BarDataSet barDataSet;
 
-    // array list for storing entries.
     ArrayList barEntriesArrayList;
 
     @Override
@@ -72,7 +68,6 @@ public class KMeans extends AppCompatActivity {
         btnDay4 = findViewById(R.id.btnDay4);
         btnDay5 = findViewById(R.id.btnDay5);
         btnDay6 = findViewById(R.id.btnDay6);
-//        btnPast = findViewById(R.id.btnPast);
         barChart = findViewById(R.id.barChart);
         barChart.setEnabled(false);
         barChart.setClickable(false);
@@ -162,17 +157,6 @@ public class KMeans extends AppCompatActivity {
             }
         });
 
-        /*btnPast.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshButtons();
-                btnPast.setBackgroundResource(R.drawable.button1dark);
-                btnPast.setEnabled(false);
-                past7Days = true;
-                runKMeans();
-            }
-        });*/
-
         getDates();
         setButtons();
 
@@ -185,54 +169,35 @@ public class KMeans extends AppCompatActivity {
     private void runKMeans() {
         int k = 1;
         barEntriesArrayList = new ArrayList<>();
-        if(past7Days == true){
-            k = 1;
-        }
         // Call your k-means clustering method with the provided K value
         List<Transaction> transactions = createDummyData();
 
         // Check if transactions are available
         if (transactions == null || transactions.isEmpty()) {
-            // Handle the case where transactions are null or empty
             textViewResult.setText("No transactions today for clustering");
             return;
         }
 
         List<Cluster> clusters = performKMeans(k);
         StringBuilder resultText = new StringBuilder("K-Means Result:\n");
-        if(past7Days == false){
-            for (int i = 0; i < k; i++) {
-                Cluster cluster = clusters.get(i);
+        for (int i = 0; i < k; i++) {
+            Cluster cluster = clusters.get(i);
+            Context context = this;
 
-                SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy, E", Locale.getDefault());
-                String formattedDate = df.format(days.get(ctr));
+            SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy, E", Locale.getDefault());
+            String formattedDate = df.format(days.get(ctr));
 
-                // Append information about the cluster to the resultText
-//                resultText.append("Cluster ").append(i + 1).append("\n");
-                resultText.append("Date: ").append(formattedDate).append("\n");
-//                resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n");
-                resultText.append("Average Items Bought: ").append(cluster.getTotalQuantity()).append("\n");
-                resultText.append("Total Sales: ").append(cluster.getTotalPrice()).append("\n");
-                resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts()).append("\n");
-                resultText.append("\n");
-            }
-        }else{
-            for (int i = 0; i < k; i++) {
-                Cluster cluster = clusters.get(i);
-
-                SimpleDateFormat df = new SimpleDateFormat("MMM-dd-yyyy", Locale.getDefault());
-                String formattedDate = df.format(days.get(i*2));
-
-                resultText.append("Date: ").append(formattedDate).append("\n");
-                resultText.append("Average Items Bought: ").append(cluster.getTotalQuantity()).append("\n");
-                resultText.append("Total Sales: ").append(cluster.getTotalPrice()).append("\n");
-                resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts()).append("\n");
-                resultText.append("\n");
-            }
+            // Append information about the cluster to the resultText
+//          resultText.append("Cluster ").append(i + 1).append("\n"); FOR CLUSTER!!!
+            resultText.append("Date: ").append(formattedDate).append("\n");
+//          resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n"); FOR CENTROID!!!
+            resultText.append("Total Items Bought: ").append(cluster.getTotalQuantity()).append("\n");
+            resultText.append("Total Sales: ").append(cluster.getTotalPrice() + "0").append("\n");
+            resultText.append("Compatible Products: ").append(cluster.getMostBoughtProducts(context)).append("\n");
+            resultText.append("\n");
         }
 
         textViewResult.setText(resultText.toString());
-        past7Days = false;
     }
 
     private List<Cluster> performKMeans(int k) {
@@ -240,15 +205,16 @@ public class KMeans extends AppCompatActivity {
         List<Transaction> transactions = createDummyData();
         List<Cluster> clusters = kMeans.predict(k, transactions);
 
-        // Print the results
+        // Print the results in the log for reference
         for (int i = 0; i < k; i++) {
             Cluster cluster = clusters.get(i);
+            Context context = this;
             float averageQuantity = cluster.getTotalQuantity();
-            String mostBoughtProduct = String.valueOf(cluster.getMostBoughtProducts());
+            String mostBoughtProduct = String.valueOf(cluster.getMostBoughtProducts(context));
 
             System.out.println("Cluster " + i);
             System.out.println("Centroid: " + Arrays.toString(cluster.getCentroid()));
-            System.out.println("Average Items Bought: " + averageQuantity);
+            System.out.println("Total Items Bought: " + averageQuantity);
             System.out.println("Total Sale for Day " + i + " " + cluster.getTotalPrice());
             System.out.println("Compatible Products: " + mostBoughtProduct);
             System.out.println("Assigned Transactions: " + cluster.getTransactions());
@@ -273,7 +239,7 @@ public class KMeans extends AppCompatActivity {
 
     public List<Cluster> predict(final int k, final List<Transaction> transactions) {
         checkDataSetSanity(transactions);
-        int dimension = 3; // Assuming 2 dimensions: product name and quantity
+        int dimension = 3;
         final List<Cluster> clusters = new ArrayList<>();
 
         for (int i = 0; i < k; i++) {
@@ -368,7 +334,7 @@ public class KMeans extends AppCompatActivity {
     private float sqDistance(Transaction transaction, Cluster cluster) {
         float dist = 0;
         float[] centroid = cluster.getCentroid();
-        // Use hash code for product name for simplicity
+        // Hash Map
         dist += Math.pow(transaction.getProductName().hashCode() - centroid[0], 2);
         dist += Math.pow(transaction.getQuantity() - centroid[1], 2);
         dist += Math.pow(transaction.getPrice() - centroid[2], 2);
@@ -391,7 +357,7 @@ public class KMeans extends AppCompatActivity {
 
         public float getTotalPrice() {
             if (transactions.isEmpty()) {
-                return 0.00f; // Return 0.00 if there are no transactions in the cluster
+                return 0.00f;
             }
 
             double totalPrice = 0;
@@ -416,7 +382,6 @@ public class KMeans extends AppCompatActivity {
                 builder.append(transaction).append(", ");
             }
 
-            // Remove the trailing comma and space if there are transactions
             if (!transactions.isEmpty()) {
                 builder.setLength(builder.length() - 2);
             }
@@ -439,8 +404,7 @@ public class KMeans extends AppCompatActivity {
             return Math.round(totalQuantity);
         }
 
-        @SuppressLint("NewApi")
-        public List<String> getMostBoughtProducts() {
+        public List<String> getMostBoughtProducts(Context context) {
             Map<String, Integer> productCounts = new HashMap<>();
 
             // Count the occurrences of each product in the cluster
@@ -464,13 +428,60 @@ public class KMeans extends AppCompatActivity {
             int i = 0;
             for (Map.Entry<String, Integer> entry : productCounts.entrySet()) {
                 if (entry.getValue() == maxCount) {
-                    if(i != 2){
+                    if (i != 2) {
                         mostBoughtProducts.add(entry.getKey());
                         i++;
                     }
                 }
             }
+
+            if (mostBoughtProducts.size() == 1) {
+                String existingProduct = mostBoughtProducts.get(0);
+                String randomProduct = getRandomProductFromDatabase(context);
+
+                // Ensure that the random product is not the same as the existing product
+                while (randomProduct.equals(existingProduct)) {
+                    randomProduct = getRandomProductFromDatabase(context);
+                }
+
+                mostBoughtProducts.add(randomProduct);
+            }
+
+            if (mostBoughtProducts.size() > 2) {
+                mostBoughtProducts = mostBoughtProducts.subList(0, 2);
+            }
+
             return mostBoughtProducts;
+        }
+
+        @SuppressLint("Range")
+        private static String getRandomProductFromDatabase(Context context) {
+            SQLiteDatabase db = null;
+            Cursor cursor = null;
+            String randomProduct = null;
+
+            try {
+                // Use the provided context to open or create the database
+                db = context.openOrCreateDatabase("TIMYC", MODE_PRIVATE, null);
+                String query = "SELECT product FROM products ORDER BY RANDOM() LIMIT 1";
+
+                cursor = db.rawQuery(query, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndex("product");
+                    if (columnIndex != -1) {
+                        randomProduct = cursor.getString(columnIndex);
+                    }
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+                if (db != null) {
+                    db.close();
+                }
+            }
+
+            return randomProduct;
         }
     }
 
@@ -510,30 +521,17 @@ public class KMeans extends AppCompatActivity {
         List<Transaction> transactions = new ArrayList<>();
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
-        if(past7Days == false){
-            startDate = days.get(ctr);
-            endDate = days.get(ctr+1);
-            String query = "SELECT * FROM transactions WHERE time BETWEEN " + startDate + " AND " + endDate;
-            Cursor cursor = db.rawQuery(query, null);
+        startDate = days.get(ctr);
+        endDate = days.get(ctr+1);
+        String query = "SELECT * FROM transactions WHERE time BETWEEN " + startDate + " AND " + endDate;
+        Cursor cursor = db.rawQuery(query, null);
 
-            int prodName = cursor.getColumnIndex("prodName");
-            int quantity = cursor.getColumnIndex("quantity");
-            int priceIndex = cursor.getColumnIndex("price");
+        int prodName = cursor.getColumnIndex("prodName");
+        int quantity = cursor.getColumnIndex("quantity");
+        int priceIndex = cursor.getColumnIndex("price");
 
-            while(cursor.moveToNext()) {
-                transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex)));
-            }
-        }else{
-            String query = "SELECT * FROM transactions WHERE time BETWEEN " + days.get(0) + " AND " + days.get(13);
-            Cursor cursor = db.rawQuery(query, null);
-
-            int prodName = cursor.getColumnIndex("prodName");
-            int quantity = cursor.getColumnIndex("quantity");
-            int priceIndex = cursor.getColumnIndex("price");
-
-            while(cursor.moveToNext()) {
-                transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex)));
-            }
+        while(cursor.moveToNext()) {
+            transactions.add(new Transaction(cursor.getString(prodName), cursor.getInt(quantity), cursor.getDouble(priceIndex)));
         }
 
         db.close();
@@ -597,8 +595,6 @@ public class KMeans extends AppCompatActivity {
         btnDay5.setEnabled(true);
         btnDay6.setBackgroundResource(R.drawable.button1);
         btnDay6.setEnabled(true);
-//        btnPast.setBackgroundResource(R.drawable.button1);
-//        btnPast.setEnabled(true);
     }
 
     public void getDailyTotal(){

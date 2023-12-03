@@ -191,7 +191,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
     private void writeDataFromDatabase(Context context, XSSFSheet sheet) {
         SQLiteDatabase db = context.openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
         if(txtStartDate.getText().toString().trim().equals("")){
-            Cursor cursor = db.rawQuery("SELECT * FROM transactions", null);
+            Cursor cursor = db.rawQuery("SELECT transID, prodName, category, quantity, price, time, (quantity * price) AS total_price FROM transactions ORDER BY time ASC", null);
 
             // Headers
             Row headerRow = sheet.createRow(0);
@@ -202,67 +202,19 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             headerCell2.setCellValue("Product Name");
 
             Cell headerCell3 = headerRow.createCell(2);
-            headerCell3.setCellValue("Quantity");
-
-            Cell headerCell4 = headerRow.createCell(2);
-            headerCell4.setCellValue("Category");
-
-            Cell headerCell5 = headerRow.createCell(3);
-            headerCell5.setCellValue("Price");
-
-            Cell headerCell6 = headerRow.createCell(4);
-            headerCell6.setCellValue("Time");
-
-            int rowNum = 1;
-            while (cursor.moveToNext()) {
-                Row dataRow = sheet.createRow(rowNum++);
-
-                String formattedDate;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
-                int time = cursor.getColumnIndex("time");
-                formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
-
-                Cell dataCell1 = dataRow.createCell(0);
-                dataCell1.setCellValue(cursor.getString(cursor.getColumnIndex("transID")));
-
-                Cell dataCell2 = dataRow.createCell(1);
-                dataCell2.setCellValue(cursor.getString(cursor.getColumnIndex("prodName")));
-
-                Cell dataCell3 = dataRow.createCell(2);
-                dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
-
-                Cell dataCell4 = dataRow.createCell(2);
-                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
-
-                Cell dataCell5 = dataRow.createCell(3);
-                dataCell5.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
-
-                Cell dataCell6 = dataRow.createCell(4);
-                dataCell6.setCellValue(formattedDate);
-            }
-            cursor.close();
-            db.close();
-        }else{
-            Cursor cursor = db.rawQuery("SELECT * FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli,null);
-            // Headers
-            Row headerRow = sheet.createRow(0);
-            Cell headerCell1 = headerRow.createCell(0);
-            headerCell1.setCellValue("Transaction ID");
-
-            Cell headerCell2 = headerRow.createCell(1);
-            headerCell2.setCellValue("Product Name");
-
-            Cell headerCell3 = headerRow.createCell(2);
-            headerCell3.setCellValue("Quantity");
+            headerCell3.setCellValue("Category");
 
             Cell headerCell4 = headerRow.createCell(3);
-            headerCell4.setCellValue("Category");
+            headerCell4.setCellValue("Quantity");
 
-            Cell headerCell5 = headerRow.createCell(3);
+            Cell headerCell5 = headerRow.createCell(4);
             headerCell5.setCellValue("Price");
 
-            Cell headerCell6 = headerRow.createCell(4);
-            headerCell6.setCellValue("Time");
+            Cell headerCell6 = headerRow.createCell(5);
+            headerCell6.setCellValue("Total Price");
+
+            Cell headerCell7 = headerRow.createCell(6);
+            headerCell7.setCellValue("Time");
 
             int rowNum = 1;
             while (cursor.moveToNext()) {
@@ -280,16 +232,76 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 dataCell2.setCellValue(cursor.getString(cursor.getColumnIndex("prodName")));
 
                 Cell dataCell3 = dataRow.createCell(2);
-                dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
+                dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
 
                 Cell dataCell4 = dataRow.createCell(3);
-                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
+                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
 
                 Cell dataCell5 = dataRow.createCell(4);
                 dataCell5.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
 
                 Cell dataCell6 = dataRow.createCell(5);
-                dataCell6.setCellValue(formattedDate);
+                dataCell6.setCellValue(cursor.getString(cursor.getColumnIndex("total_price")));
+
+                Cell dataCell7 = dataRow.createCell(6);
+                dataCell7.setCellValue(formattedDate);
+            }
+            cursor.close();
+            db.close();
+        }else{
+            Cursor cursor = db.rawQuery("SELECT transID, prodName, category, quantity, price, time, (quantity * price) AS total_price FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + "ORDER BY time ASC",null);
+            // Headers
+            Row headerRow = sheet.createRow(0);
+            Cell headerCell1 = headerRow.createCell(0);
+            headerCell1.setCellValue("Transaction ID");
+
+            Cell headerCell2 = headerRow.createCell(1);
+            headerCell2.setCellValue("Product Name");
+
+            Cell headerCell3 = headerRow.createCell(2);
+            headerCell3.setCellValue("Category");
+
+            Cell headerCell4 = headerRow.createCell(3);
+            headerCell4.setCellValue("Quantity");
+
+            Cell headerCell5 = headerRow.createCell(4);
+            headerCell5.setCellValue("Price");
+
+            Cell headerCell6 = headerRow.createCell(5);
+            headerCell6.setCellValue("Total Price");
+
+            Cell headerCell7 = headerRow.createCell(6);
+            headerCell7.setCellValue("Time");
+
+            int rowNum = 1;
+            while (cursor.moveToNext()) {
+                Row dataRow = sheet.createRow(rowNum++);
+
+                String formattedDate;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
+                int time = cursor.getColumnIndex("time");
+                formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
+
+                Cell dataCell1 = dataRow.createCell(0);
+                dataCell1.setCellValue(cursor.getString(cursor.getColumnIndex("transID")));
+
+                Cell dataCell2 = dataRow.createCell(1);
+                dataCell2.setCellValue(cursor.getString(cursor.getColumnIndex("prodName")));
+
+                Cell dataCell3 = dataRow.createCell(2);
+                dataCell3.setCellValue(cursor.getString(cursor.getColumnIndex("category")));
+
+                Cell dataCell4 = dataRow.createCell(3);
+                dataCell4.setCellValue(cursor.getString(cursor.getColumnIndex("quantity")));
+
+                Cell dataCell5 = dataRow.createCell(4);
+                dataCell5.setCellValue(cursor.getString(cursor.getColumnIndex("price")));
+
+                Cell dataCell6 = dataRow.createCell(5);
+                dataCell6.setCellValue(cursor.getString(cursor.getColumnIndex("total_price")));
+
+                Cell dataCell7 = dataRow.createCell(6);
+                dataCell7.setCellValue(formattedDate);
             }
             cursor.close();
             db.close();
@@ -323,7 +335,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
             db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
-            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + " GROUP BY transID ORDER BY time ASC";
+            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + " GROUP BY transID";
             Cursor cursor = db.rawQuery(query, null);
 
             int id = cursor.getColumnIndex("transID");
