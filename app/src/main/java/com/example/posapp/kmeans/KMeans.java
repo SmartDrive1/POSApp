@@ -164,6 +164,8 @@ public class KMeans extends AppCompatActivity {
         ctr = 12;
         runKMeans();
         getDailyTotal();
+        btnDay6.setBackgroundResource(R.drawable.button1dark);
+        btnDay6.setEnabled(false);
     }
 
     private void runKMeans() {
@@ -413,30 +415,30 @@ public class KMeans extends AppCompatActivity {
                 productCounts.put(productName, productCounts.getOrDefault(productName, 0) + 1);
             }
 
-            // Find the maximum count
-            int maxCount = 0;
+            // Find the minimum count (least bought product)
+            int minCount = Integer.MAX_VALUE; // Initialize with a large value
 
             for (int count : productCounts.values()) {
-                if (count > maxCount) {
-                    maxCount = count;
+                if (count < minCount) {
+                    minCount = count;
                 }
             }
 
-            // Find all products with the maximum count
-            List<String> mostBoughtProducts = new ArrayList<>();
+            // Find all products with the minimum count (least bought products)
+            List<String> leastBoughtProducts = new ArrayList<>();
 
             int i = 0;
             for (Map.Entry<String, Integer> entry : productCounts.entrySet()) {
-                if (entry.getValue() == maxCount) {
+                if (entry.getValue() == minCount) {
                     if (i != 2) {
-                        mostBoughtProducts.add(entry.getKey());
+                        leastBoughtProducts.add(entry.getKey());
                         i++;
                     }
                 }
             }
 
-            if (mostBoughtProducts.size() == 1) {
-                String existingProduct = mostBoughtProducts.get(0);
+            if (leastBoughtProducts.size() == 1) {
+                String existingProduct = leastBoughtProducts.get(0);
                 String randomProduct = getRandomProductFromDatabase(context);
 
                 // Ensure that the random product is not the same as the existing product
@@ -444,14 +446,14 @@ public class KMeans extends AppCompatActivity {
                     randomProduct = getRandomProductFromDatabase(context);
                 }
 
-                mostBoughtProducts.add(randomProduct);
+                leastBoughtProducts.add(randomProduct);
             }
 
-            if (mostBoughtProducts.size() > 2) {
-                mostBoughtProducts = mostBoughtProducts.subList(0, 2);
+            if (leastBoughtProducts.size() > 2) {
+                leastBoughtProducts = leastBoughtProducts.subList(0, 2);
             }
 
-            return mostBoughtProducts;
+            return leastBoughtProducts;
         }
 
         @SuppressLint("Range")

@@ -76,7 +76,6 @@ public class login extends AppCompatActivity {
 
             addProducts();
             addUsers();
-            addTransaction();
             // Set the firstRun flag to false
             SharedPreferences.Editor editor = preferences.edit();
             editor.putBoolean("firstRun", false);
@@ -312,28 +311,6 @@ public class login extends AppCompatActivity {
         user1.put("password", "user1");
         user1.put("access", "User");
         db.insert("users", null, user1);
-    }
-
-    public void addTransaction(){
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-
-        ContentValues trans1 = new ContentValues();
-        trans1.put("transID", 2); // Assuming transID is the primary key and auto-incremented
-        trans1.put("prodName", "Dinakdakan");
-        trans1.put("category", "Special");
-        trans1.put("quantity", 780);
-        trans1.put("price", 150.0); // Use the correct column name for price
-        trans1.put("time", System.currentTimeMillis()); // Use the current time as an example
-        db.insert("transactions", null, trans1);
-
-        ContentValues trans2 = new ContentValues();
-        trans2.put("transID", 2); // Assuming transID is the primary key and auto-incremented
-        trans2.put("prodName", "Blueberry Cheesecake");
-        trans2.put("category", "Cake");
-        trans2.put("quantity", 150);
-        trans2.put("price", 150.0); // Use the correct column name for price
-        trans2.put("time", System.currentTimeMillis()); // Use the current time as an example
-        db.insert("transactions", null, trans2);
     }
 
     // Helper method to get product name by ID
