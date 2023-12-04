@@ -48,6 +48,4 @@ dependencies {
     implementation 'org.apache.poi:poi:5.2.2'
     implementation 'org.apache.poi:poi-ooxml:5.2.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
-    implementation 'com.tbuonomo.andrui:viewpagerdotsindicator:4.0.1'
 }

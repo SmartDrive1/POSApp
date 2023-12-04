@@ -149,7 +149,7 @@ public class OSPayment extends AppCompatActivity {
                     statement.bindString(5, price);
                     statement.bindString(6, category);
                     statement.bindString(7, String.valueOf(currentTime));
-                    statement.bindString(8, "Pending");
+                    statement.bindString(8, "Preparing");
                     statement.execute();
                 }while (cursor.moveToNext());
             }

@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class pendingTransaction extends AppCompatActivity implements pendingClickListener{
 
-    Button btnBack;
+    Button btnOrdersView, btnBack;
     pendingAdapter pendingAdapter;
     List<pendingItems> items = new ArrayList<>();
 
@@ -34,11 +34,20 @@ public class pendingTransaction extends AppCompatActivity implements pendingClic
         setContentView(R.layout.activity_pending_transaction);
 
         btnBack = findViewById(R.id.btnBack);
+        btnOrdersView = findViewById(R.id.btnOrdersView);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(pendingTransaction.this, OrderingSystem.class);
+                startActivity(i);
+            }
+        });
+
+        btnOrdersView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(pendingTransaction.this, ordersView.class);
                 startActivity(i);
             }
         });

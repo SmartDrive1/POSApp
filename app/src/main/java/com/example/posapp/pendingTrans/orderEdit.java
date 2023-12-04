@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class orderEdit extends AppCompatActivity {
-    Button btnDone, btnCancel, btnBack;
+    Button btnDone, btnCancel, btnBack, btnServing;
     TextView txtOrderID, txtOrderTime, txtStatus;
     String transID;
     String formattedDate, status;
@@ -43,6 +43,7 @@ public class orderEdit extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_edit);
 
+        btnServing = findViewById(R.id.btnServing);
         btnDone = findViewById(R.id.btnDone);
         btnCancel = findViewById(R.id.btnCancel);
         btnBack = findViewById(R.id.btnBack);
@@ -90,6 +91,13 @@ public class orderEdit extends AppCompatActivity {
             }
         });
 
+        btnServing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toServe();
+            }
+        });
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,6 +105,10 @@ public class orderEdit extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        if(status.equals("Serving")){
+            btnServing.setEnabled(false);
+        }
 
         refreshList();
     }
@@ -210,6 +222,19 @@ public class orderEdit extends AppCompatActivity {
                 db.execSQL(updateQuantity, bindArgs);
             }while(cursor.moveToNext());
         }
+    }
+
+    public void toServe(){
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+
+        String transIDToUpdate = transID;
+        String updateStatusSQL = "UPDATE orders SET status = 'Serving' WHERE transID = ?";
+        SQLiteStatement updateStatement = db.compileStatement(updateStatusSQL);
+        updateStatement.bindString(1, transIDToUpdate);
+        updateStatement.executeUpdateDelete();
+        db.close();
+        txtStatus.setText("Status: Serving");
+        btnServing.setEnabled(false);
     }
 
     @Override

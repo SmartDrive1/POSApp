@@ -15,6 +15,14 @@
         android:theme="@style/Theme.POSApp"
         tools:targetApi="31">
         <activity
+            android:name=".pendingTrans.ordersView"
+            android:exported="false"
+            android:screenOrientation="landscape">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".pendingTrans.orderEdit"
             android:exported="false"
             android:screenOrientation="landscape">
