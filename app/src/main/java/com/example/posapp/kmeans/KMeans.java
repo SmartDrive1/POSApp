@@ -3,16 +3,19 @@ package com.example.posapp.kmeans;
 import static java.lang.Math.round;
 
 import android.annotation.SuppressLint;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.sax.StartElementListener;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +24,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.posapp.MainScreen;
 import com.example.posapp.R;
+import com.example.posapp.transactions.manageTransactions;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -39,15 +43,16 @@ import java.util.Map;
 import java.util.Random;
 
 public class KMeans extends AppCompatActivity {
-
+    Button btnBack;
     private TextView textViewResult;
-    private Button btnBack, btnDay0, btnDay1, btnDay2, btnDay3, btnDay4, btnDay5, btnDay6;
     BarChart barChart;
+    EditText txtStartDate, txtEndDate;
     long currentDay, currentDayE;
     ArrayList<Long> days = new ArrayList<Long>();//0 day to Current Day
     long startDate, endDate;
     int ctr = 0;
     BarData barData;
+    DatePickerDialog datePickerDialog;
 
     BarDataSet barDataSet;
 
@@ -58,16 +63,10 @@ public class KMeans extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kmeans_ui);
 
-        // Initialize UI components
         textViewResult = findViewById(R.id.textViewResult);
+        txtStartDate = findViewById(R.id.txtStartDate);
+        txtEndDate = findViewById(R.id.txtEndDate);
         btnBack = findViewById(R.id.btnBack);
-        btnDay0 = findViewById(R.id.btnDay0);
-        btnDay1 = findViewById(R.id.btnDay1);
-        btnDay2 = findViewById(R.id.btnDay2);
-        btnDay3 = findViewById(R.id.btnDay3);
-        btnDay4 = findViewById(R.id.btnDay4);
-        btnDay5 = findViewById(R.id.btnDay5);
-        btnDay6 = findViewById(R.id.btnDay6);
         barChart = findViewById(R.id.barChart);
         barChart.setEnabled(false);
         barChart.setClickable(false);
@@ -80,92 +79,56 @@ public class KMeans extends AppCompatActivity {
             }
         });
 
-        btnDay0.setOnClickListener(new View.OnClickListener() {
+        txtStartDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshButtons();
-                btnDay0.setBackgroundResource(R.drawable.button1dark);
-                btnDay0.setEnabled(false);
-                ctr = 0;
-                runKMeans();
+                showStartDatePicker();
+                if(!txtEndDate.getText().toString().isEmpty()){
+                    runKMeans();
+                }
             }
         });
 
-        btnDay1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshButtons();
-                btnDay1.setBackgroundResource(R.drawable.button1dark);
-                btnDay1.setEnabled(false);
-                ctr = 2;
-                runKMeans();
-            }
-        });
+        final Calendar c1 = Calendar.getInstance();
+        int mYear2 = c1.get(Calendar.YEAR);
+        int mMonth2 = c1.get(Calendar.MONTH);
+        int mDay2 = c1.get(Calendar.DAY_OF_MONTH);
 
-        btnDay2.setOnClickListener(new View.OnClickListener() {
+        txtEndDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                refreshButtons();
-                btnDay2.setBackgroundResource(R.drawable.button1dark);
-                btnDay2.setEnabled(false);
-                ctr = 4;
-                runKMeans();
-            }
-        });
+                datePickerDialog = new DatePickerDialog(KMeans.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        Calendar selectedCalendar = Calendar.getInstance();
+                        selectedCalendar.set(Calendar.YEAR, year);
+                        selectedCalendar.set(Calendar.MONTH, monthOfYear);
+                        selectedCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        btnDay3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshButtons();
-                btnDay3.setBackgroundResource(R.drawable.button1dark);
-                btnDay3.setEnabled(false);
-                ctr = 6;
-                runKMeans();
-            }
-        });
+                        // Set the time to 23:59:59
+                        selectedCalendar.set(Calendar.HOUR_OF_DAY, 23);
+                        selectedCalendar.set(Calendar.MINUTE, 59);
+                        selectedCalendar.set(Calendar.SECOND, 59);
 
-        btnDay4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshButtons();
-                btnDay4.setBackgroundResource(R.drawable.button1dark);
-                btnDay4.setEnabled(false);
-                ctr = 8;
-                runKMeans();
-            }
-        });
+                        endDate = selectedCalendar.getTimeInMillis();
 
-        btnDay5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshButtons();
-                btnDay5.setBackgroundResource(R.drawable.button1dark);
-                btnDay5.setEnabled(false);
-                ctr = 10;
-                runKMeans();
-            }
-        });
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+                        txtEndDate.setText(dateFormat.format(selectedCalendar.getTime()));
+                        runKMeans();
+                    }
+                }, mYear2, mMonth2, mDay2);
+                datePickerDialog.getDatePicker().setMinDate(startDate);
 
-        btnDay6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshButtons();
-                btnDay6.setBackgroundResource(R.drawable.button1dark);
-                btnDay6.setEnabled(false);
-                ctr = 12;
-                runKMeans();
+                datePickerDialog.show();
             }
         });
 
         getDates();
-        setButtons();
 
         //Autostart kmeans
         ctr = 12;
         runKMeans();
         getDailyTotal();
-        btnDay6.setBackgroundResource(R.drawable.button1dark);
-        btnDay6.setEnabled(false);
     }
 
     private void runKMeans() {
@@ -186,12 +149,23 @@ public class KMeans extends AppCompatActivity {
             Cluster cluster = clusters.get(i);
             Context context = this;
 
+            Date date1 = new Date(startDate);
+            Date date2 = new Date(endDate);
+
             SimpleDateFormat df = new SimpleDateFormat("MMMM dd, yyyy, E", Locale.getDefault());
-            String formattedDate = df.format(days.get(ctr));
+            String formattedDate = df.format(date1);
+            String formattedDate2 = df.format(date2);
+
 
             // Append information about the cluster to the resultText
 //          resultText.append("Cluster ").append(i + 1).append("\n"); FOR CLUSTER!!!
-            resultText.append("Date: ").append(formattedDate).append("\n");
+            if (formattedDate.equals(formattedDate2)){
+                resultText.append("Date: ").append(formattedDate).append("\n");
+            }else if(!txtEndDate.getText().toString().trim().equals("")){
+                resultText.append("Date: ").append(formattedDate).append(" to ").append(formattedDate2).append("\n");
+            }else{
+                resultText.append("Date: ").append(formattedDate).append("\n");
+            }
 //          resultText.append("Centroid: ").append(Arrays.toString(cluster.getCentroid())).append("\n"); FOR CENTROID!!!
             resultText.append("Total Items Bought: ").append(cluster.getTotalQuantity()).append("\n");
             resultText.append("Total Sales: ").append(cluster.getTotalPrice() + "0").append("\n");
@@ -523,8 +497,6 @@ public class KMeans extends AppCompatActivity {
         List<Transaction> transactions = new ArrayList<>();
         SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
-        startDate = days.get(ctr);
-        endDate = days.get(ctr+1);
         String query = "SELECT * FROM transactions WHERE time BETWEEN " + startDate + " AND " + endDate;
         Cursor cursor = db.rawQuery(query, null);
 
@@ -557,6 +529,7 @@ public class KMeans extends AppCompatActivity {
         calendar.set(Calendar.SECOND, 0);
 
         currentDay = calendar.getTimeInMillis();
+        startDate = currentDay;
         System.out.println("Current date and time as int (set to 00:00:00): " + currentDay);
 
         calendar.set(Calendar.HOUR_OF_DAY, 23);
@@ -564,6 +537,7 @@ public class KMeans extends AppCompatActivity {
         calendar.set(Calendar.SECOND, 59);
 
         currentDayE = calendar.getTimeInMillis();
+        endDate = currentDayE;
         System.out.println("Current date and time as int (set to 23:59:59): " + currentDayE);
 
         currentDay = currentDay - 518400000;
@@ -580,23 +554,6 @@ public class KMeans extends AppCompatActivity {
             System.out.println("Day " + (i / 2 + 1) + " Start: " + new Date(days.get(i)));
             System.out.println("Day " + (i / 2 + 1) + " End: " + new Date(days.get(i + 1)));
         }
-    }
-
-    public void refreshButtons(){
-        btnDay0.setBackgroundResource(R.drawable.button1);
-        btnDay0.setEnabled(true);
-        btnDay1.setBackgroundResource(R.drawable.button1);
-        btnDay1.setEnabled(true);
-        btnDay2.setBackgroundResource(R.drawable.button1);
-        btnDay2.setEnabled(true);
-        btnDay3.setBackgroundResource(R.drawable.button1);
-        btnDay3.setEnabled(true);
-        btnDay4.setBackgroundResource(R.drawable.button1);
-        btnDay4.setEnabled(true);
-        btnDay5.setBackgroundResource(R.drawable.button1);
-        btnDay5.setEnabled(true);
-        btnDay6.setBackgroundResource(R.drawable.button1);
-        btnDay6.setEnabled(true);
     }
 
     public void getDailyTotal(){
@@ -652,22 +609,49 @@ public class KMeans extends AppCompatActivity {
         barChart.getDescription().setEnabled(false);
     }
 
-    public void setButtons(){
+    private void showStartDatePicker(){
+        final Calendar c = Calendar.getInstance();
+        int mYear1 = c.get(Calendar.YEAR);
+        int mMonth1 = c.get(Calendar.MONTH);
+        int mDay1 = c.get(Calendar.DAY_OF_MONTH);
+        datePickerDialog = new DatePickerDialog(KMeans.this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar selectedCalendar = Calendar.getInstance();
+                selectedCalendar.set(Calendar.YEAR, year);
+                selectedCalendar.set(Calendar.MONTH, monthOfYear);
+                selectedCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yy", Locale.getDefault());
-        String formattedDate = df.format(days.get(0));
-        btnDay0.setText(formattedDate);
-        formattedDate = df.format(days.get(2));
-        btnDay1.setText(formattedDate);
-        formattedDate = df.format(days.get(4));
-        btnDay2.setText(formattedDate);
-        formattedDate = df.format(days.get(6));
-        btnDay3.setText(formattedDate);
-        formattedDate = df.format(days.get(8));
-        btnDay4.setText(formattedDate);
-        formattedDate = df.format(days.get(10));
-        btnDay5.setText(formattedDate);
+                // Set the time components to start of the day
+                selectedCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                selectedCalendar.set(Calendar.MINUTE, 0);
+                selectedCalendar.set(Calendar.SECOND, 0);
+                selectedCalendar.set(Calendar.MILLISECOND, 0);
+
+                startDate = selectedCalendar.getTimeInMillis();
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.getDefault());
+                String formattedDate = dateFormat.format(selectedCalendar.getTime());
+
+                txtStartDate.setText(formattedDate);
+                if(!txtEndDate.getText().toString().isEmpty()){
+                    if(startDate > endDate){
+                        txtEndDate.setText(formattedDate);
+                        runKMeans();
+                    }else{
+                        runKMeans();
+                    }
+                }
+            }
+        }, mYear1, mMonth1, mDay1);
+        datePickerDialog.show();
+        enableEndDateEditText(true);
     }
+
+    private void enableEndDateEditText(boolean enable) {
+        txtEndDate.setEnabled(enable);
+    }
+
     @Override
     public void onBackPressed() {
     }
