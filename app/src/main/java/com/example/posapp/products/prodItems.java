@@ -64,4 +64,7 @@ public class prodItems {
         return prodImage;
     }
 
+    public void setProdImage(String prodImage) {
+        this.prodImage = prodImage;
+    }
 }

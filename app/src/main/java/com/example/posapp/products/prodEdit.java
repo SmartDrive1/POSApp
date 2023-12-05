@@ -77,7 +77,6 @@ public class prodEdit extends AppCompatActivity {
         String prodPrice = i.getStringExtra("prodPrice".toString());
         String category = i.getStringExtra("category".toString());
         String quantity = i.getStringExtra("quantity".toString());
-        byte[] prodImage1 = i.getByteArrayExtra("prodImage");
         Integer category1;
 
         String prodImgbase64 = getIntent().getStringExtra("prodImg");
@@ -96,10 +95,6 @@ public class prodEdit extends AppCompatActivity {
         editName.setText(product);
         editPrice.setText(prodPrice);
         editQuantity.setText(quantity);
-        if(prodImage1 != null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(prodImage1, 0, prodImage1.length);
-            prodImg.setImageBitmap(bitmap);
-        }
 
         switch (category) {
             case "Drinks":

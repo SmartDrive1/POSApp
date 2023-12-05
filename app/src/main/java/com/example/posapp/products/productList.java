@@ -212,7 +212,6 @@ public class productList extends AppCompatActivity implements prodClickListener 
     public void loadProducts() {
         items.clear();
         foods.clear();
-        addOns.clear();
         others.clear();
 
         RecyclerView recyclerView = findViewById(R.id.recycleProds);

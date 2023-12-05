@@ -323,14 +323,13 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         change();
     }
 
-    @SuppressLint("Range")
     public void add() {
         if (prodName.getText().toString().trim().equals("")) {
-            Toast.makeText(this, "Please Select a Product", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please Select a Product", Toast.LENGTH_SHORT).show();
         } else if (Quantity.getText().toString().trim().equals("")) {
-            Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_SHORT).show();
         } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {
-            Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_SHORT).show();
         } else {
             try {
                 total();
@@ -345,23 +344,22 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 // Check if the product is already in the cartlist
                 db.collection("cartlist")
                         .whereEqualTo("id", currentID)
+                        .whereEqualTo("prodName", prodName1)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    String storedProdName = document.getString("prodName");
-                                    if (prodName1.equals(storedProdName)) {
-                                        repeat.set(true);
-                                        break;
-                                    }
+                                    // If a document is found with the same id and prodName, set repeat to true
+                                    repeat.set(true);
+                                    break;
                                 }
                                 checkQuantityAndPerformAction(repeat.get(), currentID, qty2, tPrice1);
                             } else {
-                                Toast.makeText(this, "Failed to check cartlist: " + task.getException(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(this, "Failed to check cartlist: " + task.getException(), Toast.LENGTH_SHORT).show();
                             }
                         });
             } catch (Exception e) {
-                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
         }
@@ -380,7 +378,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                             // Check if the 'quantity' field exists and is not null
                             if (document.contains("quantity") && document.get("quantity") != null) {
                                 // Convert the 'quantity' field from string to int
-                                AtomicInteger availableQuantity = new AtomicInteger(Integer.parseInt(String.valueOf(document.get("quantity"))));
+                                int[] availableQuantity = {Integer.parseInt(String.valueOf(document.get("quantity")))};
                                 int requestedQuantity = Integer.parseInt(qty2);
 
                                 if (repeat) {
@@ -393,9 +391,9 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                                                     DocumentSnapshot cartDocument = cartTask.getResult();
                                                     if (cartDocument.exists()) {
                                                         int currentCartQuantity = Integer.parseInt(String.valueOf(cartDocument.get("quantity")));
-                                                        availableQuantity.addAndGet(currentCartQuantity);
+                                                        availableQuantity[0] += currentCartQuantity;
 
-                                                        if (requestedQuantity <= availableQuantity.get()) {
+                                                        if (requestedQuantity <= availableQuantity[0]) {
                                                             updateCartItemAndReduceProductQuantityFirestore(currentID, qty2, tPrice1);
                                                             prodName.setText("");
                                                             Quantity.setText("");
@@ -414,7 +412,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                                             });
                                 } else {
                                     // If the item is not in the cartlist, check and add
-                                    if (requestedQuantity <= availableQuantity.get()) {
+                                    if (requestedQuantity <= availableQuantity[0]) {
                                         insertFirestore(currentID,  prodName.getText().toString(), qty2, itemCategory, tPrice1);
                                     } else {
                                         Toast.makeText(this, "Insufficient Stock for " + prodName.getText().toString(), Toast.LENGTH_LONG).show();
@@ -454,11 +452,11 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 .document(currentID)
                 .set(productData)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, prodName + " Added to Cart", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, prodName + " Added to Cart", Toast.LENGTH_SHORT).show();
                     refreshList();
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to add item to cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Failed to add item to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 });
     }
@@ -468,84 +466,79 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
 
         DocumentReference productRef = db.collection("products").document(String.valueOf(currentID));
 
-        productRef
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            int currentQuantity = document.getLong("quantity").intValue();
+        db.runTransaction(transaction -> {
+            DocumentSnapshot productSnapshot = transaction.get(productRef);
 
-                            // Log the current and requested quantities for debugging
-                            Log.d("Firestore", "Current Quantity: " + currentQuantity);
-                            Log.d("Firestore", "Requested Quantity To Subtract: " + quantityToSubtract);
+            if (productSnapshot.exists()) {
+                int currentQuantity = productSnapshot.getLong("quantity").intValue();
+                int newQuantity = currentQuantity - quantityToSubtract;
 
-                            // Calculate the new quantity
-                            int newQuantity = currentQuantity - quantityToSubtract;
+                // Ensure the new quantity is not negative
+                newQuantity = Math.max(newQuantity, 0);
 
-                            // Log the new quantity for debugging
-                            Log.d("Firestore", "New Quantity: " + newQuantity);
+                // Update the product quantity
+                transaction.update(productRef, "quantity", newQuantity);
+            }
 
-                            // Update the product quantity
-                            productRef
-                                    .update("quantity", newQuantity)
-                                    .addOnSuccessListener(aVoid -> {
-                                        // Successfully updated product quantity
-                                        Log.d("Firestore", "Product Quantity Updated: " + newQuantity);
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Log.e("Firestore", "Failed to update product quantity: " + e.getMessage());
-                                        e.printStackTrace();
-                                    });
-                        } else {
-                            Log.e("Firestore", "Product document does not exist");
-                        }
-                    } else {
-                        Log.e("Firestore", "Failed to get product document: " + task.getException());
-                        task.getException().printStackTrace();
-                    }
-                });
+            return null;
+        }).addOnSuccessListener(aVoid -> {
+            // Successfully updated product quantity
+            Log.d("Firestore", "Product Quantity Updated");
+        }).addOnFailureListener(e -> {
+            Log.e("Firestore", "Failed to update product quantity: " + e.getMessage());
+            e.printStackTrace();
+        });
     }
 
     private void updateCartItemAndReduceProductQuantityFirestore(String currentID, String newQuantity, String tPrice1) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Get the current quantity in the cartlist
-        db.collection("cartlist")
-                .document(currentID)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            int currentQuantityInCart = document.getLong("quantity").intValue();
+        // Use a transaction for updating cartlist and reducing product quantity
+        db.runTransaction(transaction -> {
+            DocumentReference cartItemRef = db.collection("cartlist").document(currentID);
+            DocumentReference productRef = db.collection("products").document(currentID);
 
-                            // Calculate the quantity difference
-                            int quantityDifference = Integer.parseInt(newQuantity) - currentQuantityInCart;
+            // Get the current quantity in the cartlist
+            DocumentSnapshot cartDocument = transaction.get(cartItemRef);
+            if (cartDocument.exists()) {
+                int currentQuantityInCart = cartDocument.getLong("quantity").intValue();
 
-                            // Update the cartlist document
-                            db.collection("cartlist")
-                                    .document(currentID)
-                                    .update("quantity", Integer.parseInt(newQuantity), "price", Double.parseDouble(tPrice1))
-                                    .addOnSuccessListener(aVoid -> {
-                                        // Successfully updated cartlist, now update products
-                                        decreaseProductQuantityFirestore(Integer.parseInt(currentID), quantityDifference);
+                // Calculate the quantity difference
+                int quantityDifference = Integer.parseInt(newQuantity) - currentQuantityInCart;
 
-                                        Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
-                                        refreshList();
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(this, "Failed to update item in cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                                        e.printStackTrace();
-                                    });
-                        } else {
-                            Toast.makeText(this, "Cartlist document does not exist", Toast.LENGTH_SHORT).show();
-                        }
-                    } else {
-                        Toast.makeText(this, "Failed to get cartlist document: " + task.getException(), Toast.LENGTH_LONG).show();
-                        task.getException().printStackTrace();
-                    }
-                });
+                // Update the cartlist document
+                transaction.update(cartItemRef, "quantity", Integer.parseInt(newQuantity), "price", Double.parseDouble(tPrice1));
+
+                // Update the product quantity
+                DocumentSnapshot productDocument = transaction.get(productRef);
+                if (productDocument.exists()) {
+                    int currentProductQuantity = productDocument.getLong("quantity").intValue();
+                    int newProductQuantity = currentProductQuantity - quantityDifference;
+
+                    // Ensure the new quantity is not negative
+                    newProductQuantity = Math.max(newProductQuantity, 0);
+
+                    // Update the product quantity
+                    transaction.update(productRef, "quantity", newProductQuantity);
+
+                    // Log statements to trace the flow
+                    Log.d("Firestore", "Product Quantity Updated. newProductQuantity: " + newProductQuantity);
+                } else {
+                    Log.e("Firestore", "Product document not found!");
+                }
+            } else {
+                Log.e("Firestore", "Cartlist document not found!");
+            }
+
+            return null;
+        }).addOnSuccessListener(aVoid -> {
+            // Successfully updated cartlist and reduced product quantity
+            Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_SHORT).show();
+            refreshList();
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Failed to update item in cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        });
     }
 
     public void updatePrice() {
@@ -581,7 +574,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         if (String.valueOf(Quantity.getText()).equals("")){
 
         }else if(Integer.parseInt(String.valueOf(Quantity.getText())) <= 0){
-            Toast.makeText(OrderingSystem.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
+            Toast.makeText(OrderingSystem.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_SHORT).show();
         }else{
             double qty1 = Double.parseDouble(Quantity.getText().toString());
             double price1 = Double.parseDouble(Price.getText().toString());
@@ -663,7 +656,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 .addOnFailureListener(e -> {
                     // Handle the case when there is an error fetching data from Firestore
                     e.printStackTrace();
-                    Toast.makeText(this, "Failed to fetch products", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Failed to fetch products", Toast.LENGTH_SHORT).show();
                 });
     }
 

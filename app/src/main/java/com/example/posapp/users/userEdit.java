@@ -81,16 +81,12 @@ public class userEdit extends AppCompatActivity {
         String userImgBase64 = getIntent().getStringExtra("userImg");
 
         if (userImgBase64 != null && !userImgBase64.isEmpty()) {
-            // Decode Base64 string to byte array
             byte[] userImgBytes = Base64.decode(userImgBase64, Base64.DEFAULT);
 
-            // Convert byte array to Bitmap
             Bitmap bitmap = BitmapFactory.decodeByteArray(userImgBytes, 0, userImgBytes.length);
 
-            // Set the Bitmap to the ImageView
             userImg.setImageBitmap(bitmap);
         } else {
-            // Handle the case when userImgBase64 is null or empty
             userImg.setImageResource(R.drawable.noimage);
         }
         editID.setText(id);
