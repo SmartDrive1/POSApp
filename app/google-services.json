@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "362445305160",
+    "project_id": "timyc-407118",
+    "storage_bucket": "timyc-407118.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:362445305160:android:6cd759cb4403bf8f75af7d",
+        "android_client_info": {
+          "package_name": "com.example.posapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOzkXWcbhshUxT-BmKL29ev1Ra3JmDYoY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
