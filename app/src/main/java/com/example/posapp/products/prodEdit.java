@@ -16,6 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -26,11 +27,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Blob;
+import java.util.HashMap;
+import java.util.Map;
 
 public class prodEdit extends AppCompatActivity {
 
@@ -74,9 +80,21 @@ public class prodEdit extends AppCompatActivity {
         byte[] prodImage1 = i.getByteArrayExtra("prodImage");
         Integer category1;
 
+        String prodImgbase64 = getIntent().getStringExtra("prodImg");
+
+        if (prodImgbase64 != null && !prodImgbase64.isEmpty()) {
+            byte[] userImgBytes = Base64.decode(prodImgbase64, Base64.DEFAULT);
+
+            Bitmap bitmap = BitmapFactory.decodeByteArray(userImgBytes, 0, userImgBytes.length);
+
+            prodImg.setImageBitmap(bitmap);
+        } else {
+            prodImg.setImageResource(R.drawable.noimage);
+        }
+
 //        editID.setText(id);
         editName.setText(product);
-        editPrice.setText(prodPrice + ".00");
+        editPrice.setText(prodPrice);
         editQuantity.setText(quantity);
         if(prodImage1 != null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(prodImage1, 0, prodImage1.length);
@@ -132,80 +150,101 @@ public class prodEdit extends AppCompatActivity {
         });
     }
 
-    public void edit(){
-        try{
+    public void edit() {
+        try {
             String editName1 = editName.getText().toString().trim();
             String editPrice1 = editPrice.getText().toString().trim();
             String editQuantity1 = editQuantity.getText().toString().trim();
-            if (editName1.equals("")){
-                Toast.makeText(this,"Product Name is Blank. Please Input a Product Name", Toast.LENGTH_LONG).show();
-            }else if (editQuantity1.equals("")) {
-                Toast.makeText(this,"Quantity is Blank. Please Input a Quantity", Toast.LENGTH_LONG).show();
-            }else if (editPrice1.equals("")) {
-                Toast.makeText(this,"Price is Blank. Please Input a Price", Toast.LENGTH_LONG).show();
-            }else if (editName1.equals("None") || editPrice1.equals("none")) {
+
+            if (editName1.equals("")) {
+                Toast.makeText(this, "Product Name is Blank. Please Input a Product Name", Toast.LENGTH_LONG).show();
+            } else if (editQuantity1.equals("")) {
+                Toast.makeText(this, "Quantity is Blank. Please Input a Quantity", Toast.LENGTH_LONG).show();
+            } else if (editPrice1.equals("")) {
+                Toast.makeText(this, "Price is Blank. Please Input a Price", Toast.LENGTH_LONG).show();
+            } else if (editName1.equals("None") || editPrice1.equals("none")) {
                 Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
-            }else{
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                Cursor c = db.rawQuery("SELECT * FROM products WHERE product =?", new String[]{editName1});
+            } else {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference productsCollection = db.collection("products");
 
-                if(c.getCount() > 0){
-                    if(c.moveToFirst()){
-                        int existingID = c.getColumnIndex("id");
-                        if(c.getString(existingID).equals(id)){
-                            editData();
-                        }else{
-                            Toast.makeText(this, "Product Name Already Exists", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }else{
-                    editData();
-                }
+                productsCollection.whereEqualTo("product", editName1)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                    String existingID = document.getString("id");
+
+                                    if (existingID.equals(id)) {
+                                        editData();
+                                    } else {
+                                        Toast.makeText(this, "Product Name Already Exists", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } else {
+                                editData();
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            // Handle the case when there is an error fetching data from Firestore
+                            e.printStackTrace();
+                            Toast.makeText(this, "Failed to check existing products", Toast.LENGTH_LONG).show();
+                        });
             }
-        }catch (Exception e) {
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public void editData(){
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+    public void editData() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference productsCollection = db.collection("products");
 
         String editName1 = editName.getText().toString().trim();
         String editPrice1 = editPrice.getText().toString().trim();
         String editQuantity1 = editQuantity.getText().toString().trim();
-        Spinner spinner = (Spinner)findViewById(R.id.catID);
+        Spinner spinner = findViewById(R.id.catID);
         String spTxt = spinner.getSelectedItem().toString();
 
-        String sql = "update products set product = ?, category = ?, prodPrice = ?, quantity = ?, prodImage = ? where id = ?";
-        SQLiteStatement statement = db.compileStatement(sql);
-        statement.bindString(1, editName1);
-        statement.bindString(2, spTxt);
-        statement.bindString(3, editPrice1);
-        statement.bindString(4, editQuantity1);
+        Map<String, Object> updatedData = new HashMap<>();
+        updatedData.put("product", editName1);
+        updatedData.put("category", spTxt);
+        updatedData.put("prodPrice", editPrice1);
+        updatedData.put("quantity", editQuantity1);
+
         try {
             if (selectedImageUri != null) {
                 InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
                 byte[] imageBytes = getBytes(inputStream);
-                statement.bindBlob(5, imageBytes); // Bind the image bytes
+                String imageBase64 = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                updatedData.put("prodImg", imageBase64); // Add the image Base64 string
             } else {
                 // If no new image is selected, use the current image in prodImg
                 Bitmap bitmap = ((BitmapDrawable) prodImg.getDrawable()).getBitmap();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] imageBytes = stream.toByteArray();
-                statement.bindBlob(5, imageBytes);
+                String imageBase64 = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                updatedData.put("prodImg", imageBase64);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        statement.bindString(6, id);
 
-        statement.execute();
-        Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
-        db.close();
-        Intent i = new Intent(prodEdit.this, productList.class);
-        startActivity(i);
+        productsCollection.document(id)
+                .update(updatedData)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(prodEdit.this, "Product Updated", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(prodEdit.this, productList.class);
+                    startActivity(i);
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the case when there is an error updating data in Firestore
+                    e.printStackTrace();
+                    Toast.makeText(prodEdit.this, "Failed to update product", Toast.LENGTH_LONG).show();
+                });
     }
+
 
     private void startImageSelection() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -235,40 +274,42 @@ public class prodEdit extends AppCompatActivity {
         return byteBuffer.toByteArray();
     }
 
-    public void toDelete(){
+    public void toDelete() {
         dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        try{
-                            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        CollectionReference productsCollection = db.collection("products");
 
-                            String sql = "delete from products where id = ?";
-                            SQLiteStatement statement = db.compileStatement(sql);
-                            statement.bindString(1,id);
-                            statement.execute();
-                            Toast.makeText(prodEdit.this,"Product: " + product + " Deleted", Toast.LENGTH_LONG).show();
-                            db.close();
-                            Intent i = new Intent(prodEdit.this, productList.class);
-                            startActivity(i);
-                        }catch (Exception e){
-                            Toast.makeText(prodEdit.this,"Failed", Toast.LENGTH_LONG).show();
-                        }
-
-                        Intent i = new Intent(prodEdit.this, productList.class);
-                        startActivity(i);
+                        productsCollection.document(id)
+                                .delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(prodEdit.this, "Product: " + product + " Deleted", Toast.LENGTH_LONG).show();
+                                    Intent i = new Intent(prodEdit.this, productList.class);
+                                    startActivity(i);
+                                })
+                                .addOnFailureListener(e -> {
+                                    // Handle the case when there is an error deleting the document in Firestore
+                                    e.printStackTrace();
+                                    Toast.makeText(prodEdit.this, "Failed to delete product", Toast.LENGTH_LONG).show();
+                                });
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
+                        break;
                 }
             }
         };
+
         AlertDialog.Builder builder = new AlertDialog.Builder(prodEdit.this);
         builder.setMessage("Do You Want to Delete the Product: " + product + "?")
                 .setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
+                .setNegativeButton("No", dialogClickListener)
+                .show();
     }
+
     @Override
     public void onBackPressed() {
     }

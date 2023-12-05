@@ -1,6 +1,8 @@
 package com.example.posapp.users;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,14 +38,20 @@ public class userViewHolder extends RecyclerView.ViewHolder {
         password.setText("Password: " + item.getPassword());
         access.setText("Access: " + item.getAccess());
 
-        Bitmap bitmap = item.getUserImageBitmap();
+        String base64Image = item.getUserImgBase64();
 
-        if (bitmap != null) {
+        if (base64Image != null) {
+            // Decode Base64 string to byte array
+            byte[] imageBytes = Base64.decode(base64Image, Base64.DEFAULT);
+
+            // Convert byte array to Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+
             // Set the Bitmap to the ImageView
             userImg.setImageBitmap(bitmap);
         } else {
-            // Handle the case when the Bitmap is null
-            userImg.setImageResource(R.drawable.noimage); // Set a default image or do something else
+            // Handle the case when the Base64 image string is null
+            userImg.setImageResource(R.drawable.noimage);
         }
 
         cardview.setOnClickListener(new View.OnClickListener() {

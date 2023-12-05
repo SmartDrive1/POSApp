@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +24,10 @@ import com.example.posapp.R;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.posapp.mainManageScreen;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class productList extends AppCompatActivity implements prodClickListener {
 
@@ -204,10 +209,12 @@ public class productList extends AppCompatActivity implements prodClickListener 
         search();
     }
 
-    public void loadProducts(){
+    public void loadProducts() {
         items.clear();
         foods.clear();
+        addOns.clear();
         others.clear();
+
         RecyclerView recyclerView = findViewById(R.id.recycleProds);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
@@ -224,44 +231,58 @@ public class productList extends AppCompatActivity implements prodClickListener 
         othersRecyclerView.setHasFixedSize(true);
         othersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER, prodImage BLOB )"); //Create database if non-existent, to avoid crash
-        final Cursor c = db.rawQuery("SELECT * FROM products ORDER BY product ASC", null);
-        int count = c.getCount();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference productsCollection = db.collection("products");
 
-        if(count == 0){
-            Toast.makeText(this,"No Products Found", Toast.LENGTH_LONG).show();
-        }else{
-            int id = c.getColumnIndex("id");
-            int product = c.getColumnIndex("product");
-            int category = c.getColumnIndex("category");
-            int prodPrice = c.getColumnIndex("prodPrice");
-            int quantity = c.getColumnIndex("quantity");
-            int prodImage = c.getColumnIndex("prodImage");
+        productsCollection.orderBy("product", Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String id = document.getString("id");
+                        String product = document.getString("product");
+                        String category = document.getString("category");
+                        String prodPrice = document.getString("prodPrice");
+                        String quantity = document.getString("quantity");
 
-            if(c.moveToFirst()){
-                do{
-                    if(c.getString(category).equals("Drinks")){
-                        items.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
-                        productListAdapter = new prodDrinksListAdapter(this, items, this);
-                        recyclerView.setAdapter(productListAdapter);}
-                    if(c.getString(category).equals("Food")){
-                        foods.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
-                        foodListAdapter = new prodFoodListAdapter(this, foods, this);
-                        foodRecyclerView.setAdapter(foodListAdapter);}
-                    if (c.getString(category).equals("Cake")){
-                        addOns.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
-                        CakeListAdapter = new CakeListAdapter(this, addOns, this);
-                        addOnsRecycle.setAdapter(CakeListAdapter);}
-                    if (c.getString(category).equals("Special")){
-                        others.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
-                        specialListAdapter = new SpecialListAdapter(this, others, this);
-                        othersRecyclerView.setAdapter(specialListAdapter);}
-                }while(c.moveToNext());
-            }
-            c.close();
-            db.close();
-        }
+                        Object prodImgObject = document.get("prodImg");
+                        String prodImageBase64 = null;
+
+                        if (prodImgObject instanceof String) {
+                            // Handle the case when 'userImg' is stored as a Base64 encoded string in Firestore
+                            prodImageBase64 = (String) prodImgObject;
+                        }
+
+                        prodItems productItem = new prodItems(id, product, category, prodPrice, quantity, prodImageBase64);
+
+                        if (category.equals("Drinks")) {
+                            items.add(productItem);
+                        } else if (category.equals("Food")) {
+                            foods.add(productItem);
+                        } else if (category.equals("Cake")) {
+                            addOns.add(productItem);
+                        } else if (category.equals("Special")) {
+                            others.add(productItem);
+                        }
+                    }
+
+                    // Set up RecyclerView adapters here
+                    productListAdapter = new prodDrinksListAdapter(this, items, this);
+                    recyclerView.setAdapter(productListAdapter);
+
+                    foodListAdapter = new prodFoodListAdapter(this, foods, this);
+                    foodRecyclerView.setAdapter(foodListAdapter);
+
+                    CakeListAdapter = new CakeListAdapter(this, addOns, this);
+                    addOnsRecycle.setAdapter(CakeListAdapter);
+
+                    specialListAdapter = new SpecialListAdapter(this, others, this);
+                    othersRecyclerView.setAdapter(specialListAdapter);
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the case when there is an error fetching data from Firestore
+                    e.printStackTrace();
+                    Toast.makeText(this, "Failed to fetch products", Toast.LENGTH_LONG).show();
+                });
     }
 
     @Override
@@ -273,7 +294,7 @@ public class productList extends AppCompatActivity implements prodClickListener 
         i.putExtra("category", view.getCategory());
         i.putExtra("quantity", view.getQuantity());
         if(view.getProdImage() != null){
-            i.putExtra("prodImage", view.getProdImage());
+            i.putExtra("prodImg", view.getProdImage());
         }else{
             //None
         }
@@ -311,48 +332,59 @@ public class productList extends AppCompatActivity implements prodClickListener 
                     othersRecyclerView.setHasFixedSize(true);
                     othersRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
 
-                    SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-                    db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity, INTEGER, prodPrice INTEGER, prodImage BLOB)"); //Create database if non-existent, to avoid crash
-                    String query = "SELECT * FROM products WHERE product LIKE ?";
-                    String[] selectionArgs = {"%" + searchItem + "%"};
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    CollectionReference productsCollection = db.collection("products");
 
-                    Cursor c = db.rawQuery(query, selectionArgs);
-                    count = c.getCount();
+                    productsCollection.whereGreaterThanOrEqualTo("product", searchItem)
+                            .orderBy("product", Query.Direction.ASCENDING)
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                    String id = document.getString("id");
+                                    String product = document.getString("product");
+                                    String category = document.getString("category");
+                                    String prodPrice = document.getString("prodPrice");
+                                    String quantity = document.getString("quantity");
 
-                    if(count == 0){
-                        Toast.makeText(productList.this,"No Products Found", Toast.LENGTH_LONG).show();
-                    }else{
-                        int id = c.getColumnIndex("id");
-                        int product = c.getColumnIndex("product");
-                        int category = c.getColumnIndex("category");
-                        int prodPrice = c.getColumnIndex("prodPrice");
-                        int quantity = c.getColumnIndex("quantity");
-                        int prodImage = c.getColumnIndex("prodImage");
+                                    Object prodImgObject = document.get("prodImg");
+                                    String prodImageBase64 = null;
 
-                        if (c.moveToFirst()) {
-                            do {
-                                if (c.getString(category).equals("Drinks")) {
-                                    items.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
-                                    productListAdapter = new prodDrinksListAdapter(productList.this, items, productListAdapter.mClickListener);
-                                    recyclerView.setAdapter(productListAdapter);
-                                } else if (c.getString(category).equals("Food")) {
-                                    foods.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
-                                    foodListAdapter = new prodFoodListAdapter(productList.this, foods, foodListAdapter.mClickListener);
-                                    foodRecyclerView.setAdapter(foodListAdapter);
-                                } else if (c.getString(category).equals("Cake")) {
-                                    addOns.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
-                                    CakeListAdapter = new CakeListAdapter(productList.this, addOns, CakeListAdapter.mClickListener);
-                                    addOnsRecycle.setAdapter(CakeListAdapter);
-                                } else if (c.getString(category).equals("Special")) {
-                                    others.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
-                                    specialListAdapter = new SpecialListAdapter(productList.this, others, specialListAdapter.mClickListener);
-                                    othersRecyclerView.setAdapter(specialListAdapter);
+                                    if (prodImgObject instanceof String) {
+                                        // Handle the case when 'userImg' is stored as a Base64 encoded string in Firestore
+                                        prodImageBase64 = (String) prodImgObject;
+                                    }
+
+                                    prodItems productItem = new prodItems(id, product, category, prodPrice, quantity, prodImageBase64);
+
+                                    if (category.equals("Drinks")) {
+                                        items.add(productItem);
+                                    } else if (category.equals("Food")) {
+                                        foods.add(productItem);
+                                    } else if (category.equals("Cake")) {
+                                        addOns.add(productItem);
+                                    } else if (category.equals("Special")) {
+                                        others.add(productItem);
+                                    }
                                 }
-                            } while (c.moveToNext());
-                        }
-                        c.close();
-                        db.close();
-                    }
+
+                                // Set up RecyclerView adapters here
+                                productListAdapter = new prodDrinksListAdapter(productList.this, items, productListAdapter.mClickListener);
+                                recyclerView.setAdapter(productListAdapter);
+
+                                foodListAdapter = new prodFoodListAdapter(productList.this, foods, foodListAdapter.mClickListener);
+                                foodRecyclerView.setAdapter(foodListAdapter);
+
+                                CakeListAdapter = new CakeListAdapter(productList.this, addOns, CakeListAdapter.mClickListener);
+                                addOnsRecycle.setAdapter(CakeListAdapter);
+
+                                specialListAdapter = new SpecialListAdapter(productList.this, others, specialListAdapter.mClickListener);
+                                othersRecyclerView.setAdapter(specialListAdapter);
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle the case when there is an error fetching data from Firestore
+                                e.printStackTrace();
+                                Toast.makeText(productList.this, "Failed to fetch products", Toast.LENGTH_LONG).show();
+                            });
                 }
             }
             @Override

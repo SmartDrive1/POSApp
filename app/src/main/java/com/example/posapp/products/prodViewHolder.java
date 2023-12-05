@@ -1,6 +1,8 @@
 package com.example.posapp.products;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.posapp.OrderingSystem.OrderingSystem;
 import com.example.posapp.R;
 
 public class prodViewHolder extends RecyclerView.ViewHolder {
@@ -33,15 +34,20 @@ public class prodViewHolder extends RecyclerView.ViewHolder {
         txtPrice.setText("Price: " + item.getProdPrice() + ".00");
         txtQuantity.setText("Stock: " + item.getQuantity());
 
-        // Get the Bitmap from the prodImage byte array
-        Bitmap bitmap = item.getProdImageBitmap();
+        String base64Image = item.getProdImage();
 
-        if (bitmap != null) {
+        if (base64Image != null) {
+            // Decode Base64 string to byte array
+            byte[] imageBytes = Base64.decode(base64Image, Base64.DEFAULT);
+
+            // Convert byte array to Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
+
             // Set the Bitmap to the ImageView
             prodImg.setImageBitmap(bitmap);
         } else {
-            // Handle the case when the Bitmap is null
-            prodImg.setImageResource(R.drawable.noimage); // Set a default image or do something else
+            // Handle the case when the Base64 image string is null
+            prodImg.setImageResource(R.drawable.noimage);
         }
 
         cardView.setOnClickListener(new View.OnClickListener() {

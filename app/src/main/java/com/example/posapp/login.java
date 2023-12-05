@@ -1,5 +1,8 @@
 package com.example.posapp;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -17,11 +20,18 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.posapp.OrderingSystem.OrderingSystem;
+//import com.example.posapp.OrderingSystem.OrderingSystem;
 import com.example.posapp.OrderingSystem.accessValue;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class login extends AppCompatActivity {
@@ -33,6 +43,7 @@ public class login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        FirebaseApp.initializeApp(this);
 
         txtUser = findViewById(R.id.txtUser);
         txtPass = findViewById(R.id.txtPass);
@@ -131,8 +142,8 @@ public class login extends AppCompatActivity {
                 startActivity(i);
             }else{
                 Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(login.this, OrderingSystem.class);
-                startActivity(i);
+//                Intent i = new Intent(login.this, OrderingSystem.class);
+//                startActivity(i);
             }
 
         }else

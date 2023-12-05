@@ -15,6 +15,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -23,13 +24,17 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.posapp.OrderingSystem.OrderingSystem;
 import com.example.posapp.R;
-import com.example.posapp.pendingTrans.pendingTransaction;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class userEdit extends AppCompatActivity {
 
@@ -40,6 +45,7 @@ public class userEdit extends AppCompatActivity {
     Uri selectedImageUri;
     String id;
     String userName;
+    String name;
     private DialogInterface.OnClickListener dialogClickListener;
 
     @Override
@@ -67,13 +73,26 @@ public class userEdit extends AppCompatActivity {
 
         Intent i = getIntent();
         id = i.getStringExtra("id".toString());
-        String name = i.getStringExtra("fullName".toString());
+        name = i.getStringExtra("fullName".toString());
         userName = i.getStringExtra("userName".toString());
         String password = i.getStringExtra("password".toString());
         String access = i.getStringExtra("access".toString());
-        byte[] userImg1 = i.getByteArrayExtra("userImg");
         Integer access1;
+        String userImgBase64 = getIntent().getStringExtra("userImg");
 
+        if (userImgBase64 != null && !userImgBase64.isEmpty()) {
+            // Decode Base64 string to byte array
+            byte[] userImgBytes = Base64.decode(userImgBase64, Base64.DEFAULT);
+
+            // Convert byte array to Bitmap
+            Bitmap bitmap = BitmapFactory.decodeByteArray(userImgBytes, 0, userImgBytes.length);
+
+            // Set the Bitmap to the ImageView
+            userImg.setImageBitmap(bitmap);
+        } else {
+            // Handle the case when userImgBase64 is null or empty
+            userImg.setImageResource(R.drawable.noimage);
+        }
         editID.setText(id);
         editName.setText(name);
         editUserName.setText(userName);
@@ -83,10 +102,7 @@ public class userEdit extends AppCompatActivity {
         }else{
             access1 = 1;
         }
-        if(userImg1 != null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(userImg1, 0, userImg1.length);
-            userImg.setImageBitmap(bitmap);
-        }
+
         s.setSelection(access1);
 
 
@@ -121,35 +137,42 @@ public class userEdit extends AppCompatActivity {
     }
 
     public void edit(){
-        try{
-            String editID1 = editID.getText().toString().trim();
-            String editName1 = editName.getText().toString().trim();
-            String editUserName1 = editUserName.getText().toString().trim();
-            String editPassword1 = editPassword.getText().toString().trim();
-            if(editName1.equals("")){
-                Toast.makeText(this,"Name is Blank. Please Enter a Name", Toast.LENGTH_LONG).show();
-            }else if(editUserName1.equals("")){
-                Toast.makeText(this,"Username is Blank. Please Enter a Username", Toast.LENGTH_LONG).show();
-            }else if(editPassword1.equals("")){
-                Toast.makeText(this,"Password is Blank. Please Enter a Password", Toast.LENGTH_LONG).show();
-            }else {
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                Cursor c = db.rawQuery("SELECT * FROM users WHERE userName = ?", new String[]{editUserName1});
-                if (c.getCount() > 0) {
-                    if(c.moveToFirst()){
-                        int existingID = c.getColumnIndex("id");
-                        if (c.getString(existingID).equals(editID1)) {
-                            updateUser();
+        String editID1 = editID.getText().toString().trim();
+        String editName1 = editName.getText().toString().trim();
+        String editUserName1 = editUserName.getText().toString().trim();
+        String editPassword1 = editPassword.getText().toString().trim();
+        if(editName1.equals("")){
+            Toast.makeText(this,"Name is Blank. Please Enter a Name", Toast.LENGTH_LONG).show();
+        }else if(editUserName1.equals("")){
+            Toast.makeText(this,"Username is Blank. Please Enter a Username", Toast.LENGTH_LONG).show();
+        }else if(editPassword1.equals("")){
+            Toast.makeText(this,"Password is Blank. Please Enter a Password", Toast.LENGTH_LONG).show();
+        }else {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference usersCollection = db.collection("users");
+
+            usersCollection.whereEqualTo("userName", editUserName1)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                String existingID = document.getString("id");
+                                 if (existingID.equals(editID1)) {
+                                     updateUser();
+                                 } else {
+                                     Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
+                                 }
+                            }
                         } else {
-                            Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
+                            // No user found with the provided username, proceed with the update
+                            updateUser();
                         }
-                    }
-                }else{
-                    updateUser();
-                }
-            }
-        }catch (Exception e){
-            Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle query failure
+                        e.printStackTrace();
+                        Toast.makeText(this, "Failed to query user", Toast.LENGTH_LONG).show();
+                    });
         }
     }
 
@@ -181,77 +204,103 @@ public class userEdit extends AppCompatActivity {
         return byteBuffer.toByteArray();
     }
 
-    public void updateUser(){
-        String editID1 = editID.getText().toString().trim();
-        String editName1 = editName.getText().toString().trim();
+    public void updateUser() {
         String editUserName1 = editUserName.getText().toString().trim();
+        String editName1 = editName.getText().toString().trim();
         String editPassword1 = editPassword.getText().toString().trim();
-        Spinner spinner = (Spinner)findViewById(R.id.accID);
+        Spinner spinner = findViewById(R.id.accID);
         String spTxt = spinner.getSelectedItem().toString();
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        String sql = "update users set fullName = ?, userName = ?, password = ?, access = ?, userImg = ? where id = ?";
-        SQLiteStatement statement = db.compileStatement(sql);
-        statement.bindString(1, editName1);
-        statement.bindString(2, editUserName1);
-        statement.bindString(3, editPassword1);
-        statement.bindString(4, spTxt);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersCollection = db.collection("users");
 
-        try {
-            if (selectedImageUri != null) {
-                InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-                byte[] imageBytes = getBytes(inputStream);
-                statement.bindBlob(5, imageBytes); // Bind the image bytes
-            } else {
-                // If no new image is selected, use the current image in prodImg
-                Bitmap bitmap = ((BitmapDrawable) userImg.getDrawable()).getBitmap();
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte[] imageBytes = stream.toByteArray();
-                statement.bindBlob(5, imageBytes);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // Query to find the document with the given username
+        usersCollection.whereEqualTo("userName", userName)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        // Iterate through the results (there should be only one match)
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String userId = document.getId(); // Get the document ID
 
-        statement.bindString(6, editID1);
-        statement.execute();
-        Toast.makeText(this, "Account Updated", Toast.LENGTH_LONG).show();
-        db.close();
-        Intent i = new Intent(userEdit.this, userList.class);
-        startActivity(i);
+                            // Update the user document with the new data
+                            DocumentReference userDocRef = usersCollection.document(userId);
+
+                            Map<String, Object> updateData = new HashMap<>();
+                            updateData.put("fullName", editName1);
+                            updateData.put("userName", editUserName1);
+                            updateData.put("password", editPassword1);
+                            updateData.put("access", spTxt);
+
+                            try {
+                                if (selectedImageUri != null) {
+                                    InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                                    byte[] imageBytes = getBytes(inputStream);
+                                    String imageBase64 = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                                    updateData.put("userImg", imageBase64);
+                                } else {
+                                    // Handle the case when no new image is selected
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            userDocRef.update(updateData)
+                                    .addOnSuccessListener(aVoid -> {
+                                        // User updated successfully
+                                        Toast.makeText(this, "Account Updated", Toast.LENGTH_LONG).show();
+                                        Intent i = new Intent(userEdit.this, userList.class);
+                                        startActivity(i);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle update failure
+                                        e.printStackTrace();
+                                        Toast.makeText(this, "Failed to update account", Toast.LENGTH_LONG).show();
+                                    });
+                        }
+                    } else {
+                        Toast.makeText(this, "User not found", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle query failure
+                    e.printStackTrace();
+                    Toast.makeText(this, "Failed to query user", Toast.LENGTH_LONG).show();
+                });
     }
 
-    public void toDelete(){
+    public void toDelete() {
         dialogClickListener = new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        try{
-                            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-
-                            String sql = "delete from users where id = ?";
-                            SQLiteStatement statement = db.compileStatement(sql);
-                            statement.bindString(1,id);
-                            statement.execute();
-                            Toast.makeText(userEdit.this,"Account: " + userName + " Deleted", Toast.LENGTH_LONG).show();
-                            db.close();
-                            Intent i = new Intent(userEdit.this, userList.class);
-                            startActivity(i);
-                        }catch (Exception e)
-                        {
-                            Toast.makeText(userEdit.this,"Failed", Toast.LENGTH_LONG).show();
+                        try {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            CollectionReference usersCollection = db.collection("users");
+                            usersCollection.document(id)
+                                    .delete()
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(userEdit.this, "Account: " + userName + " Deleted", Toast.LENGTH_LONG).show();
+                                        Intent i = new Intent(userEdit.this, userList.class);
+                                        startActivity(i);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Handle deletion failure
+                                        e.printStackTrace();
+                                        Toast.makeText(userEdit.this, "Failed to delete account", Toast.LENGTH_LONG).show();
+                                    });
+                        } catch (Exception e) {
+                            Toast.makeText(userEdit.this, "Failed", Toast.LENGTH_LONG).show();
                         }
-
-                        Intent i = new Intent(userEdit.this, userList.class);
-                        startActivity(i);
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
+                        break;
                 }
             }
         };
+
         AlertDialog.Builder builder = new AlertDialog.Builder(userEdit.this);
         builder.setMessage("Do You Want to Delete the Account: " + userName + "?")
                 .setPositiveButton("Yes", dialogClickListener)

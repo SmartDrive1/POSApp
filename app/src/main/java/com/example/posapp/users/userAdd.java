@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,10 +22,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class userAdd extends AppCompatActivity {
 
@@ -113,55 +121,88 @@ public class userAdd extends AppCompatActivity {
         }else if(uName.equals("Admin") || uName.equals("admin")) {
             Toast.makeText(this,"Please Choose Another Username", Toast.LENGTH_LONG).show();
         }else{
-            try{
+            try {
                 String fName1 = txtFullName.getText().toString().trim();
                 String uName1 = txtUserName.getText().toString().trim();
                 String pass1 = txtPassword.getText().toString().trim();
                 String spTxt = spinner.getSelectedItem().toString();
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY,fullName VARCHAR, userName VARCHAR, password VARCHAR, access VARCHAR, userImg BLOB)"); //Create database if non-existent, to avoid crash
-                Cursor c = db.rawQuery("SELECT * FROM users WHERE userName =?", new String[]{uName1});
 
-                if(c.getCount() > 0){
-                    Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
-                }else{
-                    String sql = "INSERT INTO users (id, fullName, userName, password, access, userImg)values(?,?,?,?,?,?)";
-                    SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1,String.valueOf(max_id));
-                    statement.bindString(2,fName1);
-                    statement.bindString(3,uName1);
-                    statement.bindString(4,pass1);
-                    statement.bindString(5,spTxt);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference usersCollection = db.collection("users");
 
-                    if (selectedImageUri != null) {
-                        try {
-                            InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-                            byte[] imageBytes = getBytes(inputStream);
-                            statement.bindBlob(6, imageBytes); // Bind the image bytes
-                        } catch (IOException e) {
+                // Check if username already exists
+                usersCollection.whereEqualTo("userName", uName1)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                // Username already exists
+                                Toast.makeText(this, "Account/Username Already Exists", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Username is unique, proceed with adding the user
+
+                                // Generate a unique ID for the new user
+                                String userId = UUID.randomUUID().toString();
+
+                                // Create a new user document
+                                Map<String, Object> userData = new HashMap<>();
+                                userData.put("id", userId);
+                                userData.put("fullName", fName1);
+                                userData.put("userName", uName1);
+                                userData.put("password", pass1);
+                                userData.put("access", spTxt);
+
+                                // Upload image to Firebase Storage (assuming selectedImageUri is the image URI)
+                                if (selectedImageUri != null) {
+                                    try {
+                                        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                                        byte[] imageBytes = getBytes(inputStream);
+
+                                        // Convert byte array to Base64 encoded string
+                                        String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+                                        // Add the Base64 encoded string to the userData map
+                                        userData.put("userImg", base64Image);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    Bitmap defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.noimage);
+                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                    defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                    byte[] defaultImageBytes = stream.toByteArray();
+
+                                    String defaultBase64Image = Base64.encodeToString(defaultImageBytes, Base64.DEFAULT);
+
+                                    userData.put("userImg", defaultBase64Image);
+                                }
+
+                                // Add the user document to Firestore
+                                usersCollection.document(userId)
+                                        .set(userData)
+                                        .addOnSuccessListener(aVoid -> {
+                                            // User added successfully
+                                            Toast.makeText(this, "User Added", Toast.LENGTH_LONG).show();
+                                            txtFullName.setText("");
+                                            txtUserName.setText("");
+                                            txtPassword.setText("");
+                                            txtFullName.requestFocus();
+                                            userImg.setImageResource(R.drawable.noimage);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Handle Firestore write error
+                                            e.printStackTrace();
+                                            Toast.makeText(this, "Failed to add user", Toast.LENGTH_LONG).show();
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            // Handle Firestore query error
                             e.printStackTrace();
-                        }
-                    } else {
-                        Bitmap defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.noimage);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] defaultImageBytes = stream.toByteArray();
-                        statement.bindBlob(6, defaultImageBytes);
-                    }
-
-                    statement.execute();
-                    Toast.makeText(this,"User Added", Toast.LENGTH_LONG).show();
-                    txtFullName.setText("");
-                    txtUserName.setText("");
-                    txtPassword.setText("");
-                    txtFullName.requestFocus();
-                    userImg.setImageResource(R.drawable.noimage);
-                }
-                c.close();
-                db.close();
-            }catch (Exception e){
+                            Toast.makeText(this, "Failed to check username", Toast.LENGTH_LONG).show();
+                        });
+            } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(this,"Failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             }
         }
     }

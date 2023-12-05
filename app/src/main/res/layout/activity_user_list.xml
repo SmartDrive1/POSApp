@@ -178,7 +178,7 @@
                     android:background="@drawable/back"
                     android:ems="10"
                     android:textStyle="bold"
-                    android:hint="Search ID, Name or Username"
+                    android:hint="Search Name or Username"
                     android:textAlignment="center"/>
 
                 <Button

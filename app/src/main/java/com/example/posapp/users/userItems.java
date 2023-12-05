@@ -9,23 +9,15 @@ public class userItems {
     String userName;
     String password;
     String access;
-    byte[] userImg;
+    String userImgBase64;
 
-    public Bitmap getUserImageBitmap() {
-        if (userImg != null) {
-            return BitmapFactory.decodeByteArray(userImg, 0, userImg.length);
-        } else {
-            return null; // Handle the case when prodImage is null or empty
-        }
-    }
-
-    public userItems(String id, String fullName, String userName, String password, String access, byte[] userImg) {
+    public userItems(String id, String fullName, String userName, String password, String access, String userImgBase64) {
         this.id = id;
         this.fullName = fullName;
         this.userName = userName;
         this.password = password;
         this.access = access;
-        this.userImg = userImg;
+        this.userImgBase64 = userImgBase64;
     }
 
     public String getId() {
@@ -68,11 +60,7 @@ public class userItems {
         this.access = access;
     }
 
-    public byte[] getUserImg() {
-        return userImg;
-    }
-
-    public void setUserImg(byte[] userImg) {
-        this.userImg = userImg;
+    public String getUserImgBase64() {
+        return userImgBase64;
     }
 }

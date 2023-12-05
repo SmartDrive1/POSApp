@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -20,10 +21,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 public class prodAdd extends AppCompatActivity {
 
@@ -77,89 +84,111 @@ public class prodAdd extends AppCompatActivity {
         });
     }
 
-    public void getMax() {
-        try {
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-
-            Cursor cursor = db.rawQuery("SELECT MAX(id) FROM products", null);
-
-            if (cursor.moveToFirst()) {
-                max_id = cursor.getInt(0);
-            }
-
-            cursor.close();
-            db.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public void insert() {
         String prodName = txtProduct.getText().toString().trim();
         String price = txtPrice.getText().toString().trim();
         String quantity = txtQuantity.getText().toString().trim();
-        Spinner spinner = (Spinner) findViewById(R.id.catID);
+        Spinner spinner = findViewById(R.id.catID);
 
-        getMax();
-        max_id += 1;
         if (prodName.equals("")) {
             Toast.makeText(this, "Product Name is Blank. Please Input a Product Name", Toast.LENGTH_LONG).show();
-        } else if(quantity.equals("")){
+        } else if (quantity.equals("")) {
             Toast.makeText(this, "Quantity is Blank. Please Input a Quantity", Toast.LENGTH_LONG).show();
-        }else if (price.equals("")) {
+        } else if (price.equals("")) {
             Toast.makeText(this, "Product Price is Blank. Please Input a Product Price", Toast.LENGTH_LONG).show();
         } else if (prodName.equals("None") || prodName.equals("none")) {
             Toast.makeText(this, "Please Enter Another Product Name", Toast.LENGTH_LONG).show();
-        }else {
+        } else {
             try {
                 String spTxt = spinner.getSelectedItem().toString();
-                if (spTxt.equals("Add-Ons")) {
-                    spTxt = "AddOns";
-                }
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice INTEGER, prodImage BLOB)");
 
-                Cursor c = db.rawQuery("SELECT * FROM products WHERE product =?", new String[]{prodName});
-                if (c.getCount() > 0) {
-                    Toast.makeText(this, "Product Already Exists", Toast.LENGTH_SHORT).show();
-                } else {
-                    String sql = "insert into products (id, product, category, quantity, prodPrice, prodImage)values(?,?,?,?,?,?)";
-                    SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1, String.valueOf(max_id));
-                    statement.bindString(2, prodName);
-                    statement.bindString(3, spTxt);
-                    statement.bindString(4, quantity);
-                    statement.bindString(5, price);
+                // Initialize Firebase Firestore
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference productsCollection = db.collection("products");
 
-                    if (selectedImageUri != null) {//Add image
-                        try {
-                            InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
-                            byte[] imageBytes = getBytes(inputStream);
-                            statement.bindBlob(6, imageBytes);
-                        } catch (IOException e) {
+                // Check if product already exists
+                productsCollection.whereEqualTo("product", prodName)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                // Product already exists
+                                Toast.makeText(this, "Product Already Exists", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Product is unique, proceed with adding to Firestore
+
+                                // Generate a unique ID for the new product
+                                String productId = UUID.randomUUID().toString();
+
+                                // Create a new product document
+                                Map<String, Object> productData = new HashMap<>();
+                                productData.put("id", productId);
+                                productData.put("product", prodName);
+                                productData.put("category", spTxt);
+                                productData.put("quantity", quantity);
+                                productData.put("prodPrice", price);
+
+                                // Upload image to Firebase Storage (assuming selectedImageUri is the image URI)
+                                if (selectedImageUri != null) {
+                                    try {
+                                        InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+                                        byte[] imageBytes = getBytes(inputStream);
+
+                                        // Convert byte array to Base64 encoded string
+                                        String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+                                        // Add the Base64 encoded string to the userData map
+                                        productData.put("prodImg", base64Image);
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    Bitmap defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.noimage);
+                                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                    defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                                    byte[] defaultImageBytes = stream.toByteArray();
+
+                                    String defaultBase64Image = Base64.encodeToString(defaultImageBytes, Base64.DEFAULT);
+
+                                    productData.put("prodImg", defaultBase64Image);
+                                }
+
+                                // Add the product document to Firestore
+                                productsCollection.document(productId)
+                                        .set(productData)
+                                        .addOnSuccessListener(aVoid -> {
+                                            // Product added successfully
+                                            Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
+                                            txtProduct.setText("");
+                                            txtPrice.setText("");
+                                            txtQuantity.setText("");
+                                            txtProduct.requestFocus();
+                                            prodImg.setImageResource(R.drawable.noimage);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            // Handle Firestore write error
+                                            e.printStackTrace();
+                                            Toast.makeText(this, "Failed to add product", Toast.LENGTH_LONG).show();
+                                        });
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            // Handle Firestore query error
                             e.printStackTrace();
-                        }
-                    } else {
-                        Bitmap defaultBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.noimage);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        defaultBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] defaultImageBytes = stream.toByteArray();
-                        statement.bindBlob(6, defaultImageBytes);
-                    }
-
-                    statement.execute();
-                    Toast.makeText(this, "Product Added", Toast.LENGTH_LONG).show();
-                    txtProduct.setText("");
-                    txtPrice.setText("");
-                    txtQuantity.setText("");
-                    txtProduct.requestFocus();
-                    prodImg.setImageResource(R.drawable.noimage);
-                    db.close();
-                }
+                            Toast.makeText(this, "Failed to check product", Toast.LENGTH_LONG).show();
+                        });
             } catch (Exception e) {
                 Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    // Function to convert an image URI to Base64
+    private String imageToBase64(Uri imageUri) throws IOException {
+        InputStream inputStream = getContentResolver().openInputStream(imageUri);
+        byte[] bytes = new byte[Objects.requireNonNull(inputStream).available()];
+        inputStream.read(bytes);
+        inputStream.close();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
     private void startImageSelection() {

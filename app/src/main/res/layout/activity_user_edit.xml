@@ -84,7 +84,8 @@
                             android:layout_margin="3dp"
                             android:textAlignment="center"
                             android:background="@drawable/edit_text_border"
-                            android:ems="8"/>
+                            android:ems="8"
+                            android:visibility="gone"/>
 
                         <!--  Full Name  -->
                         <EditText

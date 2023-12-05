@@ -22,9 +22,8 @@
             android:id="@+id/userImg"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_marginTop="10dp"
             android:padding="3dp"
-            android:src="@drawable/noimage" />
+            android:src="@drawable/noimage"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,7 +35,8 @@
             android:autoSizeMaxTextSize="30sp"
             android:autoSizeStepGranularity="1sp"
             android:textColor="@color/black"
-            android:text="ID"/>
+            android:text="ID"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/fName"
