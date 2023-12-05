@@ -1,5 +1,6 @@
 package com.example.posapp.products;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +36,8 @@ public class productList extends AppCompatActivity implements prodClickListener 
     List<prodItems> foods = new ArrayList<>();
     List<prodItems> addOns = new ArrayList<>();
     List<prodItems> others = new ArrayList<>();
+    ImageView rightIndicator1, leftIndicator1, rightIndicator2, leftIndicator2, rightIndicator3, leftIndicator3 , rightIndicator4, leftIndicator4;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,30 @@ public class productList extends AppCompatActivity implements prodClickListener 
         back = findViewById(R.id.btnBack);
         txtSearch = findViewById(R.id.txtSearch);
         btnAddProduct = findViewById(R.id.btnAddProduct);
+        rightIndicator1 = findViewById(R.id.rightIndicator1);
+        leftIndicator1 = findViewById(R.id.leftIndicator1);
+        rightIndicator2 = findViewById(R.id.rightIndicator2);
+        leftIndicator2 = findViewById(R.id.leftIndicator2);
+        rightIndicator3 = findViewById(R.id.rightIndicator3);
+        leftIndicator3 = findViewById(R.id.leftIndicator3);
+        rightIndicator4 = findViewById(R.id.rightIndicator4);
+        leftIndicator4 = findViewById(R.id.leftIndicator4);
+
+        RecyclerView recyclerView = findViewById(R.id.recycleProds);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
+        foodRecyclerView.setHasFixedSize(true);
+        foodRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
+        addOnsRecycle.setHasFixedSize(true);
+        addOnsRecycle.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
+        othersRecyclerView.setHasFixedSize(true);
+        othersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,6 +85,118 @@ public class productList extends AppCompatActivity implements prodClickListener 
             public void onClick(View view) {
                 Intent i = new Intent(productList.this, prodAdd.class);
                 startActivity(i);
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator1.setVisibility(View.GONE);
+                    leftIndicator1.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator1.setVisibility(View.GONE);
+                        leftIndicator1.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator1.setVisibility(View.VISIBLE);
+                        leftIndicator1.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        foodRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator2.setVisibility(View.GONE);
+                    leftIndicator2.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator2.setVisibility(View.GONE);
+                        leftIndicator2.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator2.setVisibility(View.VISIBLE);
+                        leftIndicator2.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        addOnsRecycle.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator3.setVisibility(View.GONE);
+                    leftIndicator3.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator3.setVisibility(View.GONE);
+                        leftIndicator3.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator3.setVisibility(View.VISIBLE);
+                        leftIndicator3.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        othersRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator4.setVisibility(View.GONE);
+                    leftIndicator4.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator4.setVisibility(View.GONE);
+                        leftIndicator4.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator4.setVisibility(View.VISIBLE);
+                        leftIndicator4.setVisibility(View.GONE);
+                    }
+                }
             }
         });
 
@@ -76,11 +216,11 @@ public class productList extends AppCompatActivity implements prodClickListener 
         foodRecyclerView.setHasFixedSize(true);
         foodRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
-        RecyclerView addOnsRecycle = findViewById(R.id.recycleAddOns);
+        RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
         addOnsRecycle.setHasFixedSize(true);
         addOnsRecycle.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
-        RecyclerView othersRecyclerView = findViewById(R.id.recycleOthers);
+        RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
         othersRecyclerView.setHasFixedSize(true);
         othersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
@@ -163,11 +303,11 @@ public class productList extends AppCompatActivity implements prodClickListener 
                     foodRecyclerView.setHasFixedSize(true);
                     foodRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
 
-                    RecyclerView addOnsRecycle = findViewById(R.id.recycleAddOns);
+                    RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
                     addOnsRecycle.setHasFixedSize(true);
                     addOnsRecycle.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
 
-                    RecyclerView othersRecyclerView = findViewById(R.id.recycleOthers);
+                    RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
                     othersRecyclerView.setHasFixedSize(true);
                     othersRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
 

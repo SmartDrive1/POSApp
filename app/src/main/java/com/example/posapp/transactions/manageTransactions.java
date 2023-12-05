@@ -1,5 +1,6 @@
 package com.example.posapp.transactions;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -22,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.example.posapp.R;
 import java.io.File;
@@ -46,6 +48,9 @@ public class manageTransactions extends AppCompatActivity implements transClickL
     List<transItems> items = new ArrayList<>();
     DatePickerDialog datePickerDialog;
     long startTimeMilli, endTimeMilli;
+    long currentDay, currentDayE;
+    ImageView upIndicator, downIndicator;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,15 @@ public class manageTransactions extends AppCompatActivity implements transClickL
         txtStartDate = findViewById(R.id.txtStartDate);
         txtEndDate = findViewById(R.id.txtEndDate);
         btnReset = findViewById(R.id.btnReset);
+        upIndicator = findViewById(R.id.upIndicator);
+        downIndicator = findViewById(R.id.downIndicator);
+
+        recyclerView = findViewById(R.id.recycleTrans);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+
+        transAdapter = new transAdapter(this, items, this);
+        recyclerView.setAdapter(transAdapter);
 
         btnExcel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,6 +139,34 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 datePickerDialog.show();
             }
         });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+                int itemsPerPage = 1;
+
+                if (itemCount <= visibleItemCount || itemCount <= itemsPerPage) {
+                    downIndicator.setVisibility(View.GONE);
+                    upIndicator.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        downIndicator.setVisibility(View.GONE);
+                        upIndicator.setVisibility(View.VISIBLE);
+                    } else {
+                        downIndicator.setVisibility(View.VISIBLE);
+                        upIndicator.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+        currentDate();
         refreshList();
     }
 
@@ -132,15 +174,12 @@ public class manageTransactions extends AppCompatActivity implements transClickL
     public void refreshList() {
         items.clear();
         String formattedDate;
-        RecyclerView recyclerView = findViewById(R.id.recycleTrans);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
             db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
-            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions GROUP BY transID";
+            String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + currentDay + " AND " + currentDayE + " GROUP BY transID";
             Cursor cursor = db.rawQuery(query, null);
 
             int id = cursor.getColumnIndex("transID");
@@ -154,11 +193,11 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 while(cursor.moveToNext()){
                     formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
                     items.add(new transItems(cursor.getString(id), "", cursor.getString(totalQuantity), cursor.getString(totalAmount), "", formattedDate));
-                    transAdapter = new transAdapter(this, items, this);
-                    recyclerView.setAdapter(transAdapter);
                 }
                 cursor.close();
                 db.close();
+
+                transAdapter.notifyDataSetChanged();
             }
         }catch (Exception e) {
                 Toast.makeText(this, "No Transactions", Toast.LENGTH_LONG).show();
@@ -326,9 +365,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
         items.clear();
 
         String formattedDate;
-        RecyclerView recyclerView = findViewById(R.id.recycleTrans);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
 
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
@@ -353,8 +389,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 cursor.close();
                 db.close();
 
-                transAdapter = new transAdapter(this, items, this);
-                recyclerView.setAdapter(transAdapter);
+                transAdapter.notifyDataSetChanged();
             }
         }catch (Exception e) {
             Toast.makeText(this, "No Transactions", Toast.LENGTH_LONG).show();
@@ -402,6 +437,27 @@ public class manageTransactions extends AppCompatActivity implements transClickL
 
     private void enableEndDateEditText(boolean enable) {
         txtEndDate.setEnabled(enable);
+    }
+
+    public void currentDate(){
+        Date currentDate = new Date();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+
+        currentDay = calendar.getTimeInMillis();
+        System.out.println("Current date and time as int (set to 00:00:00): " + currentDay);
+
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        currentDayE = calendar.getTimeInMillis();
+        System.out.println("Current date and time as int (set to 23:59:59): " + currentDayE);
     }
 
     @Override

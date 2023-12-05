@@ -1,5 +1,6 @@
 package com.example.posapp.OrderingSystem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,8 +60,10 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
     List<prodItems> Special = new ArrayList<>();
     SQLiteDatabase db;
     String currentID, itemCategory, currentProduct;
+    ImageView rightIndicator1, leftIndicator1, rightIndicator2, leftIndicator2, rightIndicator3, leftIndicator3 , rightIndicator4, leftIndicator4;
     View v;
     Double addOn = 0.00;
+    RecyclerView recyclerView, foodRecyclerView, addOnsRecycle, othersRecyclerView;
 
     private DialogInterface.OnClickListener dialogClickListener;
 
@@ -86,6 +89,41 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         large = findViewById(R.id.large);
         v.setVisibility(View.GONE);
         Quantity.setEnabled(false);
+        rightIndicator1 = findViewById(R.id.rightIndicator1);
+        leftIndicator1 = findViewById(R.id.leftIndicator1);
+        rightIndicator2 = findViewById(R.id.rightIndicator2);
+        leftIndicator2 = findViewById(R.id.leftIndicator2);
+        rightIndicator3 = findViewById(R.id.rightIndicator3);
+        leftIndicator3 = findViewById(R.id.leftIndicator3);
+        rightIndicator4 = findViewById(R.id.rightIndicator4);
+        leftIndicator4 = findViewById(R.id.leftIndicator4);
+
+        recyclerView = findViewById(R.id.recycleProds);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        foodRecyclerView = findViewById(R.id.recycleFoods);
+        foodRecyclerView.setHasFixedSize(true);
+        foodRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        addOnsRecycle = findViewById(R.id.recycleCakes);
+        addOnsRecycle.setHasFixedSize(true);
+        addOnsRecycle.setLayoutManager(new LinearLayoutManager(OrderingSystem.this,LinearLayoutManager.HORIZONTAL, false));
+
+        othersRecyclerView = findViewById(R.id.recycleSpecial);
+        othersRecyclerView.setHasFixedSize(true);
+        othersRecyclerView.setLayoutManager(new LinearLayoutManager(OrderingSystem.this,LinearLayoutManager.HORIZONTAL, false));
+
+        productListAdapter = new prodDrinksListAdapter(this, items, this);
+        foodListAdapter = new prodFoodListAdapter(this, foods, this);
+        CakeListAdapter = new CakeListAdapter(this, Cakes, this);
+        specialListAdapter = new SpecialListAdapter(this, Special, this);
+
+        recyclerView.setAdapter(productListAdapter);
+        foodRecyclerView.setAdapter(foodListAdapter);
+        addOnsRecycle.setAdapter(CakeListAdapter);
+        othersRecyclerView.setAdapter(specialListAdapter);
+
 
         switch (accessValue.access){
             case "User":
@@ -154,6 +192,118 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 prodName.setText(currentProduct + "(L)");
                 addOn = 20.00;
                 updatePrice();
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator1.setVisibility(View.GONE);
+                    leftIndicator1.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator1.setVisibility(View.GONE);
+                        leftIndicator1.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator1.setVisibility(View.VISIBLE);
+                        leftIndicator1.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        foodRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator2.setVisibility(View.GONE);
+                    leftIndicator2.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator2.setVisibility(View.GONE);
+                        leftIndicator2.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator2.setVisibility(View.VISIBLE);
+                        leftIndicator2.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        addOnsRecycle.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator3.setVisibility(View.GONE);
+                    leftIndicator3.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator3.setVisibility(View.GONE);
+                        leftIndicator3.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator3.setVisibility(View.VISIBLE);
+                        leftIndicator3.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        othersRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator4.setVisibility(View.GONE);
+                    leftIndicator4.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator4.setVisibility(View.GONE);
+                        leftIndicator4.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator4.setVisibility(View.VISIBLE);
+                        leftIndicator4.setVisibility(View.GONE);
+                    }
+                }
             }
         });
 
@@ -281,7 +431,6 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         try {
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
 
-            // Step 1: Retrieve current quantity from the 'cartlist'
             String getCurrentQuantityQuery = "SELECT quantity FROM cartlist WHERE id=?";
             Cursor cursor = db.rawQuery(getCurrentQuantityQuery, new String[]{currentID});
 
@@ -346,30 +495,15 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         Cakes.clear();
         Special.clear();
 
-        RecyclerView recyclerView = findViewById(R.id.recycleProds);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice DOUBLE, prodImage BLOB)");
 
-        RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
-        foodRecyclerView.setHasFixedSize(true);
-        foodRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
-
-        RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
-        addOnsRecycle.setHasFixedSize(true);
-        addOnsRecycle.setLayoutManager(new LinearLayoutManager(OrderingSystem.this,LinearLayoutManager.HORIZONTAL, false));
-
-        RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
-        othersRecyclerView.setHasFixedSize(true);
-        othersRecyclerView.setLayoutManager(new LinearLayoutManager(OrderingSystem.this,LinearLayoutManager.HORIZONTAL, false));
-
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY,product VARCHAR, category VARCHAR, quantity INTEGER, prodPrice DOUBLE, prodImage BLOB)"); //Create database if non-existent, to avoid crash
         final Cursor c = db.rawQuery("SELECT * FROM products ORDER BY product ASC", null);
         int count = c.getCount();
 
-        if(count == 0){
-            Toast.makeText(this,"No Products Available", Toast.LENGTH_LONG).show();
-        }else{
+        if (count == 0) {
+            Toast.makeText(this, "No Products Available", Toast.LENGTH_LONG).show();
+        } else {
             int id = c.getColumnIndex("id");
             int product = c.getColumnIndex("product");
             int category = c.getColumnIndex("category");
@@ -377,30 +511,29 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             int quantity = c.getColumnIndex("quantity");
             int prodImage = c.getColumnIndex("prodImage");
 
-            if(c.moveToFirst()){
-                do{
+            if (c.moveToFirst()) {
+                do {
                     if (c.getString(category).equals("Drinks")) {
                         items.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
-                        productListAdapter = new prodDrinksListAdapter(this, items, this);
-                        recyclerView.setAdapter(productListAdapter);
                     }
                     if (c.getString(category).equals("Food")) {
                         foods.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
-                        foodListAdapter = new prodFoodListAdapter(this, foods, this);
-                        foodRecyclerView.setAdapter(foodListAdapter);
                     }
-                    if (c.getString(category).equals("Cake")){
-                        Cakes.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
-                        CakeListAdapter = new CakeListAdapter(this, Cakes, this);
-                        addOnsRecycle.setAdapter(CakeListAdapter);}
-                    if (c.getString(category).equals("Special")){
-                        Special.add(new prodItems(c.getString(id),c.getString(product),c.getString(category),c.getString(prodPrice),c.getString(quantity), c.getBlob(prodImage)));
-                        specialListAdapter = new SpecialListAdapter(this, Special, this);
-                        othersRecyclerView.setAdapter(specialListAdapter);}
-                }while(c.moveToNext());
+                    if (c.getString(category).equals("Cake")) {
+                        Cakes.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
+                    }
+                    if (c.getString(category).equals("Special")) {
+                        Special.add(new prodItems(c.getString(id), c.getString(product), c.getString(category), c.getString(prodPrice), c.getString(quantity), c.getBlob(prodImage)));
+                    }
+                } while (c.moveToNext());
             }
             c.close();
             db.close();
+
+            productListAdapter.notifyDataSetChanged();
+            foodListAdapter.notifyDataSetChanged();
+            CakeListAdapter.notifyDataSetChanged();
+            specialListAdapter.notifyDataSetChanged();
         }
     }
 

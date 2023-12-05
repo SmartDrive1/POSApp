@@ -1,5 +1,6 @@
 package com.example.posapp.users;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.posapp.R;
@@ -30,6 +32,8 @@ public class userList extends AppCompatActivity implements userClickListener {
     userAdapter userAdapter;
     List<userItems> admins = new ArrayList<>();
     List<userItems> users = new ArrayList<>();
+    ImageView rightIndicator1, leftIndicator1, rightIndicator2, leftIndicator2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,18 @@ public class userList extends AppCompatActivity implements userClickListener {
         btnBack = findViewById(R.id.btnBack);
         btnAddUser = findViewById(R.id.btnAddUser);
         txtSearch = findViewById(R.id.txtSearch);
+        rightIndicator1 = findViewById(R.id.rightIndicator1);
+        leftIndicator1 = findViewById(R.id.leftIndicator1);
+        rightIndicator2 = findViewById(R.id.rightIndicator2);
+        leftIndicator2 = findViewById(R.id.leftIndicator2);
+
+        RecyclerView adminRecyclerView = findViewById(R.id.recycleAdmin);
+        adminRecyclerView.setHasFixedSize(true);
+        adminRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+
+        RecyclerView userRecyclerView = findViewById(R.id.recycleUser);
+        userRecyclerView.setHasFixedSize(true);
+        userRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +69,62 @@ public class userList extends AppCompatActivity implements userClickListener {
             public void onClick(View view) {
                 Intent i = new Intent(userList.this, userAdd.class);
                 startActivity(i);
+            }
+        });
+
+        adminRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator1.setVisibility(View.GONE);
+                    leftIndicator1.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator1.setVisibility(View.GONE);
+                        leftIndicator1.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator1.setVisibility(View.VISIBLE);
+                        leftIndicator1.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+        userRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int itemCount = layoutManager.getItemCount();
+                int visibleItemCount = layoutManager.getChildCount();
+
+                if (itemCount <= visibleItemCount) {
+                    rightIndicator2.setVisibility(View.GONE);
+                    leftIndicator2.setVisibility(View.GONE);
+                } else {
+                    int lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition();
+
+                    int itemsPerPage = 1;
+
+                    if (lastVisibleItemPosition + itemsPerPage >= itemCount) {
+                        rightIndicator2.setVisibility(View.GONE);
+                        leftIndicator2.setVisibility(View.VISIBLE);
+                    } else {
+                        rightIndicator2.setVisibility(View.VISIBLE);
+                        leftIndicator2.setVisibility(View.GONE);
+                    }
+                }
             }
         });
 

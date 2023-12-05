@@ -100,14 +100,36 @@
                     android:ems="5"
                     android:maxLines="2"/>
             </RelativeLayout>
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycleTrans"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="90"
-                android:layout_gravity="center"
-                android:layout_marginBottom="3dp">
-            </androidx.recyclerview.widget.RecyclerView>
+                android:orientation="vertical"
+                android:weightSum="100">
+
+                <ImageView
+                    android:id="@+id/upIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:src="@drawable/up_indicator_icon"
+                    android:visibility="gone"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycleTrans"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="90"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="3dp">
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <ImageView
+                    android:id="@+id/downIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"
+                    android:src="@drawable/down_indicator_icon"/>
+            </LinearLayout>
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
