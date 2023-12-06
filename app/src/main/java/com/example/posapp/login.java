@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 //import com.example.posapp.OrderingSystem.OrderingSystem;
+import com.example.posapp.OrderingSystem.OrderingSystem;
 import com.example.posapp.OrderingSystem.accessValue;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -142,8 +143,8 @@ public class login extends AppCompatActivity {
                 startActivity(i);
             }else{
                 Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-//                Intent i = new Intent(login.this, OrderingSystem.class);
-//                startActivity(i);
+                Intent i = new Intent(login.this, OrderingSystem.class);
+                startActivity(i);
             }
 
         }else

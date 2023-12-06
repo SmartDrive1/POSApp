@@ -2,39 +2,50 @@ package com.example.posapp.OrderingSystem;
 
 import com.google.firebase.firestore.PropertyName;
 
-public class ProductData {
+public class CartItem {
+    @PropertyName("id")
+    private String id;
+
+    @PropertyName("prodName")
     private String prodName;
+
+    @PropertyName("quantity")
     private int quantity;
+
+    @PropertyName("category")
     private String category;
+
+    @PropertyName("price")
     private double price;
 
-    // Default constructor required for Firestore
-    public ProductData() {
+    public CartItem() {
+        // Default constructor required for Firestore
     }
 
-    public ProductData(String prodName, int quantity, String category, double price) {
+    public CartItem(String id, String prodName, int quantity, String category, double price) {
+        this.id = id;
         this.prodName = prodName;
         this.quantity = quantity;
         this.category = category;
         this.price = price;
     }
 
-    @PropertyName("prodName")
+    public String getId() {
+        return id;
+    }
+
     public String getProdName() {
         return prodName;
     }
 
-    @PropertyName("quantity")
     public int getQuantity() {
         return quantity;
     }
 
-    @PropertyName("category")
     public String getCategory() {
         return category;
     }
 
-    @PropertyName("price")
     public double getPrice() {
         return price;
     }

@@ -46,6 +46,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -319,24 +320,23 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
             }
         });
 
-        refreshList();
+        refreshListOnUiThread();
         change();
     }
 
     public void add() {
         if (prodName.getText().toString().trim().equals("")) {
-            Toast.makeText(this, "Please Select a Product", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Select a Product", Toast.LENGTH_LONG).show();
         } else if (Quantity.getText().toString().trim().equals("")) {
-            Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Input a Valid Quantity", Toast.LENGTH_LONG).show();
         } else if (Integer.parseInt(String.valueOf(Quantity.getText())) <= 0) {
-            Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Input Quantity More Than 0", Toast.LENGTH_LONG).show();
         } else {
             try {
                 total();
                 String tPrice1 = totalPriceUp.getText().toString().trim();
                 String qty2 = Quantity.getText().toString().trim();
                 String prodName1 = prodName.getText().toString().trim();
-                AtomicBoolean repeat = new AtomicBoolean(false);
 
                 // Assuming you have initialized Firestore
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -347,199 +347,238 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                         .whereEqualTo("prodName", prodName1)
                         .get()
                         .addOnCompleteListener(task -> {
+                            boolean repeat = false; // Initialize repeat here
+
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     // If a document is found with the same id and prodName, set repeat to true
-                                    repeat.set(true);
+                                    repeat = true;
                                     break;
                                 }
-                                checkQuantityAndPerformAction(repeat.get(), currentID, qty2, tPrice1);
                             } else {
-                                Toast.makeText(this, "Failed to check cartlist: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Failed to check cartlist: " + task.getException(), Toast.LENGTH_LONG).show();
+                            }
+
+                            // Perform actions based on the repeat value here
+                            if (repeat) {
+                                updateCartItemAndReduceProductQuantity(currentID, prodName1, qty2, tPrice1);
+                            } else {
+                                checkStockAndAddToCart(currentID, prodName1, qty2, itemCategory, tPrice1);
                             }
                         });
             } catch (Exception e) {
-                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Failed", Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         }
     }
 
-    public void checkQuantityAndPerformAction(boolean repeat, String currentID, String qty2, String tPrice1) {
+    private void checkStockAndAddToCart(String currentID, String prodName, String quantity, String category, String price) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        // Check the stock of the product in the products collection
         db.collection("products")
-                .document(currentID)
+                .whereEqualTo("id", currentID)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            // Check if the 'quantity' field exists and is not null
-                            if (document.contains("quantity") && document.get("quantity") != null) {
-                                // Convert the 'quantity' field from string to int
-                                int[] availableQuantity = {Integer.parseInt(String.valueOf(document.get("quantity")))};
-                                int requestedQuantity = Integer.parseInt(qty2);
+                        for (QueryDocumentSnapshot productDocument : task.getResult()) {
+                            String quantityField = productDocument.getString("quantity");
 
-                                if (repeat) {
-                                    // If the item is already in the cartlist, check and update
-                                    db.collection("cartlist")
-                                            .document(currentID)
-                                            .get()
-                                            .addOnCompleteListener(cartTask -> {
-                                                if (cartTask.isSuccessful()) {
-                                                    DocumentSnapshot cartDocument = cartTask.getResult();
-                                                    if (cartDocument.exists()) {
-                                                        int currentCartQuantity = Integer.parseInt(String.valueOf(cartDocument.get("quantity")));
-                                                        availableQuantity[0] += currentCartQuantity;
+                            if (quantityField != null && quantityField.matches("\\d+")) {
+                                int availableQuantity = Integer.parseInt(quantityField);
 
-                                                        if (requestedQuantity <= availableQuantity[0]) {
-                                                            updateCartItemAndReduceProductQuantityFirestore(currentID, qty2, tPrice1);
-                                                            prodName.setText("");
-                                                            Quantity.setText("");
-                                                            totalPriceUp.setText("");
-                                                            Price.setText("");
-                                                            v.setVisibility(View.GONE);
-                                                            prodImg.setImageResource(R.drawable.noimage);
-                                                            Quantity.setEnabled(false);
-                                                        } else {
-                                                            Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
-                                                        }
-                                                    }
-                                                } else {
-                                                    Toast.makeText(this, "Failed to check cartlist: " + cartTask.getException(), Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+                                // Check if the requested quantity is less than or equal to the available quantity
+                                if (Integer.parseInt(quantity) <= availableQuantity) {
+                                    // Requested quantity is valid, add the product to the cart
+                                    addToCartAndUpdateQuantity(currentID, prodName, quantity, category, price);
                                 } else {
-                                    // If the item is not in the cartlist, check and add
-                                    if (requestedQuantity <= availableQuantity[0]) {
-                                        insertFirestore(currentID,  prodName.getText().toString(), qty2, itemCategory, tPrice1);
-                                    } else {
-                                        Toast.makeText(this, "Insufficient Stock for " + prodName.getText().toString(), Toast.LENGTH_LONG).show();
-                                        prodName.setText("");
-                                        Quantity.setText("");
-                                        totalPriceUp.setText("");
-                                        Price.setText("");
-                                        prodImg.setImageResource(R.drawable.noimage);
-                                        Quantity.setEnabled(false);
-                                    }
+                                    // Requested quantity is more than available, calculate the difference
+                                    int quantityDifference = Integer.parseInt(quantity) - availableQuantity;
+
+                                    // Check if the updated quantity in the cartlist and products is valid
+                                    isUpdatedQuantityValid(currentID, prodName, quantityDifference, isValid -> {
+                                        if (isValid) {
+                                            // Updated quantity is valid, proceed with the update
+                                            updateCartItemAndReduceProductQuantity(currentID, prodName, quantity, price);
+                                        } else {
+                                            // Handle the case where the updated quantity is not valid
+                                            Toast.makeText(this, "Invalid updated quantity for " + prodName, Toast.LENGTH_LONG).show();
+                                        }
+                                    });
                                 }
                             } else {
-                                // Handle the case where 'quantity' is not present or is null.
-                                Toast.makeText(this, "Quantity field is missing or null in Firestore document", Toast.LENGTH_LONG).show();
+                                // Handle the case where the "quantity" field is not a valid integer
+                                Toast.makeText(this, "Invalid quantity for " + prodName, Toast.LENGTH_LONG).show();
                             }
-                        } else {
-                            Toast.makeText(this, "Document does not exist", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(this, "Failed to check products: " + task.getException(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "Failed to check stock: " + task.getException(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
 
-    private void insertFirestore(String currentID, String prodName, String quantity, String category, String price) {
+    private void addToCartAndUpdateQuantity(String currentID, String prodName, String quantity, String category, String price) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Convert quantity and price to the appropriate types
         int quantityValue = Integer.parseInt(quantity);
         double priceValue = Double.parseDouble(price);
 
-        // Create an instance of the ProductData class
-        ProductData productData = new ProductData(prodName, quantityValue, category, priceValue);
+        // Create a CartItem object
+        CartItem cartItem = new CartItem(currentID, prodName, quantityValue, category, priceValue);
 
-        // Add the product data to Firestore
+        // Add the cart item to Firestore
         db.collection("cartlist")
-                .document(currentID)
-                .set(productData)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(this, prodName + " Added to Cart", Toast.LENGTH_SHORT).show();
-                    refreshList();
+                .add(cartItem)
+                .addOnSuccessListener(documentReference -> {
+                    // Cart item added successfully
+                    Toast.makeText(this, prodName + " added to cart", Toast.LENGTH_LONG).show();
+
+                    // After adding to the cart, update the quantity in the "products" collection
+                    updateProductQuantity(currentID, prodName, quantityValue);
+                    refreshListOnUiThread();  // Assuming this method updates your UI
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to add item to cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    // Handle the case where adding to the cart fails
+                    Toast.makeText(this, "Failed to add item to cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 });
     }
 
-    private void decreaseProductQuantityFirestore(int currentID, int quantityToSubtract) {
+
+
+    private void updateCartItemAndReduceProductQuantity(String currentID, String prodName1, String newQuantity, String tPrice1) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        DocumentReference productRef = db.collection("products").document(String.valueOf(currentID));
+        // Update cartlist document in Firestore
+        db.collection("cartlist")
+                .whereEqualTo("id", currentID)
+                .whereEqualTo("prodName", prodName1)
+                .get()
+                .addOnCompleteListener(cartListTask -> {
+                    if (cartListTask.isSuccessful()) {
+                        for (QueryDocumentSnapshot cartDocument : cartListTask.getResult()) {
+                            // Get the current quantity from the cartlist document
+                            String currentQuantityString = cartDocument.getString("quantity");
 
-        db.runTransaction(transaction -> {
-            DocumentSnapshot productSnapshot = transaction.get(productRef);
+                            if (currentQuantityString != null && currentQuantityString.matches("\\d+")) {
+                                int currentQuantity = Integer.parseInt(currentQuantityString);
 
-            if (productSnapshot.exists()) {
-                int currentQuantity = productSnapshot.getLong("quantity").intValue();
-                int newQuantity = currentQuantity - quantityToSubtract;
+                                // Calculate the difference in quantity
+                                int quantityDifference = Integer.parseInt(newQuantity) - currentQuantity;
 
-                // Ensure the new quantity is not negative
-                newQuantity = Math.max(newQuantity, 0);
-
-                // Update the product quantity
-                transaction.update(productRef, "quantity", newQuantity);
-            }
-
-            return null;
-        }).addOnSuccessListener(aVoid -> {
-            // Successfully updated product quantity
-            Log.d("Firestore", "Product Quantity Updated");
-        }).addOnFailureListener(e -> {
-            Log.e("Firestore", "Failed to update product quantity: " + e.getMessage());
-            e.printStackTrace();
-        });
+                                // Check if the updated quantity is valid
+                                isUpdatedQuantityValid(currentID, prodName1, quantityDifference, isValid -> {
+                                    if (isValid) {
+                                        // Updated quantity is valid, proceed with the update
+                                        cartDocument.getReference().update("quantity", newQuantity, "price", tPrice1)
+                                                .addOnSuccessListener(aVoid -> {
+                                                    // Successfully updated cartlist, now update the product quantity
+                                                    updateProductQuantity(currentID, prodName1, quantityDifference);
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                    Toast.makeText(this, "Failed to update item in cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    e.printStackTrace();
+                                                });
+                                    } else {
+                                        // Handle the case where the updated quantity is not valid
+                                        Toast.makeText(this, "Invalid quantity for " + prodName1, Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            } else {
+                                // Handle the case where "quantity" in cartlist is not a valid integer
+                                Toast.makeText(this, "Invalid quantity in cartlist for " + prodName1, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Failed to retrieve item from cartlist: " + cartListTask.getException(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
-    private void updateCartItemAndReduceProductQuantityFirestore(String currentID, String newQuantity, String tPrice1) {
+    private void isUpdatedQuantityValid(String currentID, String prodName, int quantityDifference, OnValidationResultCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Use a transaction for updating cartlist and reducing product quantity
-        db.runTransaction(transaction -> {
-            DocumentReference cartItemRef = db.collection("cartlist").document(currentID);
-            DocumentReference productRef = db.collection("products").document(currentID);
+        // Retrieve the product document from Firestore
+        db.collection("products")
+                .whereEqualTo("id", currentID)
+                .get()
+                .addOnCompleteListener(productTask -> {
+                    if (productTask.isSuccessful()) {
+                        for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
+                            // Get the existing quantity from the product document
+                            String currentProductQuantityString = productDocument.getString("quantity");
 
-            // Get the current quantity in the cartlist
-            DocumentSnapshot cartDocument = transaction.get(cartItemRef);
-            if (cartDocument.exists()) {
-                int currentQuantityInCart = cartDocument.getLong("quantity").intValue();
+                            if (currentProductQuantityString != null && currentProductQuantityString.matches("\\d+")) {
+                                int currentProductQuantity = Integer.parseInt(currentProductQuantityString);
 
-                // Calculate the quantity difference
-                int quantityDifference = Integer.parseInt(newQuantity) - currentQuantityInCart;
+                                // Calculate the new available quantity
+                                int newAvailableQuantity = currentProductQuantity - quantityDifference;
 
-                // Update the cartlist document
-                transaction.update(cartItemRef, "quantity", Integer.parseInt(newQuantity), "price", Double.parseDouble(tPrice1));
+                                // Check if the new available quantity is non-negative
+                                boolean isValid = newAvailableQuantity >= 0;
 
-                // Update the product quantity
-                DocumentSnapshot productDocument = transaction.get(productRef);
-                if (productDocument.exists()) {
-                    int currentProductQuantity = productDocument.getLong("quantity").intValue();
-                    int newProductQuantity = currentProductQuantity - quantityDifference;
-
-                    // Ensure the new quantity is not negative
-                    newProductQuantity = Math.max(newProductQuantity, 0);
-
-                    // Update the product quantity
-                    transaction.update(productRef, "quantity", newProductQuantity);
-
-                    // Log statements to trace the flow
-                    Log.d("Firestore", "Product Quantity Updated. newProductQuantity: " + newProductQuantity);
-                } else {
-                    Log.e("Firestore", "Product document not found!");
-                }
-            } else {
-                Log.e("Firestore", "Cartlist document not found!");
-            }
-
-            return null;
-        }).addOnSuccessListener(aVoid -> {
-            // Successfully updated cartlist and reduced product quantity
-            Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_SHORT).show();
-            refreshList();
-        }).addOnFailureListener(e -> {
-            Toast.makeText(this, "Failed to update item in cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        });
+                                // Invoke the callback with the validation result
+                                callback.onResult(isValid);
+                            } else {
+                                // Handle the case where "quantity" in products is not a valid integer
+                                callback.onResult(false);
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Failed to retrieve item from products: " + productTask.getException(), Toast.LENGTH_LONG).show();
+                        callback.onResult(false);
+                    }
+                });
     }
+
+    private void updateProductQuantity(String currentID, String prodName, int quantityDifference) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Retrieve the product document from Firestore
+        db.collection("products")
+                .whereEqualTo("id", currentID)
+                .get()
+                .addOnCompleteListener(productTask -> {
+                    if (productTask.isSuccessful()) {
+                        for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
+                            // Get the existing quantity from the product document
+                            String currentProductQuantityString = productDocument.getString("quantity");
+
+                            if (currentProductQuantityString != null && currentProductQuantityString.matches("\\d+")) {
+                                int currentProductQuantity = Integer.parseInt(currentProductQuantityString);
+
+                                // Calculate the new available quantity
+                                int newAvailableQuantity = currentProductQuantity - quantityDifference;
+
+                                // Update the quantity in the products collection
+                                productDocument.getReference().update("quantity", String.valueOf(newAvailableQuantity))
+                                        .addOnSuccessListener(aVoid -> {
+                                            // Additional actions after successful update
+                                            Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
+                                            refreshListOnUiThread();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(this, "Failed to update quantity in products: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            e.printStackTrace();
+                                        });
+                            } else {
+                                // Handle the case where "quantity" in products is not a valid integer
+                                Toast.makeText(this, "Invalid quantity in products", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Failed to retrieve item from products: " + productTask.getException(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    interface OnValidationResultCallback {
+        void onResult(boolean isValid);
+    }
+
+
+
 
     public void updatePrice() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -574,7 +613,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         if (String.valueOf(Quantity.getText()).equals("")){
 
         }else if(Integer.parseInt(String.valueOf(Quantity.getText())) <= 0){
-            Toast.makeText(OrderingSystem.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_SHORT).show();
+            Toast.makeText(OrderingSystem.this,"Quantity Must Be Greater Than 1", Toast.LENGTH_LONG).show();
         }else{
             double qty1 = Double.parseDouble(Quantity.getText().toString());
             double price1 = Double.parseDouble(Price.getText().toString());
@@ -584,80 +623,87 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         }
     }
 
-    public void refreshList() {
-        items.clear();
-        foods.clear();
-        Cakes.clear();
-        Special.clear();
+    public void refreshListOnUiThread() {
+        runOnUiThread(()->{
+            items.clear();
+            foods.clear();
+            Cakes.clear();
+            Special.clear();
 
-        RecyclerView recyclerView = findViewById(R.id.recycleProds);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+            RecyclerView recyclerView = findViewById(R.id.recycleProds);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
-        foodRecyclerView.setHasFixedSize(true);
-        foodRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+            RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
+            foodRecyclerView.setHasFixedSize(true);
+            foodRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
-        addOnsRecycle.setHasFixedSize(true);
-        addOnsRecycle.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+            RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
+            addOnsRecycle.setHasFixedSize(true);
+            addOnsRecycle.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
-        othersRecyclerView.setHasFixedSize(true);
-        othersRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+            RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
+            othersRecyclerView.setHasFixedSize(true);
+            othersRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference productsCollection = db.collection("products");
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference productsCollection = db.collection("products");
 
-        productsCollection.orderBy("product", Query.Direction.ASCENDING)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String id = document.getString("id");
-                        String product = document.getString("product");
-                        String category = document.getString("category");
-                        String prodPrice = document.getString("prodPrice");
-                        String quantity = document.getString("quantity");
+            productsCollection.orderBy("product", Query.Direction.ASCENDING)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String id = document.getString("id");
+                            String product = document.getString("product");
+                            String category = document.getString("category");
+                            String prodPrice = document.getString("prodPrice");
+                            String quantity = document.getString("quantity");
 
-                        Object prodImgObject = document.get("prodImg");
-                        String prodImageBase64 = null;
+                            Object prodImgObject = document.get("prodImg");
+                            String prodImageBase64 = null;
 
-                        if (prodImgObject instanceof String) {
-                            // Handle the case when 'userImg' is stored as a Base64 encoded string in Firestore
-                            prodImageBase64 = (String) prodImgObject;
+                            if (prodImgObject instanceof String) {
+                                prodImageBase64 = (String) prodImgObject;
+                            }
+
+                            prodItems productItem = new prodItems(id, product, category, prodPrice, quantity, prodImageBase64);
+
+                            if (category.equals("Drinks")) {
+                                items.add(productItem);
+                            } else if (category.equals("Food")) {
+                                foods.add(productItem);
+                            } else if (category.equals("Cake")) {
+                                Cakes.add(productItem);
+                            } else if (category.equals("Special")) {
+                                Special.add(productItem);
+                            }
                         }
 
-                        prodItems productItem = new prodItems(id, product, category, prodPrice, quantity, prodImageBase64);
+                        // Set up RecyclerView adapters here
+                        productListAdapter = new prodDrinksListAdapter(this, items, this);
+                        recyclerView.setAdapter(productListAdapter);
 
-                        if (category.equals("Drinks")) {
-                            items.add(productItem);
-                        } else if (category.equals("Food")) {
-                            foods.add(productItem);
-                        } else if (category.equals("Cake")) {
-                            Cakes.add(productItem);
-                        } else if (category.equals("Special")) {
-                            Special.add(productItem);
-                        }
-                    }
+                        foodListAdapter = new prodFoodListAdapter(this, foods, this);
+                        foodRecyclerView.setAdapter(foodListAdapter);
 
-                    // Set up RecyclerView adapters here
-                    productListAdapter = new prodDrinksListAdapter(this, items, this);
-                    recyclerView.setAdapter(productListAdapter);
+                        CakeListAdapter = new CakeListAdapter(this, Cakes, this);
+                        addOnsRecycle.setAdapter(CakeListAdapter);
 
-                    foodListAdapter = new prodFoodListAdapter(this, foods, this);
-                    foodRecyclerView.setAdapter(foodListAdapter);
+                        specialListAdapter = new SpecialListAdapter(this, Special, this);
+                        othersRecyclerView.setAdapter(specialListAdapter);
 
-                    CakeListAdapter = new CakeListAdapter(this, Cakes, this);
-                    addOnsRecycle.setAdapter(CakeListAdapter);
-
-                    specialListAdapter = new SpecialListAdapter(this, Special, this);
-                    othersRecyclerView.setAdapter(specialListAdapter);
-                })
-                .addOnFailureListener(e -> {
-                    // Handle the case when there is an error fetching data from Firestore
-                    e.printStackTrace();
-                    Toast.makeText(this, "Failed to fetch products", Toast.LENGTH_SHORT).show();
-                });
+                        // Notify adapters that the data has changed
+                        productListAdapter.notifyDataSetChanged();
+                        foodListAdapter.notifyDataSetChanged();
+                        CakeListAdapter.notifyDataSetChanged();
+                        specialListAdapter.notifyDataSetChanged();
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle the case when there is an error fetching data from Firestore
+                        e.printStackTrace();
+                        Toast.makeText(this, "Failed to fetch products", Toast.LENGTH_LONG).show();
+                    });
+        });
     }
 
     public void change(){//text change
