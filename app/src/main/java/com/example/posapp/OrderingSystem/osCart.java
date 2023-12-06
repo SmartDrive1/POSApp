@@ -16,6 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,36 +77,50 @@ public class osCart extends AppCompatActivity implements cartClickListener {
         total.setText("Total: ₱" + tPrice.toString() + "0");
     }
 
-    public void refreshList(){
+    public void refreshList() {
         RecyclerView recyclerView = findViewById(R.id.recycleCart1);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, category VARCHAR, price DOUBLE)"); //Create database if non-existent, to avoid crash
-        final Cursor c = db.rawQuery("select * from cartlist", null);
-        int count = c.getCount();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference cartlistCollection = db.collection("cartlist");
 
-        if(count == 0){
-            Toast.makeText(this,"The Cart is Empty", Toast.LENGTH_LONG).show();
-        }else{
-            int id = c.getColumnIndex("id");
-            int prodName = c.getColumnIndex("prodName");
-            int quantity = c.getColumnIndex("quantity");
-            int price = c.getColumnIndex("price");
-            int category = c.getColumnIndex("category");
+        // Assuming you have the current user's ID stored in a variable called currentUserID
+        String currentUserID = accessValue.user; // Replace this with the actual user ID
 
-            if(c.moveToFirst()){
-                do{
-                    items.add(new OSItems(c.getString(id),c.getString(prodName),c.getString(quantity),c.getString(price),c.getString(category)));
-                    OSAdapter = new OSAdapter(this, items, this);
-                    recyclerView.setAdapter(OSAdapter);
-                    tPrice = tPrice + Double.parseDouble(c.getString(price));
-                }while(c.moveToNext());
-            }
-        }
-        c.close();
-        db.close();
+        cartlistCollection.whereEqualTo("user", currentUserID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<OSItems> items = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String id = document.getString("id");
+                        String prodName = document.getString("prodName");
+                        String quantity = document.getString("quantity");
+                        String price = document.getString("price");
+                        String category = document.getString("category");
+
+                        items.add(new OSItems(id, prodName, quantity, price, category));
+
+                        // Calculate total price and add it to the totalSum
+                        tPrice += Double.parseDouble(price);
+                    }
+
+                    if (items.isEmpty()) {
+                        Toast.makeText(this, "The Cart is Empty", Toast.LENGTH_LONG).show();
+                    } else {
+                        OSAdapter = new OSAdapter(this, items, this);
+                        recyclerView.setAdapter(OSAdapter);
+
+                        // Set the total sum to the TextView
+                        total.setText(String.format("Total: ₱%.2f", tPrice));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the case when there is an error fetching data from Firestore
+                    e.printStackTrace();
+                    Toast.makeText(this, "Failed to fetch cart items", Toast.LENGTH_LONG).show();
+                });
     }
 
     @Override

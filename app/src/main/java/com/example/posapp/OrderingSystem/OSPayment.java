@@ -18,9 +18,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OSPayment extends AppCompatActivity {
 
@@ -74,97 +79,114 @@ public class OSPayment extends AppCompatActivity {
     public void refreshList() {
         RecyclerView recyclerView = findViewById(R.id.recycleCart1);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS cartlist(id INTEGER PRIMARY KEY, prodName VARCHAR,quantity INTEGER, category VARCHAR, price DOUBLE)"); //Create database if non-existent, to avoid crash
-        final Cursor c = db.rawQuery("select * from cartlist", null);
-        int count = c.getCount();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        if(count == 0){
-            Toast.makeText(this,"No Products Found", Toast.LENGTH_LONG).show();
-        }else{
-            int id = c.getColumnIndex("id");
-            int prodName = c.getColumnIndex("prodName");
-            int quantity = c.getColumnIndex("quantity");
-            int price = c.getColumnIndex("price");
-            int category = c.getColumnIndex("category");
+        // Assuming you have the current user's ID stored in a variable called currentUserID
+        String currentUserID = accessValue.user; // Replace this with the actual user ID
 
-            if(c.moveToFirst()){
-                do{
-                    items.add(new OSItems(c.getString(id), c.getString(prodName),c.getString(quantity),c.getString(price), c.getString(category)));
-                    OSPaymentAdapter = new OSPaymentAdapter(this, items);
-                    recyclerView.setAdapter(OSPaymentAdapter);
-                }while(c.moveToNext());
-            }
-        }
-        c.close();
-        db.close();
+        db.collection("cartlist")
+                .whereEqualTo("user", currentUserID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<OSItems> items = new ArrayList<>();
+
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String id = document.getString("id");; // Use document ID as the ID
+                        String prodName = document.getString("prodName");
+                        String quantity = document.getString("quantity");
+                        String price = document.getString("price");
+                        String category = document.getString("category");
+
+                        items.add(new OSItems(id, prodName, quantity, price, category));
+                    }
+
+                    if (items.isEmpty()) {
+                        Toast.makeText(this, "No Products Found", Toast.LENGTH_LONG).show();
+                    } else {
+                        OSPaymentAdapter = new OSPaymentAdapter(this, items);
+                        recyclerView.setAdapter(OSPaymentAdapter);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the case when there is an error fetching data from Firestore
+                    e.printStackTrace();
+                    Toast.makeText(this, "Failed to fetch cart items", Toast.LENGTH_LONG).show();
+                });
     }
 
-    @SuppressLint("Range")
     public void confirmTrans() {
-        int max_id = 0, max_id2 = 0, highestID = 0;
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String currentUserID = accessValue.user;
 
-        try {
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            Cursor cursor = db.rawQuery("SELECT MAX(transID) FROM transactions", null);
+        db.collection("transactions")
+                .orderBy("transID", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        long highestID = 0;
 
-            if (cursor.moveToNext()) {
-                max_id = cursor.getInt(0);
-            }
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            highestID = document.getLong("transID");
+                        }
 
-            cursor = db.rawQuery("SELECT MAX(transID) FROM orders", null);
-            if(cursor.moveToNext()){
-                max_id2 = cursor.getInt(0);
-            }
+                        long finalHighestID = highestID;
+                        db.collection("cartlist")
+                                .whereEqualTo("user", currentUserID)
+                                .get()
+                                .addOnCompleteListener(cartListTask -> {
+                                    if (cartListTask.isSuccessful()) {
+                                        for (QueryDocumentSnapshot cartDocument : cartListTask.getResult()) {
+                                            String prodID = cartDocument.getString("id");
+                                            String prodName = cartDocument.getString("prodName");
+                                            String quantity = cartDocument.getString("quantity");
+                                            String price = cartDocument.getString("price");
+                                            String category = cartDocument.getString("category");
 
+                                            long currentTime = System.currentTimeMillis();
 
-            cursor = db.rawQuery("SELECT * FROM cartlist", null);
+                                            // Create a map to represent the order
+                                            Map<String, Object> orderData = new HashMap<>();
+                                            orderData.put("transID", String.valueOf(finalHighestID + 1));
+                                            orderData.put("prodID", prodID);
+                                            orderData.put("prodName", prodName);
+                                            orderData.put("quantity", quantity);
+                                            orderData.put("price", price);
+                                            orderData.put("category", category);
+                                            orderData.put("time", currentTime);
+                                            orderData.put("status", "Preparing");
 
-            max_id += 1;
-            max_id2 += 1;
+                                            // Add the order to Firestore
+                                            db.collection("orders").add(orderData)
+                                                    .addOnSuccessListener(documentReference -> {
+                                                        Toast.makeText(getApplicationContext(), "Transaction Successful", Toast.LENGTH_SHORT).show();
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        // Handle failure
+                                                    });
+                                        }
 
-            if(max_id > max_id2){
-                highestID = max_id;
-            }else{
-                highestID = max_id2;
-            }
-
-            if(cursor.moveToFirst()){
-                do{
-                    String prodID = cursor.getString(cursor.getColumnIndex("id"));
-                    String prodName = cursor.getString(cursor.getColumnIndex("prodName"));
-                    String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
-                    String price = cursor.getString(cursor.getColumnIndex("price"));
-                    String category = cursor.getString(cursor.getColumnIndex("category"));
-                    long currentTime = System.currentTimeMillis();
-
-                    String sql = "INSERT INTO orders(transID, id, prodName, quantity, price, category, time, status)values(?,?,?,?,?,?,?,?)";
-                    SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1, String.valueOf(highestID));
-                    statement.bindString(2, prodID);
-                    statement.bindString(3, prodName);
-                    statement.bindString(4, quantity);
-                    statement.bindString(5, price);
-                    statement.bindString(6, category);
-                    statement.bindString(7, String.valueOf(currentTime));
-                    statement.bindString(8, "Preparing");
-                    statement.execute();
-                }while (cursor.moveToNext());
-            }
-
-            String sql = "drop table cartlist";
-            SQLiteStatement statement = db.compileStatement(sql);
-            statement.execute();
-
-            cursor.close();
-            db.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Failed to transfer data", Toast.LENGTH_LONG).show();
-        }
+                                        // Drop the cartlist collection or clear the user's cart
+                                        db.collection("cartlist")
+                                                .whereEqualTo("user", currentUserID)
+                                                .get()
+                                                .addOnCompleteListener(cartListDeleteTask -> {
+                                                    if (cartListDeleteTask.isSuccessful()) {
+                                                        for (QueryDocumentSnapshot document : cartListDeleteTask.getResult()) {
+                                                            document.getReference().delete();
+                                                        }
+                                                    }
+                                                });
+                                    } else {
+                                        // Handle failure to retrieve cart items
+                                    }
+                                });
+                    } else {
+                        // Handle failure to retrieve highest transID
+                    }
+                });
     }
 
     @Override

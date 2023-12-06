@@ -27,7 +27,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -54,7 +56,7 @@ public class login extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Login();
+                login();
             }
         });
 
@@ -116,41 +118,51 @@ public class login extends AppCompatActivity {
         }
     }
 
-    public void Login(){
+    public void login() {
         String username = txtUser.getText().toString().trim();
         String pass = txtPass.getText().toString().trim();
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, fullName VARCHAR, userName VARCHAR, password VARCHAR, access, VARCHAR)");//incase there are no tables yet
-        Cursor c = db.rawQuery("select * from users WHERE userName='" + username + "'and password='" + pass + "'", null);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        if (username.equals("")){
-            Toast.makeText(login.this, "Username is Blank", Toast.LENGTH_SHORT).show();
-        }else if(pass.equals("")){
-            Toast.makeText(login.this, "Password is Blank", Toast.LENGTH_SHORT).show();
-        }else if(username.equals("admin") && pass.equals("admin")){ //Edit before deployment
-            accessValue.access = "Admin";
-            Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(login.this, MainScreen.class);
-            startActivity(i);
-        }else if (c.moveToFirst()){
-            int accessIndex = c.getColumnIndex("access");
-            accessValue.access = c.getString(accessIndex);
-            String currentAccess = accessValue.access;
-            if(currentAccess.equals("Admin")){
-                Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(login.this, MainScreen.class);
-                startActivity(i);
-            }else{
-                Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent(login.this, OrderingSystem.class);
-                startActivity(i);
-            }
+        db.collection("users")
+                .whereEqualTo("userName", username)
+                .whereEqualTo("password", pass)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
 
-        }else
-        {
-            Toast.makeText(login.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
-        }
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // User found in Firestore
+                            DocumentSnapshot userDoc = querySnapshot.getDocuments().get(0);
+                            String currentAccess = userDoc.getString("access");
+
+                            if ("admin".equals(username) && "admin".equals(pass)) { // Edit before deployment
+                                currentAccess = "Admin";
+                            }
+
+                            accessValue.access = currentAccess;
+                            accessValue.user = username;
+
+                            Toast.makeText(login.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                            Intent intent;
+                            if ("Admin".equals(currentAccess)) {
+                                intent = new Intent(login.this, MainScreen.class);
+                            } else {
+                                intent = new Intent(login.this, OrderingSystem.class);
+                            }
+
+                            startActivity(intent);
+                        } else {
+                            // User not found in Firestore
+                            Toast.makeText(login.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // Error in Firestore query
+                        Toast.makeText(login.this, "Failed to authenticate user: " + task.getException(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void addProducts(){

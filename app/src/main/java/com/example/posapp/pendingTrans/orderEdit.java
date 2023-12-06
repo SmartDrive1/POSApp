@@ -21,12 +21,20 @@ import android.widget.Toast;
 import com.example.posapp.R;
 import com.example.posapp.transactions.manageTransactions;
 import com.example.posapp.transactions.transEdit;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class orderEdit extends AppCompatActivity {
     Button btnDone, btnCancel, btnBack, btnServing;
@@ -53,26 +61,10 @@ public class orderEdit extends AppCompatActivity {
 
         Intent i = getIntent();
         transID = i.getStringExtra("id".toString());
+        status = i.getStringExtra("status".toString());
+        formattedDate = i.getStringExtra("time".toString());
 
         txtOrderID.setText("Order ID: " + transID);
-
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS orders(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER, status VARCHAR)");
-
-        String[] columns = {"status, time"};
-        String selection = "transID=?";
-        String[] selectionArgs = {String.valueOf(transID)};
-
-        Cursor cursor = db.query("orders", columns, selection, selectionArgs, null, null, null);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-        if (cursor != null && cursor.moveToFirst()) {
-            int time = cursor.getColumnIndex("time");
-            formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
-            status = cursor.getString(cursor.getColumnIndex("status"));
-            cursor.close();
-        }
-
         txtStatus.setText("Status: " + status);
         txtOrderTime.setText("Order Time:\n" + formattedDate);
 
@@ -108,6 +100,11 @@ public class orderEdit extends AppCompatActivity {
 
         if(status.equals("Serving")){
             btnServing.setEnabled(false);
+            btnDone.setEnabled(true);
+        }
+
+        if(status.equals("Preparing")){
+            btnDone.setEnabled(false);
         }
 
         refreshList();
@@ -117,68 +114,92 @@ public class orderEdit extends AppCompatActivity {
         RecyclerView recyclerView = findViewById(R.id.recycleOrderEdit);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        String query = "SELECT * FROM orders WHERE transid= ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(transID)});
+        db.collection("orders")
+                .whereEqualTo("transID", transID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<orderEditItems> items = new ArrayList<>();
 
-        int prodName = cursor.getColumnIndex("prodName");
-        int quantity = cursor.getColumnIndex("quantity");
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String prodName = document.getString("prodName");
+                        String quantity = document.getString("quantity");
 
-        while(cursor.moveToNext()){
-            items.add(new orderEditItems(cursor.getString(prodName), cursor.getString(quantity)));
-            editOrderAdapter = new editOrderAdapter(this, items);
-            recyclerView.setAdapter(editOrderAdapter);
-        }
+                        items.add(new orderEditItems(prodName, quantity));
+                    }
+
+                    // Move the adapter and setAdapter out of the loop to set the adapter only once
+                    editOrderAdapter = new editOrderAdapter(this, items);
+                    recyclerView.setAdapter(editOrderAdapter);
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the case where there is an error fetching data from Firestore
+                    e.printStackTrace();
+                });
     }
 
     @SuppressLint("Range")
-    public void orderDone(){
-        int max_id = 0;
+    public void orderDone() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference transactionsCollection = db.collection("transactions");
+        CollectionReference ordersCollection = db.collection("orders");
 
-        try{
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            Cursor cursor = db.rawQuery("SELECT MAX(transID) from transactions", null);
+        int[] maxID = {0}; // Using an array to hold the value so it can be modified in the listener
 
-            if(cursor.moveToNext()){
-                max_id = cursor.getInt(0);
-            }
+        // Fetch the max transID from transactions collection
+        db.collection("transactions")
+                .orderBy("transID", Query.Direction.DESCENDING)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
+                        maxID[0] = documentSnapshot.getLong("transID").intValue();
+                    }
 
-            max_id += 1;
+                    // Increment the maxID
+                    maxID[0]++;
 
-            cursor = db.rawQuery("SELECT * FROM orders", null);
+                    // Fetch orders from Firestore
+                    ordersCollection
+                            .whereEqualTo("transID", transID)
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots1 -> {
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots1) {
+                                    String prodName = document.getString("prodName");
+                                    String quantity = document.getString("quantity");
+                                    String price = document.getString("price");
+                                    String category = document.getString("category");
+                                    long time = document.getLong("time");
 
-            if(cursor.moveToNext()){
-                do{
-                    String prodName = cursor.getString(cursor.getColumnIndex("prodName"));
-                    String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
-                    String price = cursor.getString(cursor.getColumnIndex("price"));
-                    String category = cursor.getString(cursor.getColumnIndex("category"));
-                    long currentTime = cursor.getLong(cursor.getColumnIndex("time"));
+                                    // Create a new transaction document
+                                    Map<String, Object> transactionData = new HashMap<>();
+                                    transactionData.put("transID", maxID[0]);
+                                    transactionData.put("prodName", prodName);
+                                    transactionData.put("quantity", quantity);
+                                    transactionData.put("price", price);
+                                    transactionData.put("category", category);
+                                    transactionData.put("time", time);
 
-                    String sql = "INSERT INTO transactions(transID, prodName, quantity, price, category, time)values(?,?,?,?,?,?)";
-                    SQLiteStatement statement = db.compileStatement(sql);
-                    statement.bindString(1, String.valueOf(max_id));
-                    statement.bindString(2, prodName);
-                    statement.bindString(3, quantity);
-                    statement.bindString(4, price);
-                    statement.bindString(5, category);
-                    statement.bindString(6, String.valueOf(currentTime));
-                    statement.execute();
-                }while(cursor.moveToNext());
-            }
+                                    // Add the transaction document to the transactions collection
+                                    transactionsCollection.add(transactionData);
 
-            db.delete("orders", "transID=?", new String[] { String.valueOf(transID) });
+                                    // Delete the order document
+                                    document.getReference().delete();
+                                }
 
-            cursor.close();
-            db.close();
-            Toast.makeText(orderEdit.this, "Order Successful", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(orderEdit.this, pendingTransaction.class);
-            startActivity(i);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+                                Toast.makeText(orderEdit.this, "Order Successful", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(orderEdit.this, pendingTransaction.class);
+                                startActivity(i);
+                            })
+                            .addOnFailureListener(e -> {
+                                e.printStackTrace();
+                            });
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                });
     }
 
     public void cancelOrder(){
@@ -187,10 +208,7 @@ public class orderEdit extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
                         cancelOrderFunction();
-                        db.delete("orders", "transID=?", new String[] { String.valueOf(transID) });
-                        db.close();
                         Toast.makeText(orderEdit.this, "Order ID: " + transID + " Cancelled Successfully", Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(orderEdit.this, pendingTransaction.class);
                         startActivity(i);
@@ -206,35 +224,64 @@ public class orderEdit extends AppCompatActivity {
                 .setNegativeButton("No", dialogClickListener).show();
     }
 
-    @SuppressLint("Range")
-    public void cancelOrderFunction(){
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+    public void cancelOrderFunction() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        CollectionReference ordersCollection = db.collection("orders");
+        CollectionReference productsCollection = db.collection("products");
 
-        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE transID = " + transID, null);
+        ordersCollection.whereEqualTo("transID", transID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        // Retrieve the quantity and id from the document
+                        String quantityString = document.getString("quantity");
+                        String prodID = document.getString("prodID"); // Assuming there is an 'id' field in the orders collection
 
-        if(cursor.moveToNext()){
-            do{
-                String quantity = cursor.getString(cursor.getColumnIndex("quantity"));
-                int id = cursor.getInt(cursor.getColumnIndex("id"));
-                String updateQuantity = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
-                Object[] bindArgs = {quantity, id};
-                db.execSQL(updateQuantity, bindArgs);
-            }while(cursor.moveToNext());
-        }
+                        productsCollection.whereEqualTo("id", prodID)
+                                .get()
+                                .addOnSuccessListener(productsSnapshots -> {
+                                    for (QueryDocumentSnapshot productDocument : productsSnapshots) {
+                                        String currentQuantity = productDocument.getString("quantity");
+                                        int newQuantity = Integer.parseInt(currentQuantity) + Integer.parseInt(quantityString);
+                                        productDocument.getReference().update("quantity", String.valueOf(newQuantity));
+                                    }
+                                })
+                                .addOnFailureListener(e -> {
+                                    e.printStackTrace();
+                                });
+
+                        document.getReference().delete()
+                                .addOnSuccessListener(aVoid -> {
+                                    // Document deleted successfully
+                                })
+                                .addOnFailureListener(e -> {
+                                    e.printStackTrace();
+                                });
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                });
     }
 
     public void toServe(){
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-
-        String transIDToUpdate = transID;
-        String updateStatusSQL = "UPDATE orders SET status = 'Serving' WHERE transID = ?";
-        SQLiteStatement updateStatement = db.compileStatement(updateStatusSQL);
-        updateStatement.bindString(1, transIDToUpdate);
-        updateStatement.executeUpdateDelete();
-        db.close();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();;
+        CollectionReference ordersCollection = db.collection("orders");
+        ordersCollection.whereEqualTo("transID", transID)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        document.getReference().update("status", "Serving");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle the case where there is an error fetching data from Firestore
+                    e.printStackTrace();
+                });
         txtStatus.setText("Status: Serving");
         btnServing.setEnabled(false);
+        btnDone.setEnabled(true);
     }
 
     @Override

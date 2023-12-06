@@ -20,6 +20,9 @@ import android.widget.Toast;
 
 import com.example.posapp.R;
 import com.example.posapp.pendingTrans.pendingTransaction;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 public class OSEditOrder extends AppCompatActivity {
 
@@ -82,83 +85,162 @@ public class OSEditOrder extends AppCompatActivity {
         setPrice();
         change();
     }
-    @SuppressLint("Range")
+
     public void edit() {
         try {
             String qty1 = qty.getText().toString().trim();
 
             if (qty1.equals("")) {
                 Toast.makeText(this, "Quantity is Blank. Please Input a Value", Toast.LENGTH_LONG).show();
-            } else if(quantity.equals(qty1)){
+            } else if (quantity.equals(qty1)) {
                 Toast.makeText(this, "Order Updated", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
                 startActivity(i);
-            }else if (Integer.parseInt(qty1) <= 0) {
+            } else if (Integer.parseInt(qty1) <= 0) {
                 Toast.makeText(this, "Quantity is Invalid. Please Input More Than 0", Toast.LENGTH_LONG).show();
             } else {
-                SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                String checkQuantityQuery = "SELECT quantity FROM products WHERE id = ?";
-                Cursor cursor = db.rawQuery(checkQuantityQuery, new String[]{id});
-                if (cursor.moveToFirst()) {//Get qty from products
-                    int availableQuantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-                    int requestedQuantity = Integer.parseInt(String.valueOf(qty.getText()));
-                    availableQuantity = Integer.parseInt(availableQuantity + quantity);
+                // Step 1: Retrieve the product quantity from Firestore
+                db.collection("products")
+                        .whereEqualTo("id", id)
+                        .get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                DocumentSnapshot productDocument = queryDocumentSnapshots.getDocuments().get(0);
+                                String availableQuantityString = productDocument.getString("quantity");
+                                if (availableQuantityString != null && availableQuantityString.matches("\\d+")) {
+                                    int availableQuantity = Integer.parseInt(availableQuantityString);
+                                    int requestedQuantity = Integer.parseInt(qty1);
 
-                    if (requestedQuantity <= availableQuantity) {
-                        updateCartItemAndReduceProductQuantity(id, qty1, newPrice);
-                        String sql = "update cartlist set quantity = ?, price = ? where id = ?";
-                        SQLiteStatement statement = db.compileStatement(sql);
-                        statement.bindString(1, qty1);
-                        statement.bindString(2, newPrice);
-                        statement.bindString(3, id);
-                        statement.execute();
-                        Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
-                        Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
-                        startActivity(i);
-                        db.close();
-                    }else{
-                        Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
-                    }
-                }
+                                    if (requestedQuantity <= availableQuantity) {
+                                        // Step 2: Update the cartlist in Firestore
+                                        updateCartItemAndReduceProductQuantity(id, qty1, newPrice);
+                                        db.collection("cartlist")
+                                                .whereEqualTo("id", id)
+                                                .get()
+                                                .addOnSuccessListener(cartListSnapshot -> {
+                                                    if (!cartListSnapshot.isEmpty()) {
+                                                        DocumentSnapshot cartDocument = cartListSnapshot.getDocuments().get(0);
+                                                        cartDocument.getReference().update("quantity", qty1, "price", newPrice)
+                                                                .addOnSuccessListener(aVoid -> {
+                                                                    Toast.makeText(this, "Product Updated", Toast.LENGTH_LONG).show();
+                                                                    Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
+                                                                    startActivity(i);
+                                                                })
+                                                                .addOnFailureListener(e -> {
+                                                                    Toast.makeText(this, "Failed to update cartlist: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                                    e.printStackTrace();
+                                                                });
+                                                    } else {
+                                                        Toast.makeText(this, "Cart item not found", Toast.LENGTH_LONG).show();
+                                                    }
+                                                })
+                                                .addOnFailureListener(e -> {
+                                                    Toast.makeText(this, "Failed to retrieve cart item from Firestore: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                    e.printStackTrace();
+                                                });
+                                    } else {
+                                        Toast.makeText(this, "Insufficient Stock", Toast.LENGTH_LONG).show();
+                                    }
+                                } else {
+                                    // Handle the case where "quantity" in products is not a valid integer
+                                    Toast.makeText(this, "Invalid quantity in products", Toast.LENGTH_LONG).show();
+                                }
+                            } else {
+                                Toast.makeText(this, "Product not found", Toast.LENGTH_LONG).show();
+                            }
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Failed to retrieve product from Firestore: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            e.printStackTrace();
+                        });
             }
         } catch (Exception e) {
             Toast.makeText(this, "Input a Valid Quantity", Toast.LENGTH_LONG).show();
         }
     }
 
-    @SuppressLint("Range")
     public void updateCartItemAndReduceProductQuantity(String currentID, String newQuantity, String tPrice1) {
-        try {
-            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            // Step 1: Retrieve current quantity from the 'cartlist'
-            String getCurrentQuantityQuery = "SELECT quantity FROM cartlist WHERE id=?";
-            Cursor cursor = db.rawQuery(getCurrentQuantityQuery, new String[]{currentID});
+        // Step 1: Retrieve current quantity from the 'cartlist'
+        db.collection("cartlist")
+                .whereEqualTo("id", currentID)
+                .whereEqualTo("user",accessValue.user)
+                .get()
+                .addOnSuccessListener(cartListTask -> {
+                    for (QueryDocumentSnapshot cartDocument : cartListTask) {
+                        // If the cartlist document exists, retrieve the current quantity
+                        String currentQuantityString = cartDocument.getString("quantity");
 
-            int currentQuantity = 0;
-            if (cursor.moveToFirst()) {
-                currentQuantity = cursor.getInt(cursor.getColumnIndex("quantity"));
-            }
-            cursor.close();
+                        if (currentQuantityString != null && currentQuantityString.matches("\\d+")) {
+                            int currentQuantity = Integer.parseInt(currentQuantityString);
 
-            int quantityDifference = Integer.parseInt(newQuantity) - currentQuantity;
+                            int quantityDifference = Integer.parseInt(newQuantity) - currentQuantity;
 
-            String updateCartlistQuery = "UPDATE cartlist SET quantity=?, price=? WHERE id=?";
-            Object[] cartlistBindArgs = {newQuantity, tPrice1, currentID};
-            db.execSQL(updateCartlistQuery, cartlistBindArgs);
+                            // Step 2: Update cartlist document in Firestore
+                            cartDocument.getReference()
+                                    .update("quantity", newQuantity, "price", tPrice1)
+                                    .addOnSuccessListener(aVoid -> {
+                                        // Step 3: Successfully updated cartlist, now update the product quantity
+                                        updateProductQuantity(currentID, quantityDifference);
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(this, "Failed to update item in cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    });
+                        } else {
+                            // Handle the case where "quantity" in cartlist is not a valid integer
+                            Toast.makeText(this, "Invalid quantity in cartlist", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to retrieve item from cartlist: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                });
+    }
 
-            String updateProductsQuery = "UPDATE products SET quantity = quantity - ? WHERE id = ?";
-            Object[] productsBindArgs = {quantityDifference, currentID};
-            db.execSQL(updateProductsQuery, productsBindArgs);
+    private void updateProductQuantity(String currentID, int quantityDifference) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
+        // Step 4: Retrieve the product document from Firestore
+        db.collection("products")
+                .whereEqualTo("id", currentID)
+                .get()
+                .addOnSuccessListener(productTask -> {
+                    for (QueryDocumentSnapshot productDocument : productTask) {
+                        // If the product document exists, retrieve the existing quantity
+                        String currentProductQuantityString = productDocument.getString("quantity");
 
-            db.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+                        if (currentProductQuantityString != null && currentProductQuantityString.matches("\\d+")) {
+                            int currentProductQuantity = Integer.parseInt(currentProductQuantityString);
 
-        }
+                            // Calculate the new available quantity
+                            int newAvailableQuantity = currentProductQuantity - quantityDifference;
+
+                            // Step 5: Update the quantity in the products collection
+                            productDocument.getReference()
+                                    .update("quantity", String.valueOf(newAvailableQuantity))
+                                    .addOnSuccessListener(aVoid -> {
+                                        // Additional actions after successful update
+                                        Toast.makeText(this, "Item Updated in Cart", Toast.LENGTH_LONG).show();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Toast.makeText(this, "Failed to update quantity in products: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        e.printStackTrace();
+                                    });
+                        } else {
+                            // Handle the case where "quantity" in products is not a valid integer
+                            Toast.makeText(this, "Invalid quantity in products", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Failed to retrieve item from products: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                });
     }
 
     public void delete() {
@@ -210,43 +292,65 @@ public class OSEditOrder extends AppCompatActivity {
     public void onBackPressed() {
     }
 
-    public void removeitem(){
-        dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case DialogInterface.BUTTON_POSITIVE:
-                        try {
-                            String product1 = editProduct.getText().toString();
-
-                            SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                            //Add to products stock
-                            String updateQuantity = "UPDATE products SET quantity = quantity + ? WHERE id = ?";
-                            Object[] bindArgs = {quantity, id};
-                            db.execSQL(updateQuantity, bindArgs);
-                            //Delete
-                            String sql = "DELETE FROM cartlist WHERE prodName = ?";
-                            SQLiteStatement statement = db.compileStatement(sql);
-                            statement.bindString(1, product1);
-                            statement.execute();
-                            Toast.makeText(OSEditOrder.this, prodName + " Removed from Cart", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(OSEditOrder.this, osCart.class);
-                            startActivity(i);
-                            db.close();
-                        } catch (Exception e) {
-                            Toast.makeText(OSEditOrder.this, "Failed", Toast.LENGTH_LONG).show();
-                        }
-                        Intent i = new Intent(OSEditOrder.this, OrderingSystem.class);
-                        startActivity(i);
-                        break;
-                    case DialogInterface.BUTTON_NEGATIVE:
-                        dialog.dismiss();
-                }
-            }
-        };
+    public void removeitem() {
         AlertDialog.Builder builder = new AlertDialog.Builder(OSEditOrder.this);
-        builder.setMessage("Are you sure do you want to remove " + prodName + "?")
-                .setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener).show();
+        builder.setMessage("Are you sure you want to remove " + prodName + "?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    try {
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+                        // Update quantity in products collection
+                        db.collection("products")
+                                .whereEqualTo("id", id)
+                                .get()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            String quantityString = document.getString("quantity");
+
+                                            if (quantityString != null) {
+                                                int currentQuantity = Integer.parseInt(quantityString);
+                                                int quantityToRemove = Integer.parseInt(quantity);
+                                                int newQuantity = currentQuantity + quantityToRemove;
+
+                                                if (newQuantity >= 0) {
+                                                    // Update quantity in products
+                                                    document.getReference().update("quantity", String.valueOf(newQuantity));
+
+                                                    // Delete item from cartlist
+                                                    db.collection("cartlist")
+                                                            .whereEqualTo("prodName", prodName)
+                                                            .whereEqualTo("user", accessValue.user)
+                                                            .get()
+                                                            .addOnCompleteListener(cartListTask -> {
+                                                                if (cartListTask.isSuccessful()) {
+                                                                    for (QueryDocumentSnapshot cartDocument : cartListTask.getResult()) {
+                                                                        cartDocument.getReference().delete();
+                                                                        Toast.makeText(OSEditOrder.this, prodName + " Removed from Cart", Toast.LENGTH_LONG).show();
+                                                                        Intent i = new Intent(OSEditOrder.this, osCart.class);
+                                                                        startActivity(i);
+                                                                    }
+                                                                } else {
+                                                                    Toast.makeText(OSEditOrder.this, "Failed to retrieve item from cartlist: " + cartListTask.getException(), Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
+                                                } else {
+                                                    Toast.makeText(OSEditOrder.this, "Invalid quantity in products2", Toast.LENGTH_LONG).show();
+                                                }
+                                            } else {
+                                                Toast.makeText(OSEditOrder.this, "Invalid quantity in products1", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    } else {
+                                        Toast.makeText(OSEditOrder.this, "Failed to retrieve item from products: " + task.getException(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    } catch (Exception e) {
+                        Toast.makeText(OSEditOrder.this, "Failed", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }

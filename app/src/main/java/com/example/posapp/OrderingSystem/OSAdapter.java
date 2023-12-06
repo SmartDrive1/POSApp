@@ -35,7 +35,7 @@ public class OSAdapter extends RecyclerView.Adapter<OSViewHolder> {
     public void onBindViewHolder(@NonNull OSViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.nameP.setText(items.get(position).getpName());
         holder.quantityP.setText(items.get(position).getpQuantity());
-        holder.priceP.setText(items.get(position).getpPrice() + ".00");
+        holder.priceP.setText(items.get(position).getpPrice());
 
         holder.btnEdit.setOnClickListener(new View.OnClickListener() {
             @Override

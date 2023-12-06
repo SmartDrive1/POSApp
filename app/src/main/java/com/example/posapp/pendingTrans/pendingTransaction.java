@@ -15,12 +15,17 @@ import android.widget.Toast;
 
 import com.example.posapp.OrderingSystem.OrderingSystem;
 import com.example.posapp.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class pendingTransaction extends AppCompatActivity implements pendingClickListener{
 
@@ -55,48 +60,57 @@ public class pendingTransaction extends AppCompatActivity implements pendingClic
         loadOrders();
     }
 
-    public void loadOrders(){
+    public void loadOrders() {
         items.clear();
 
         RecyclerView recyclerView = findViewById(R.id.recycleOrders);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        try {
-            db.execSQL("CREATE TABLE IF NOT EXISTS orders(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER, status VARCHAR)");
-            String query = "SELECT transID, status, time FROM orders GROUP BY transID";
-            Cursor cursor = db.rawQuery(query, null);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-            int transIDIndex = cursor.getColumnIndex("transID");
-            int statusIndex = cursor.getColumnIndex("status");
-            int timeIndex = cursor.getColumnIndex("time");
-            String formattedDate;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-            if (cursor.getCount() == 0) {
-                Toast.makeText(this, "No Pending Orders", Toast.LENGTH_LONG).show();
-            } else {
-                while (cursor.moveToNext()) {
-                    long time = cursor.getLong(timeIndex);
-                    formattedDate = dateFormat.format(new Date(time));
-                    items.add(new pendingItems(cursor.getString(transIDIndex), cursor.getString(statusIndex), formattedDate));
-                }
-                cursor.close();
-                db.close();
-                // Move the adapter and setAdapter out of the loop to set the adapter only once
-                pendingAdapter = new pendingAdapter(this, items, this);
-                recyclerView.setAdapter(pendingAdapter);
-            }
-        } catch (Exception e) {
-            Toast.makeText(this, "Error retrieving pending orders", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
+        // Assuming "orders" is your Firestore collection name
+        db.collection("orders")
+                .orderBy("transID", Query.Direction.ASCENDING)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                    Set<String> processedTransactions = new HashSet<>();
+
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String transID = document.getString("transID");
+                        String status = document.getString("status");
+                        long time = document.getLong("time");
+
+                        if (processedTransactions.add(transID)) {
+                            // Process only the first occurrence for each transID
+                            if (time != 0) {
+                                String formattedDate = dateFormat.format(new Date(time));
+                                items.add(new pendingItems(transID, status, formattedDate));
+                            }
+                        }
+                    }
+
+                    if (items.isEmpty()) {
+                        Toast.makeText(this, "No Pending Orders", Toast.LENGTH_LONG).show();
+                    } else {
+                        // Set the adapter only once after processing all documents
+                        pendingAdapter = new pendingAdapter(this, items, this);
+                        recyclerView.setAdapter(pendingAdapter);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(this, "Error retrieving pending orders: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                });
     }
 
     @Override
     public void onItemClicked(pendingItems view) {
         Intent i = new Intent(getApplicationContext(), orderEdit.class);
         i.putExtra("id", view.getTransID());
+        i.putExtra("status", view.getStatus());
+        i.putExtra("time",view.getOrderTime());
         startActivity(i);
     }
 

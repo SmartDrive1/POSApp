@@ -345,6 +345,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 db.collection("cartlist")
                         .whereEqualTo("id", currentID)
                         .whereEqualTo("prodName", prodName1)
+                        .whereEqualTo("user", accessValue.user)
                         .get()
                         .addOnCompleteListener(task -> {
                             boolean repeat = false; // Initialize repeat here
@@ -363,7 +364,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                             if (repeat) {
                                 updateCartItemAndReduceProductQuantity(currentID, prodName1, qty2, tPrice1);
                             } else {
-                                checkStockAndAddToCart(currentID, prodName1, qty2, itemCategory, tPrice1);
+                                addProductToCart(currentID, prodName1, qty2, itemCategory, tPrice1);
                             }
                         });
             } catch (Exception e) {
@@ -373,8 +374,10 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         }
     }
 
-    private void checkStockAndAddToCart(String currentID, String prodName, String quantity, String category, String price) {
+    private void addProductToCart(String currentID, String prodName, String quantity, String category, String price) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        int requestedQuantity = Integer.parseInt(quantity);
 
         // Check the stock of the product in the products collection
         db.collection("products")
@@ -389,27 +392,32 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                                 int availableQuantity = Integer.parseInt(quantityField);
 
                                 // Check if the requested quantity is less than or equal to the available quantity
-                                if (Integer.parseInt(quantity) <= availableQuantity) {
+                                if (requestedQuantity <= availableQuantity) {
                                     // Requested quantity is valid, add the product to the cart
-                                    addToCartAndUpdateQuantity(currentID, prodName, quantity, category, price);
-                                } else {
-                                    // Requested quantity is more than available, calculate the difference
-                                    int quantityDifference = Integer.parseInt(quantity) - availableQuantity;
+                                    CartItem cartItem = new CartItem(currentID, prodName, quantity, category, price, accessValue.user);
 
-                                    // Check if the updated quantity in the cartlist and products is valid
-                                    isUpdatedQuantityValid(currentID, prodName, quantityDifference, isValid -> {
-                                        if (isValid) {
-                                            // Updated quantity is valid, proceed with the update
-                                            updateCartItemAndReduceProductQuantity(currentID, prodName, quantity, price);
-                                        } else {
-                                            // Handle the case where the updated quantity is not valid
-                                            Toast.makeText(this, "Invalid updated quantity for " + prodName, Toast.LENGTH_LONG).show();
-                                        }
-                                    });
+                                    // Add the cart item to Firestore
+                                    db.collection("cartlist")
+                                            .add(cartItem)
+                                            .addOnSuccessListener(documentReference -> {
+                                                // Cart item added successfully
+                                                Toast.makeText(this, prodName + " added to cart", Toast.LENGTH_LONG).show();
+
+                                                // After adding to the cart, update the quantity in the "products" collection
+                                                updateProductQuantityForNewProduct(currentID, prodName, requestedQuantity);
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                // Handle the case where adding to the cart fails
+                                                Toast.makeText(this, "Failed to add item to cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                                e.printStackTrace();
+                                            });
+                                } else {
+                                    // Requested quantity exceeds available, show insufficient stock message
+                                    Toast.makeText(this, "Insufficient stock for " + prodName, Toast.LENGTH_LONG).show();
                                 }
                             } else {
                                 // Handle the case where the "quantity" field is not a valid integer
-                                Toast.makeText(this, "Invalid quantity for " + prodName, Toast.LENGTH_LONG).show();
+                                Toast.makeText(this, "Insufficient stock for " + prodName, Toast.LENGTH_LONG).show();
                             }
                         }
                     } else {
@@ -418,34 +426,45 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
                 });
     }
 
-    private void addToCartAndUpdateQuantity(String currentID, String prodName, String quantity, String category, String price) {
+    private void updateProductQuantityForNewProduct(String currentID, String prodName, int quantityValue) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        int quantityValue = Integer.parseInt(quantity);
-        double priceValue = Double.parseDouble(price);
+        // Update product quantity in Firestore for a new product
+        db.collection("products")
+                .whereEqualTo("id", currentID)
+                .get()
+                .addOnCompleteListener(productTask -> {
+                    if (productTask.isSuccessful()) {
+                        for (QueryDocumentSnapshot productDocument : productTask.getResult()) {
+                            // Get the existing quantity from the product document
+                            String currentProductQuantityString = productDocument.getString("quantity");
 
-        // Create a CartItem object
-        CartItem cartItem = new CartItem(currentID, prodName, quantityValue, category, priceValue);
+                            if (currentProductQuantityString != null && currentProductQuantityString.matches("\\d+")) {
+                                int currentProductQuantity = Integer.parseInt(currentProductQuantityString);
 
-        // Add the cart item to Firestore
-        db.collection("cartlist")
-                .add(cartItem)
-                .addOnSuccessListener(documentReference -> {
-                    // Cart item added successfully
-                    Toast.makeText(this, prodName + " added to cart", Toast.LENGTH_LONG).show();
+                                // Calculate the new available quantity
+                                int newAvailableQuantity = currentProductQuantity - quantityValue;
 
-                    // After adding to the cart, update the quantity in the "products" collection
-                    updateProductQuantity(currentID, prodName, quantityValue);
-                    refreshListOnUiThread();  // Assuming this method updates your UI
-                })
-                .addOnFailureListener(e -> {
-                    // Handle the case where adding to the cart fails
-                    Toast.makeText(this, "Failed to add item to cart: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+                                // Update the quantity in the products collection
+                                productDocument.getReference().update("quantity", String.valueOf(newAvailableQuantity))
+                                        .addOnSuccessListener(aVoid -> {
+                                            // Additional actions after successful update
+                                            refreshListOnUiThread();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(this, "Failed to update quantity in products: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                            e.printStackTrace();
+                                        });
+                            } else {
+                                // Handle the case where "quantity" in products is not a valid integer
+                                Toast.makeText(this, "Invalid quantity in products for " + prodName, Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    } else {
+                        Toast.makeText(this, "Failed to retrieve item from products: " + productTask.getException(), Toast.LENGTH_LONG).show();
+                    }
                 });
     }
-
-
 
     private void updateCartItemAndReduceProductQuantity(String currentID, String prodName1, String newQuantity, String tPrice1) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -454,6 +473,7 @@ public class OrderingSystem extends AppCompatActivity implements prodClickListen
         db.collection("cartlist")
                 .whereEqualTo("id", currentID)
                 .whereEqualTo("prodName", prodName1)
+                .whereEqualTo("user", accessValue.user)
                 .get()
                 .addOnCompleteListener(cartListTask -> {
                     if (cartListTask.isSuccessful()) {

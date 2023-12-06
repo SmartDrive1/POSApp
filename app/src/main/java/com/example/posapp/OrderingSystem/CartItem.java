@@ -1,44 +1,43 @@
 package com.example.posapp.OrderingSystem;
 
-import com.google.firebase.firestore.PropertyName;
-
 public class CartItem {
-    @PropertyName("id")
-    private String id;
-
-    @PropertyName("prodName")
+    private String currentID;
     private String prodName;
-
-    @PropertyName("quantity")
-    private int quantity;
-
-    @PropertyName("category")
+    private String quantity;
     private String category;
+    private String price;
+    private String user;
 
-    @PropertyName("price")
-    private double price;
-
-    public CartItem() {
-        // Default constructor required for Firestore
+    // Existing constructor
+    public CartItem(String currentID, String prodName, int quantity, String category, double price, String user) {
+        this.currentID = currentID;
+        this.prodName = prodName;
+        this.quantity = String.valueOf(quantity);
+        this.category = category;
+        this.price = String.valueOf(price);
+        this.user = user;
     }
 
-    public CartItem(String id, String prodName, int quantity, String category, double price) {
-        this.id = id;
+    // New constructor that accepts String values
+    public CartItem(String currentID, String prodName, String quantity, String category, String price, String user) {
+        this.currentID = currentID;
         this.prodName = prodName;
         this.quantity = quantity;
         this.category = category;
         this.price = price;
+        this.user = user;
+
     }
 
     public String getId() {
-        return id;
+        return currentID;
     }
 
     public String getProdName() {
         return prodName;
     }
 
-    public int getQuantity() {
+    public String getQuantity() {
         return quantity;
     }
 
@@ -46,7 +45,15 @@ public class CartItem {
         return category;
     }
 
-    public double getPrice() {
+    public String getPrice() {
         return price;
+    }
+
+    public String getUser(){
+        return user;
+    }
+
+    public String setUser(){
+        return user;
     }
 }
