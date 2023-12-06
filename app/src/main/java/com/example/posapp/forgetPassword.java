@@ -12,7 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.posapp.OrderingSystem.OrderingSystem;
 import com.example.posapp.OrderingSystem.accessValue;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 public class forgetPassword extends AppCompatActivity {
 
@@ -41,40 +45,56 @@ public class forgetPassword extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Login();
+                login();
             }
         });
     }
 
-    public void Login(){
-        String username = txtUser.getText().toString();
-        String pass = txtPass.getText().toString();
+    public void login() {
+        String username = txtUser.getText().toString().trim();
+        String pass = txtPass.getText().toString().trim();
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, fullName VARCHAR, userName VARCHAR, password VARCHAR, access, VARCHAR)");//incase there are no tables yet
-        Cursor c = db.rawQuery("select * from users WHERE userName='" + username + "'and password='" + pass + "'", null);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        if (username.equals("")){
-            Toast.makeText(forgetPassword.this, "Username is Blank", Toast.LENGTH_SHORT).show();
-        }else if (pass.equals("")){
-            Toast.makeText(forgetPassword.this, "Password is Blank", Toast.LENGTH_SHORT).show();
-        }else if(username.equals("admin") && pass.equals("adminuriel41")){
-            Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(forgetPassword.this, MainScreen.class);
-            startActivity(i);
-            }else if(c.moveToFirst()){
-                    int accessIndex = c.getColumnIndex("access");
-                    accessValue.access = c.getString(accessIndex);
-                    String currentAccess = accessValue.access;
-                    if(currentAccess.equals("Admin")) {
-                        Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(forgetPassword.this, MainScreen.class);
-                        startActivity(i);
-                    }else{
-                        Toast.makeText(forgetPassword.this, "Account is a User", Toast.LENGTH_SHORT).show();
+        db.collection("users")
+                .whereEqualTo("userName", username)
+                .whereEqualTo("password", pass)
+                .whereEqualTo("access", "Admin")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // User found in Firestore
+                            DocumentSnapshot userDoc = querySnapshot.getDocuments().get(0);
+                            String currentAccess = userDoc.getString("access");
+
+                            if ("admin".equals(username) && "admin".equals(pass)) { // Edit before deployment
+                                currentAccess = "Admin";
+                            }
+
+                            accessValue.access = currentAccess;
+                            accessValue.user = username;
+
+                            Toast.makeText(forgetPassword.this, "Login successful", Toast.LENGTH_SHORT).show();
+
+                            Intent intent;
+                            if ("Admin".equals(currentAccess)) {
+                                intent = new Intent(forgetPassword.this, MainScreen.class);
+                            } else {
+                                intent = new Intent(forgetPassword.this, OrderingSystem.class);
+                            }
+
+                            startActivity(intent);
+                        } else {
+                            // User not found in Firestore
+                            Toast.makeText(forgetPassword.this, "Please Enter an Admin Account", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // Error in Firestore query
+                        Toast.makeText(forgetPassword.this, "Failed to authenticate user: " + task.getException(), Toast.LENGTH_SHORT).show();
                     }
-            }else{
-            Toast.makeText(forgetPassword.this, "Wrong Login Credentials. Please Try Again.", Toast.LENGTH_SHORT).show();
-        }
+                });
     }
 }
