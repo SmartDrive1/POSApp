@@ -81,9 +81,7 @@ public class OSPayment extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        // Assuming you have the current user's ID stored in a variable called currentUserID
-        String currentUserID = accessValue.user; // Replace this with the actual user ID
+        String currentUserID = accessValue.user;
 
         db.collection("cartlist")
                 .whereEqualTo("user", currentUserID)
