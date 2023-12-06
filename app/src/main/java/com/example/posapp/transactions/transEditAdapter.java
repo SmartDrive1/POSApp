@@ -31,7 +31,7 @@ public class transEditAdapter extends RecyclerView.Adapter<transEditViewHolder> 
         holder.pName.setText(items.get(position).getpName());
         holder.pQuantity.setText(items.get(position).getpQuantity());
         holder.pCategory.setText(items.get(position).getpCategory());
-        holder.pPrice.setText(items.get(position).getpPrice() + ".00");
+        holder.pPrice.setText(items.get(position).getpPrice());
     }
 
     @Override

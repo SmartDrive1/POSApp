@@ -36,6 +36,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import com.example.posapp.mainManageScreen;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -91,8 +95,8 @@ public class manageTransactions extends AppCompatActivity implements transClickL
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              Intent i = new Intent(manageTransactions.this, mainManageScreen.class);
-              startActivity(i);
+                Intent i = new Intent(manageTransactions.this, mainManageScreen.class);
+                startActivity(i);
             }
         });
 
@@ -166,6 +170,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 }
             }
         });
+        transferFirestoreToSQLite();
         currentDate();
         refreshList();
     }
@@ -178,7 +183,6 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
 
             SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-            db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
             String query = "SELECT transID, time, category, SUM(price) AS totalAmount, SUM(quantity) AS totalQuantity FROM transactions WHERE time BETWEEN " + currentDay + " AND " + currentDayE + " GROUP BY transID";
             Cursor cursor = db.rawQuery(query, null);
 
@@ -200,7 +204,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
                 transAdapter.notifyDataSetChanged();
             }
         }catch (Exception e) {
-                Toast.makeText(this, "No Transactions", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No Transactions", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -208,6 +212,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
     public void onItemClicked(transItems view) {
         Intent i = new Intent(getApplicationContext(), transEdit.class);
         i.putExtra("id",view.getTransID());
+        i.putExtra("time",view.gettDate());
         startActivity(i);
     }
 
@@ -348,7 +353,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
     }
 
     private void saveExcelFile(Context context, XSSFWorkbook workbook) {
-                try {
+        try {
             String exportDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString();
             File file = new File(exportDir, "transactions.xlsx");
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -458,6 +463,63 @@ public class manageTransactions extends AppCompatActivity implements transClickL
 
         currentDayE = calendar.getTimeInMillis();
         System.out.println("Current date and time as int (set to 23:59:59): " + currentDayE);
+    }
+
+    public void transferFirestoreToSQLite() {
+        // Create or open SQLite database
+        SQLiteDatabase sqliteDb = openOrCreateDatabase("TIMYC", MODE_PRIVATE, null);
+
+        // Create transactions table if not exists
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS transactions " +
+                "(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)";
+        sqliteDb.execSQL(createTableQuery);
+
+        // Retrieve data from Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference transactionsCollection = db.collection("transactions");
+
+        transactionsCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Clear existing data in SQLite table
+                sqliteDb.execSQL("DELETE FROM transactions");
+
+                // Insert data into SQLite table
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    long transID = document.getLong("transID");
+                    String prodName = document.getString("prodName");
+                    String quantityStr = document.getString("quantity");
+                    String priceStr = document.getString("price");
+                    String category = document.getString("category");
+                    long time = document.getLong("time");
+
+                    // Parse quantity and price from string to appropriate types
+                    int quantity = Integer.parseInt(quantityStr);
+                    double price = Double.parseDouble(priceStr);
+
+                    // Insert data into SQLite table
+                    String insertDataQuery = "INSERT INTO transactions (transID, prodName, quantity, price, category, time) " +
+                            "VALUES (" + transID + ", '" + prodName + "', " + quantity + ", " + price + ", '" + category + "', " + time + ")";
+                    sqliteDb.execSQL(insertDataQuery);
+                }
+
+                // Close SQLite database
+                sqliteDb.close();
+            } else {
+                // Handle failure, e.g., show an error message
+                Exception exception = task.getException();
+                if (exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Call the method to fetch and display transactions again
+        transferFirestoreToSQLite();
+        refreshList();
     }
 
     @Override

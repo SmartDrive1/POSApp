@@ -34,7 +34,7 @@ public class transAdapter extends RecyclerView.Adapter<transViewHolder> {
     public void onBindViewHolder(@NonNull transViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.transIDP.setText(items.get(position).getTransID());
         holder.tQuantityP.setText(items.get(position).getpQuantity());
-        holder.tPriceP.setText(items.get(position).getpPrice() + ".00");
+        holder.tPriceP.setText(items.get(position).getpPrice() + "0");
         holder.dateP.setText(items.get(position).gettDate());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {

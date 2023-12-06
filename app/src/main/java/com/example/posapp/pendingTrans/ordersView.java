@@ -8,58 +8,101 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ordersView extends AppCompatActivity {
     List<servingItems> sItems = new ArrayList<>();
     List<preparingItems> pItems = new ArrayList<>();
     servingAdapter servingAdapter;
     preparingAdapter preparingAdapter;
+    private Handler handler = new Handler();
+    private Runnable refreshRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orders_view);
 
-        loadOrders();
+        scheduleRefresh();
     }
 
-    public void loadOrders(){
-        RecyclerView recyclerView = findViewById(R.id.recyclePreparing);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+    public void loadOrders() {
+        pItems.clear();
+        sItems.clear();
+        RecyclerView recyclerViewPreparing = findViewById(R.id.recyclePreparing);
+        recyclerViewPreparing.setHasFixedSize(true);
+        recyclerViewPreparing.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        RecyclerView recyclerView1 = findViewById(R.id.recycleServing);
-        recyclerView1.setHasFixedSize(true);
-        recyclerView1.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        RecyclerView recyclerViewServing = findViewById(R.id.recycleServing);
+        recyclerViewServing.setHasFixedSize(true);
+        recyclerViewServing.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        String query = "SELECT * FROM orders GROUP BY transID";
-        Cursor cursor = db.rawQuery(query, null);
+        // Initialize Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Set<String> uniqueTransIDs = new HashSet<>();
+        db.collection("orders")
+                .orderBy("transID") // Adjust the orderBy clause based on your data structure
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String transID = document.getString("transID");
+                            String status = document.getString("status");
 
-        int id = cursor.getColumnIndex("transID");
-        int status = cursor.getColumnIndex("status");
+                            // Check if the transID is unique
+                            if (uniqueTransIDs.add(transID)) {
+                                if ("Preparing".equals(status)) {
+                                    pItems.add(new preparingItems(transID));
+                                } else if ("Serving".equals(status)) {
+                                    sItems.add(new servingItems(transID));
+                                }
+                            }
+                        }
 
-        if(cursor.getCount() == 0){
+                        // Update RecyclerView adapters outside the loop
+                        preparingAdapter = new preparingAdapter(this, pItems);
+                        recyclerViewPreparing.setAdapter(preparingAdapter);
 
-        }else{
-            while(cursor.moveToNext()){
-                if(cursor.getString(status).equals("Preparing")){
-                    pItems.add(new preparingItems(cursor.getString(id)));
-                    preparingAdapter = new preparingAdapter(this, pItems);
-                    recyclerView.setAdapter(preparingAdapter);
+                        servingAdapter = new servingAdapter(this, sItems);
+                        recyclerViewServing.setAdapter(servingAdapter);
 
-                }
-                if(cursor.getString(status).equals("Serving")){
-                    sItems.add(new servingItems(cursor.getString(id)));
-                    servingAdapter = new servingAdapter(this, sItems);
-                    recyclerView1.setAdapter(servingAdapter);
-                }
+                    } else {
+                        Toast.makeText(this, "Error fetching orders: " + task.getException(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void scheduleRefresh() {
+        // Create a Runnable to run the refreshList() method
+        refreshRunnable = new Runnable() {
+            @Override
+            public void run() {
+                loadOrders();
+
+                // Schedule the next refresh after 5 seconds
+                handler.postDelayed(this, 5000);
             }
-        }
+        };
+
+        // Post the initial refresh immediately
+        handler.post(refreshRunnable);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Remove the callback to prevent memory leaks
+        handler.removeCallbacks(refreshRunnable);
     }
 }

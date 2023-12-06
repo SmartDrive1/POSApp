@@ -1,5 +1,6 @@
 package com.example.posapp.transactions;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.posapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,7 +40,7 @@ public class transEdit extends AppCompatActivity {
     String transID;
     double sum = 0.0;
     String formattedDate;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss", Locale.getDefault());
+    Long newTrans;
 
     private DialogInterface.OnClickListener dialogClickListener;
 
@@ -51,32 +58,49 @@ public class transEdit extends AppCompatActivity {
 
         Intent i = getIntent();
         transID = i.getStringExtra("id".toString());
+        formattedDate = i.getStringExtra("time".toString());
 
         txtTransID.setText("Transaction ID: " + String.valueOf(transID));
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        db.execSQL("CREATE TABLE IF NOT EXISTS transactions(transID INTEGER, prodName VARCHAR, quantity INTEGER, price DOUBLE, category VARCHAR, time INTEGER)");
+        newTrans = Long.valueOf(transID);
 
-        String[] columns = {"SUM(price) AS totalAmount, time"};
-        String selection = "transID=?";
-        String[] selectionArgs = {String.valueOf(transID)};
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference transactionsCollection = db.collection("transactions");
 
-        Cursor cursor = db.query("transactions", columns, selection, selectionArgs, null, null, null);
+        transactionsCollection
+                .whereEqualTo("transID", newTrans)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    sum = 0.0;
 
-        if (cursor != null && cursor.moveToFirst()) {
-            int time = cursor.getColumnIndex("time");
-            formattedDate = dateFormat.format(new Date(cursor.getLong(time)));
-            sum = cursor.getDouble(cursor.getColumnIndex("totalAmount"));
-            cursor.close();
-        }
+                    if (queryDocumentSnapshots.isEmpty()) {
+                        System.out.println("No documents found with transID: " + transID);
+                    } else {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            String priceString = document.getString("price");
 
-        txtTotalPrice.setText("Total: " + String.valueOf(sum) + "0");
+                            // Convert priceString to a numeric value (double) and add to the sum
+                            try {
+                                double price = Double.parseDouble(priceString);
+                                sum += price;
+                            } catch (NumberFormatException e) {
+                                // Handle parsing error if the priceString is not a valid double
+                                e.printStackTrace();
+                            }
+                        }
+                        txtTotalPrice.setText("Total: " + sum + "0");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                });
+
+
         txtDateTime.setText("Date/Time:\n" + formattedDate);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.close();
                 Intent i = new Intent(transEdit.this, manageTransactions.class);
                 startActivity(i);
             }
@@ -92,25 +116,36 @@ public class transEdit extends AppCompatActivity {
         refreshList();
     }
 
-    public void refreshList(){
+    public void refreshList() {
         RecyclerView recyclerView = findViewById(R.id.recycleTransEdit);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-        String query = "SELECT * FROM transactions WHERE transid= ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(transID)});
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference transactionsCollection = db.collection("transactions");
 
-        int prodName = cursor.getColumnIndex("prodName");
-        int quantity = cursor.getColumnIndex("quantity");
-        int price = cursor.getColumnIndex("price");
-        int category = cursor.getColumnIndex("category");
+        transactionsCollection
+                .whereEqualTo("transID", newTrans) // Replace transID with the desired transID
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    items.clear(); // Clear existing items before adding new ones
 
-        while(cursor.moveToNext()) {
-            items.add(new transEditItems(cursor.getString(prodName), cursor.getString(quantity), cursor.getString(category), cursor.getString(price)));
-            transEditAdapter = new transEditAdapter(this, items);
-            recyclerView.setAdapter(transEditAdapter);
-        }
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String prodName = document.getString("prodName");
+                        String quantity = document.getString("quantity");
+                        String category = document.getString("category");
+                        String price = document.getString("price");
+
+                        items.add(new transEditItems(prodName, quantity, category, price));
+                    }
+
+                    transEditAdapter = new transEditAdapter(this, items);
+                    recyclerView.setAdapter(transEditAdapter);
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                    // Handle failure, e.g., show an error message
+                });
     }
 
     public void delete() {
@@ -119,18 +154,51 @@ public class transEdit extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case DialogInterface.BUTTON_POSITIVE:
-                        SQLiteDatabase db = openOrCreateDatabase("TIMYC", Context.MODE_PRIVATE, null);
-                        db.delete("transactions", "transid=?", new String[] { String.valueOf(transID) });
-                        db.close();
-                        Toast.makeText(transEdit.this, "Transaction: " + transID + " Successfully Deleted", Toast.LENGTH_SHORT).show();
-                        Intent i = new Intent(transEdit.this, manageTransactions.class);
-                        startActivity(i);
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        CollectionReference transactionsCollection = db.collection("transactions");
+
+                        // Assuming "transID" is the field name in Firestore
+                        transactionsCollection.whereEqualTo("transID", Integer.parseInt(transID))
+                                .get()
+                                .addOnSuccessListener(queryDocumentSnapshots -> {
+                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                        document.getReference().delete()
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(transEdit.this, "Transaction: " + transID + " Successfully Deleted", Toast.LENGTH_SHORT).show();
+
+                                                        // Navigate to the desired activity after deletion
+                                                        Intent i = new Intent(transEdit.this, manageTransactions.class);
+                                                        startActivity(i);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        e.printStackTrace();
+                                                        // Handle failure, e.g., show an error message
+                                                        Toast.makeText(transEdit.this, "Failed to delete transaction: " + transID, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        e.printStackTrace();
+                                        // Handle failure, e.g., show an error message
+                                        Toast.makeText(transEdit.this, "Failed to find transaction: " + transID, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         dialog.dismiss();
+                        break;
                 }
             }
         };
+
         AlertDialog.Builder builder = new AlertDialog.Builder(transEdit.this);
         builder.setMessage("Do You Want To Delete Transaction " + transID + "?")
                 .setPositiveButton("Yes", dialogClickListener)

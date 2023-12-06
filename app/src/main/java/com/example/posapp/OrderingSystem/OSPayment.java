@@ -120,19 +120,19 @@ public class OSPayment extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String currentUserID = accessValue.user;
 
-        db.collection("transactions")
+        db.collection("orders")
                 .orderBy("transID", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        long highestID = 0;
+                        String highestID = String.valueOf(0);
 
                         for (QueryDocumentSnapshot document : task.getResult()) {
-                            highestID = document.getLong("transID");
+                            highestID = document.getString("transID");
                         }
 
-                        long finalHighestID = highestID;
+                        long finalHighestID = Long.parseLong(highestID);
                         db.collection("cartlist")
                                 .whereEqualTo("user", currentUserID)
                                 .get()

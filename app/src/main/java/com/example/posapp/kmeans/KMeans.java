@@ -30,6 +30,9 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -127,6 +130,7 @@ public class KMeans extends AppCompatActivity {
 
         //Autostart kmeans
         ctr = 12;
+        transferFirestoreToSQLite();
         runKMeans();
         getDailyTotal();
     }
@@ -654,6 +658,49 @@ public class KMeans extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+    }
+
+    public void transferFirestoreToSQLite() {
+        // Create or open SQLite database
+        SQLiteDatabase sqliteDb = openOrCreateDatabase("TIMYC", MODE_PRIVATE, null);
+
+        // Create transactions table if not exists
+        String createTableQuery = "CREATE TABLE IF NOT EXISTS transactions " +
+                "(prodName VARCHAR, quantity INTEGER, price DOUBLE, time INTEGER)";
+        sqliteDb.execSQL(createTableQuery);
+
+        // Retrieve data from Firestore
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference transactionsCollection = db.collection("transactions");
+
+        transactionsCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Clear existing data in SQLite table
+                sqliteDb.execSQL("DELETE FROM transactions");
+
+                // Insert data into SQLite table
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String prodName = document.getString("prodName");
+                    String quantity = document.getString("quantity");
+                    String price = document.getString("price");
+                    long time = document.getLong("time");
+
+                    // Insert data into SQLite table
+                    String insertDataQuery = "INSERT INTO transactions (prodName, quantity, price, time) " +
+                            "VALUES ('" + prodName + "', " + Integer.parseInt(quantity) + ", " + Double.parseDouble(price) + ", " + time + ")";
+                    sqliteDb.execSQL(insertDataQuery);
+                }
+
+                // Close SQLite database
+                sqliteDb.close();
+            } else {
+                // Handle failure, e.g., show an error message
+                Exception exception = task.getException();
+                if (exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+        });
     }
 
 }
