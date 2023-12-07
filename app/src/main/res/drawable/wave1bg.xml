@@ -12,7 +12,10 @@
     <item>
         <bitmap
             android:src="@drawable/backgroundimage"
-            android:gravity="fill"/>
+            android:gravity="fill"
+            android:alpha="0.6"
+            android:tintMode="add"
+            android:tint="@color/black"/>
     </item>
 
 <!--    &lt;!&ndash; Vector Shape &ndash;&gt;-->

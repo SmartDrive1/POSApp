@@ -32,7 +32,7 @@ public class OSPaymentAdapter extends RecyclerView.Adapter<OSViewHolder> {
     public void onBindViewHolder(@NonNull OSViewHolder holder, int position) {
         holder.nameP.setText(items.get(position).getpName());
         holder.quantityP.setText(items.get(position).getpQuantity());
-        holder.priceP.setText(items.get(position).getpPrice() + ".00");
+        holder.priceP.setText(items.get(position).getpPrice());
         holder.btnEdit.setVisibility(View.GONE);
     }
 

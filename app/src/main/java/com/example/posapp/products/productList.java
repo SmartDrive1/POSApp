@@ -315,26 +315,19 @@ public class productList extends AppCompatActivity implements prodClickListener 
                     clearTable();
                     String searchItem;
                     searchItem = txtSearch.getText().toString();
-                    RecyclerView recyclerView = findViewById(R.id.recycleProds);
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
 
-                    RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
-                    foodRecyclerView.setHasFixedSize(true);
-                    foodRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
-
-                    RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
-                    addOnsRecycle.setHasFixedSize(true);
-                    addOnsRecycle.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
-
-                    RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
-                    othersRecyclerView.setHasFixedSize(true);
-                    othersRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+                    List<prodItems> items = new ArrayList<>();
+                    List<prodItems> foods = new ArrayList<>();
+                    List<prodItems> addOns = new ArrayList<>();
+                    List<prodItems> others = new ArrayList<>();
 
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     CollectionReference productsCollection = db.collection("products");
 
-                    productsCollection.whereGreaterThanOrEqualTo("product", searchItem)
+
+                    productsCollection
+                            .whereGreaterThanOrEqualTo("product", searchItem)
+                            .whereLessThanOrEqualTo("product", searchItem + "\uf8ff")
                             .orderBy("product", Query.Direction.ASCENDING)
                             .get()
                             .addOnSuccessListener(queryDocumentSnapshots -> {
@@ -365,6 +358,22 @@ public class productList extends AppCompatActivity implements prodClickListener 
                                         others.add(productItem);
                                     }
                                 }
+
+                                RecyclerView recyclerView = findViewById(R.id.recycleProds);
+                                recyclerView.setHasFixedSize(true);
+                                recyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+
+                                RecyclerView foodRecyclerView = findViewById(R.id.recycleFoods);
+                                foodRecyclerView.setHasFixedSize(true);
+                                foodRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+
+                                RecyclerView addOnsRecycle = findViewById(R.id.recycleCakes);
+                                addOnsRecycle.setHasFixedSize(true);
+                                addOnsRecycle.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
+
+                                RecyclerView othersRecyclerView = findViewById(R.id.recycleSpecial);
+                                othersRecyclerView.setHasFixedSize(true);
+                                othersRecyclerView.setLayoutManager(new LinearLayoutManager(productList.this,LinearLayoutManager.HORIZONTAL, false));
 
                                 // Set up RecyclerView adapters here
                                 productListAdapter = new prodDrinksListAdapter(productList.this, items, productListAdapter.mClickListener);
