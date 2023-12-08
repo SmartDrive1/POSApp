@@ -293,7 +293,7 @@ public class manageTransactions extends AppCompatActivity implements transClickL
             cursor.close();
             db.close();
         }else{
-            Cursor cursor = db.rawQuery("SELECT transID, prodName, category, quantity, price, time, (quantity * price) AS total_price FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + "ORDER BY time ASC",null);
+            Cursor cursor = db.rawQuery("SELECT transID, prodName, category, quantity, price, time, (quantity * price) AS total_price FROM transactions WHERE time BETWEEN " + startTimeMilli + " AND " + endTimeMilli + " ORDER BY time ASC",null);
             // Headers
             Row headerRow = sheet.createRow(0);
             Cell headerCell1 = headerRow.createCell(0);
